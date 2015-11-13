@@ -1,0 +1,74 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/chat/index.css">
+<% extend 'layout' %>
+<div id="container" class="container-fluid" >
+<% include 'chat/head', {} %>
+
+<div class="row" id="page">
+  <div class=" col-md-7"></div>
+  <div class=" col-md-5"><h2 class="module_title">Friday, 13 November</h2></div>
+</div>
+
+<div class="row" id="main">
+  <div class="col-md-7">
+
+  <div class="chat-graphic_body">
+       chat-graphic
+  </div>
+
+  <div class="chat-input_body">
+            <iframe class="chat-input_body" src="/chat/statement"></iframe>
+  </div>
+
+  </div>
+
+
+
+  <div class="col-md-5">
+  <div class="chat-list">
+   <div class="chat-list_heading">
+   <span>Chat news</span>
+   </div>
+   <div>
+   <ul class="chat-list_list">
+            <li class="chat-list_list_item">
+                 <span>1.</span>
+                 The first statement
+                 The first statement
+                 The first statement
+                 The first statement
+                 The first statement
+                 The first statement
+            </li>
+            <li class="chat-list_list_item">
+                 <span>2.</span>
+                 The first statement
+                 The first statement
+                 The first statement
+                 The first statement
+                 The first statement
+                 The first statement
+            </li>
+            <li class="chat-list_list_item">
+                 <span>3.</span>
+                 The first statement
+                 The first statement
+                 The first statement
+                 The first statement
+                 The first statement
+                 The first statement
+            </li>
+   </ul>
+   </div>
+  </div>
+
+</div>
+</div>
+</div>
+
+<script>
+function setInformation(data){
+        alert(data.textContent);
+}
+
+</script>
+
