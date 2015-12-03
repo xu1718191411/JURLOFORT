@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<body>
+</body>
+<script src="/javascripts/graphic/d3.js"></script>
+
+<script>
+
+    function clickOnCircle(d,i){
+        parent.clickOnCircle(d,i)
+    }
+
+
+    var d3Load = function(pos){
+
+             window.color = pos=="pro"?"black":"blue";
+
+             d3.select("svg").remove();
+
+             window.canvas = d3.select("body").append("svg")
+                            .attr("width",800)
+                            .attr("height",800)
+                            .append("g")
+                            .attr("transform","translate(50,0)");
+
+             readFile("/data/d3/tmp.json",0,0);
+
+    }
+
+    function readFile(pathname,x,y){
+
+                var tree = d3.layout.tree()
+                            .size([300,300])
+
+                d3.json(pathname,function(data){
+                        var n = data.children.length
+
+                        var nodes = tree.nodes(data);
+                        //nodes.shift()
+
+                        var links = tree.links(nodes);
+
+
+                        for(var i=0;i<n;i++){
+                            links.shift();
+                        }
+
+                        group(nodes,links,x,y);
+                })
+    }
+
+
+    function group(nodes,links,x,y){
+
+                        var g1 = window.canvas.append("g").attr("class","g1");
+                        g1.attr("transform","translate("+x+","+y+")");
+                        var node = g1.selectAll(".node")
+                                    .data(nodes)
+                                    .enter()
+                                    .append("g")
+                                    .attr("class","node")
+                                    .attr("transform",function(d){
+                                        return "translate("+d.y+","+d.x+")";
+                                    })
+
+                        g1.selectAll(".node").append("circle")
+                                .attr("r",15)
+                                .attr("fill",window.color)
+                                .on("click",function(d,i){
+                                        clickOnCircle(d,i);
+                                }
+                                );
+
+                        g1.selectAll(".node").append("text").text(function(d){return d.name});
+
+                        var diagonal = d3.svg.diagonal()
+                                          .projection(function(d){
+                                                return [d.y,d.x];
+                                          })
+
+                        g1.selectAll(".link")
+                                .data(links)
+                                .enter()
+                                .append("path")
+                                .attr("class","link")
+                                .attr("stroke","#000")
+                                .attr("fill","none")
+                                .attr("d",diagonal);
+    }
+
+//d3Load()
+</script>

@@ -1,0 +1,440 @@
+<% extend 'layout' %>
+<style>
+body{
+  background-color: #ffffe6;
+}
+
+.btns {
+    background: #3498db;
+    background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+    background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+    background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+    background-image: -o-linear-gradient(top, #3498db, #2980b9);
+    background-image: linear-gradient(to bottom, #3498db, #2980b9);
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 20px;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+}
+
+.btns:hover {
+    background: #3cb0fd;
+    background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+    text-decoration: none;
+}
+
+
+</style>
+<div class="container" id="analyzeContainer">
+
+   <div id="buildDissentInput">
+
+   </div>
+
+
+  <form class="form-group">
+
+  <div id="c1" class="claim" num="1"> <!-- c1 start -->
+
+  <div class="row">
+    <div class="col-sm-9">
+      <div class="input-group">
+        <span class="input-group-addon">Claim: Pro-C1</span>
+        <input type="text" class="form-control" placeholder="pro's first claim">
+        <span class="input-group-addon"><input type="checkbox"> Dissent</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="c1w1" class="warrant" num="1"> <!-- w1 start -->
+  <div class="row">
+    <div class="col-sm-1">
+    <button class="btn btn-default btn-xs" onClick="fun(this);return false"><i class="fa fa-plus-square"></i> Claim</button>
+    </div>
+    <div class="col-sm-8">
+      <div class="input-group">
+        <span class="input-group-addon">Warrant: Pro-W1C1</span>
+        <input type="text" class="form-control" placeholder="pro's first warrant for Pro-C1">
+        <span class="input-group-addon"><input type="checkbox"> Dissent</span>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div id="c1w1e1" class="evidence" num="1">
+  <div class="row">
+    <div class="col-sm-offset-1 col-sm-1">
+      <button class="btn btn-default btn-xs" onClick="fun2(this);return false"><i class="fa fa-plus-square"></i> Warrant</button>
+    </div>
+    <div class="col-sm-7">
+      <div class="input-group">
+        <span class="input-group-addon">Evidence: Pro-C1W1E1</span>
+        <input type="text" class="form-control" placeholder="pro's first evidence for Pro-C1W1">
+        <span class="input-group-addon"><input type="checkbox"> Dissent</span>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-sm-offset-2 col-sm-7">
+      <button class="btn btn-default btn-xs"  onClick="fun3(this);return false" ><i class="fa fa-plus-square"></i> Evidence</button>
+    </div>
+  </div>
+
+
+  </div><!-- end of c1w1e1-->
+
+
+  </div><!-- end of c1w1-->
+
+
+  </div><!-- end of c1-->
+
+
+
+
+
+
+
+
+  <div id="claimAddContent" style="display:none"><!-- start of claimAddContent-->
+    <div class="row">
+    <div class="col-sm-9">
+      <div class="input-group">
+        <span class="input-group-addon">Claim: Pro-C1</span>
+        <input type="text" class="form-control" placeholder="pro's first claim">
+        <span class="input-group-addon"><input type="checkbox"> Dissent</span>
+        <span class="input-group-addon"><button onclick="fun4(this);return false;" style="width:38px" class="glyphicon glyphicon-minus-sign"></button></span>
+      </div>
+    </div>
+  </div>
+
+<!--    <div class="row">
+    <div class="col-sm-1">
+   <button class="btn btn-default btn-xs" id="claimAdd" onClick="fun(this);return false"><i class="fa fa-plus-square"></i> Claim</button>
+    </div>
+    <div class="col-sm-8">
+      <div class="input-group">
+        <span class="input-group-addon">Warrant: Pro-W1C1</span>
+        <input type="text" class="form-control" placeholder="pro's first warrant for Pro-C1">
+        <span class="input-group-addon"><input type="checkbox"> Dissent</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-offset-1 col-sm-1">
+<button class="btn btn-default btn-xs" id="claimAdd" onClick="fun2(this);return false"><i class="fa fa-plus-square"></i> Warrant</button>
+    </div>
+    <div class="col-sm-7">
+      <div class="input-group">
+        <span class="input-group-addon">Evidence: Pro-C1W1E1</span>
+        <input type="text" class="form-control" placeholder="pro's first evidence for Pro-C1W1">
+        <span class="input-group-addon"><input type="checkbox"> Dissent</span>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-sm-offset-2 col-sm-7">
+      <button class="btn btn-default btn-xs"><i class="fa fa-plus-square"></i> Evidence</button>
+    </div>
+  </div> -->
+
+  </div><!-- end of #claimAddContent-->
+
+
+
+
+
+
+  <div id="warrantAddContent" style="display:none">
+
+  <div class="row">
+    <div class="col-sm-1">
+
+    </div>
+    <div class="col-sm-8">
+      <div class="input-group">
+        <span class="input-group-addon">Warrant: Pro-W1C1</span>
+        <input type="text" class="form-control" placeholder="pro's first warrant for Pro-C1">
+        <span class="input-group-addon"><input type="checkbox"> Dissent</span>
+        <span class="input-group-addon"><button onclick="fun5(this);return false;" style="width:38px" class="glyphicon glyphicon-minus-sign"></button></span>
+      </div>
+    </div>
+  </div>
+
+<!--   <div class="row">
+    <div class="col-sm-offset-1 col-sm-1">
+      <button class="btn btn-default btn-xs" id="warrantAdd" onClick="fun2(this);return false"><i class="fa fa-plus-square"></i> Warrant</button>
+    </div>
+    <div class="col-sm-7">
+      <div class="input-group">
+        <span class="input-group-addon">Evidence: Pro-C1W1E1</span>
+        <input type="text" class="form-control" placeholder="pro's first evidence for Pro-C1W1">
+        <span class="input-group-addon"><input type="checkbox"> Dissent</span>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-sm-offset-2 col-sm-7">
+      <button class="btn btn-default btn-xs"><i class="fa fa-plus-square"></i> Evidence</button>
+    </div>
+  </div> -->
+
+  </div>
+
+
+
+
+  <div id="evidenceAddContent" style="display:none">
+
+  <div class="row">
+    <div class="col-sm-offset-1 col-sm-1">
+
+    </div>
+    <div class="col-sm-7">
+      <div class="input-group">
+        <span class="input-group-addon">Evidence: Pro-C1W1E1</span>
+        <input type="text" class="form-control" placeholder="pro's first evidence for Pro-C1W1">
+        <span class="input-group-addon"><input type="checkbox"> Dissent</span>
+        <span class="input-group-addon"><button onclick="fun6(this);return false;" style="width:38px" class="glyphicon glyphicon-minus-sign"></button></span>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-sm-offset-2 col-sm-7">
+      <button class="btn btn-default btn-xs"  onClick="fun3(this);return false" ><i class="fa fa-plus-square"></i> Evidence</button>
+    </div>
+  </div>
+
+  </div>
+
+
+  </form>
+
+  <div class="row">
+
+
+
+
+
+<script type="text/javascript">
+
+
+        var submit = function(){
+            var arrData = [];
+            var i = 0;
+            while(true){
+                    i++;
+                if(!$("#c"+i).html()){
+                    i--;
+                    break;
+                }else{
+                    var nameClaim = $("#c"+i).find(".form-control").val();
+                    arrData.push({"name":nameClaim,"children":[]});
+
+                    var j = 0;
+                    while(true){
+                            j++;
+                            if(!$("#c"+i+"w"+j).html()){
+                                j--;
+                                break;
+                            }else{
+                                var nameWarrant = $("#c"+i+"w"+j).find(".form-control").val();
+                                arrData[i-1]["children"].push({"name":nameWarrant,"children":[]});
+
+                                var k = 0;
+                                while(true){
+                                        k++;
+                                        if(!$("#c"+i+"w"+j+"e"+k).html()){
+                                            k--;
+                                            break;
+                                        }else{
+                                            var nameEvidence = $("#c"+i+"w"+j+"e"+k).find(".form-control").val();
+                                            arrData[i-1]["children"][j-1]["children"].push({"name":nameEvidence,size:3938});
+                                        }
+                                }
+
+                            }
+                    }
+
+                }
+            }
+
+            window.arrData = arrData;
+
+            $("input").val("");
+
+
+            [
+                {
+                    "name":"claim1",
+                    "children":[
+                        {
+                            "name":"warrant1",
+                            "children":[
+                                    {name:"first evidence",size:3938},
+                                    {name:"second evidence",size:3938},
+                                    {name:"thrid evidence",size:3738}
+                            ]
+                        },
+                        {
+                            "name":"warrant2",
+                            "children":[
+                                    {name:"first evidence",size:3938},
+                                    {name:"second evidence",size:3938},
+                                    {name:"thrid evidence",size:3738}
+                            ]
+
+                        }
+                    ]
+                }
+            ]
+
+        }
+
+
+        var fun = function(obj){
+
+
+          var node = $(obj).parents('.claim')
+          n = parseInt(node.attr('num'))
+          n = n + 1
+
+          $("#claimAddContent").find('.input-group-addon:first').html('Claim: Pro-C'+n)
+          $("#claimAddContent").find('.form-control').attr('placeholder',"pro's "+n+"th claim")
+          $("#warrantAddContent").find('.input-group-addon:first').html('Warrant: Pro-W1C'+n)
+          $("#warrantAddContent").find('.form-control').attr('placeholder',"pro's first warrant for Pro-C"+n)
+          $("#evidenceAddContent").find('.input-group-addon:first').html('Evidence: Pro-C'+n+'W1E1')
+          $("#evidenceAddContent").find('.form-control').attr('placeholder',"pro's first evidence for Pro-C"+n+"W1")
+
+          var claimAddContent = $("#claimAddContent").html()
+          node.after('<div class="claim" id="c'+n+'" num="'+n+'"></div>')
+          $("#c"+n).html(claimAddContent)
+
+
+          var warrantAddContent = $("#warrantAddContent").html()
+          id = "c"+n+"w1"
+
+          $('#c'+n).children('.row:nth-child(1)').after('<div class="warrant" id="'+id+'" num="1"></div>')
+          $("#"+id).html(warrantAddContent)
+
+
+          $("#"+id).children('.row:nth-child(1)').children('div:nth-child(1)').html('<button class="btn btn-default btn-xs" id="claimAdd" onClick="fun(this);return false"><i class="fa fa-plus-square"></i> Claim</button>')
+
+          var evidenceAddContent = $("#evidenceAddContent").html()
+          _id = id+"e1"
+          $("#"+id).children('.row:nth-child(1)').after('<div class="evidence" id="'+_id+'" num="1"></div>')
+          $("#"+_id).html(evidenceAddContent)
+          $("#"+_id).children('.row:nth-child(1)').children('div:nth-child(1)').html('<button class="btn btn-default btn-xs" onClick="fun2(this);return false"><i class="fa fa-plus-square"></i> Warrant</button>')
+
+          $(obj).remove()
+
+
+
+
+          return false
+    }
+
+
+
+        var fun2 = function(obj){
+
+          var node = $(obj).parents('.warrant')
+          _n = parseInt(node.attr('num'))
+          _n = _n + 1
+
+
+          var nodeClaim = $(obj).parents('.claim')
+          _cn = parseInt(nodeClaim.attr('num'))
+          _id="c"+_cn+"w"+_n
+          node.after('<div class="warrant" id="'+_id+'" num="'+_n+'"></div>')
+          $("#warrantAddContent").find('.input-group-addon:first').html('Warrant: Pro-W'+_n+'C'+_cn)
+          $("#warrantAddContent").find('.form-control').attr('placeholder',"pro's "+_n+"th warrant for Pro-C"+_cn)
+          $("#evidenceAddContent").find('.input-group-addon:first').html('Evidence: Pro-C'+_cn+'W'+_n+'E1')
+          $("#evidenceAddContent").find('.form-control').attr('placeholder',"pro's first evidence for Pro-C"+_cn+"W"+_n)
+
+
+          var warrantAddContent = $("#warrantAddContent").html()
+          $("#"+_id).html(warrantAddContent)
+
+
+          var evidenceAddContent = $("#evidenceAddContent").html()
+          _ids = _id+'e1'
+          $("#"+_id).children('.row:nth-child(1)').after('<div class="evidence" id="'+_ids+'" num="1"></div>')
+          $("#"+_ids).html(evidenceAddContent)
+          $("#"+_ids).children('.row:nth-child(1)').children('div:nth-child(1)').html('<button class="btn btn-default btn-xs" onClick="fun2(this);return false"><i class="fa fa-plus-square"></i> Warrant</button>')
+
+          $(obj).remove()
+          return false;
+
+    }
+
+    var  fun3 = function(obj){
+
+          var node = $(obj).parents('.evidence')
+          __n = parseInt(node.attr('num'))
+          __n = __n + 1
+          var nodeWarrant = $(obj).parents('.warrant')
+          __id = nodeWarrant.attr('id')+"e"+__n
+
+          $("#evidenceAddContent").find('.input-group-addon:first').html('Evidence: Pro-'+nodeWarrant.attr('id').toUpperCase()+'E'+__n)
+          $("#evidenceAddContent").find('.form-control').attr('placeholder',"pro's "+__n+"th evidence for Pro-"+nodeWarrant.attr('id').toUpperCase())
+          var evidenceAddContent = $("#evidenceAddContent").html()
+          node.after('<div class="evidence" id="'+__id+'" num="'+__n+'"></div>')
+          $("#"+__id).html(evidenceAddContent)
+          $(obj).remove()
+          return false;
+
+    }
+
+    var  fun4 = function(obj){
+          //歪打正着
+          n = n -1
+          $("#c"+n).find('.warrant:first').find('.col-sm-1:first').html($(obj).parents('.row').next().find('.col-sm-1:first').html())
+          $(obj).parents('.claim').remove()
+    }
+
+    var fun5 = function(obj){
+          current__n = $(obj).parents('.warrant').attr('num')
+          current__n--
+          current_n = $(obj).parents('.claim').attr('num')
+          $("#c"+current_n+"w"+current__n).find('.evidence:first').find('.col-sm-1:first').html($(obj).parents('.row').next().find('.col-sm-1:first').html())
+          $(obj).parents('.warrant').remove()
+    }
+
+    var fun6 = function(obj){
+          current_n = $(obj).parents('.claim').attr('num')
+          current__n = $(obj).parents('.warrant').attr('num')
+          current___n = $(obj).parents('.evidence').attr('num')
+          current___n = current___n-1
+          $("#c"+current_n+"w"+current__n+"e"+current___n).find('.col-sm-1').html($(obj).parents('.row').next().find('.col-sm-offset-2').html())
+          $(obj).parents('.evidence').remove()
+    }
+
+
+
+
+    function getGetOrdinal(n) {
+   var s=["th","st","nd","rd"],
+       v=n%100;
+   return n+(s[(v-20)%10]||s[v]||s[0]);
+}
+
+  </script>

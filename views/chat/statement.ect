@@ -8,10 +8,10 @@
 	<!-- STYLE  SECTION -->
   <style type="text/css">
 
-  textarea {
+  textarea,.dissentContent {
 
   	width: 30em; /* the inital width of the textarea */
-  	height: 10em; /* the inital height of the textarea */
+  	height: 8em; /* the inital height of the textarea */
 
   	max-width: 40em; /* the maximum width of the textarea */
   	max-height: 15em; /* the maximum height of the textarea */
@@ -26,6 +26,16 @@
 
   	background-color: #ffffe6;
 
+  }
+
+  .dissentContent{
+  	height: 4em; /* the inital height of the textarea */
+  }
+
+  .dissent{
+    	padding-left: 0.8em;
+    	font-family: "Montserrat", "sans-serif";
+    	font-size: 1em;
   }
 
   .btn {
@@ -72,8 +82,22 @@
                 $(".btn").click(function(e){
                     e.preventDefault();
                     var textContent = $("#textContent").val();
-                    iframeData = {textContent:textContent};
+
+                    var dissentContents = $(".dissentContent");
+                    var dissentContentsArr = [];
+
+                    for(var i=0;i<dissentContents.length-1;i++){
+                           var til = $(dissentContents[i+1]).siblings(".dissent").text();
+                           var con = $(dissentContents[i+1]).val();
+                           dissentContentsArr.push({"title":til,"content":con});
+                    }
+
+                    console.log(dissentContentsArr);
+
+                    iframeData = {textContent:textContent,dissentContentsArr:dissentContentsArr};
                     parent.setInformation(iframeData);
+
+                    $("#textContent").val("")
                 });
 
         }
@@ -81,13 +105,34 @@
 
      </script>
 	<!-- HTML SECTION  -->
+
+    <div class="dissentC" style="display:none">
+            <hr>
+            <p class="dissent">adadasdasdasd</p>
+           	<textarea class="dissentContent" placeholder="あなたのコメントをここに書いてください..."></textarea>
+    </div>
+
+	<div id="clear" style="clear:both;"></div>
 	<div class="a">
-	<textarea id="textContent" placeholder="Write your message here..."></textarea>
+	<textarea id="textContent" placeholder="あなたのコメントをここに書いてください..."></textarea>
 	</div>
 	<div class="a">
 	<div class="a_button">
-	<button class="btn">Submit</button>
+	<button class="btn">サブミット</button>
 	</div>
 	</div>
 </body>
 </html>
+
+<script>
+
+    window.dissentExplainNum = 0;
+    function addDissent(title,val){
+        window.dissentExplainNum++;
+        $("#clear").prepend("<div id='"+window.dissentExplainNum+"'></div>");
+        $("#"+window.dissentExplainNum).html($(".dissentC").html());
+        $("#"+window.dissentExplainNum).children("textarea").val(val);
+        $("#"+window.dissentExplainNum).children(".dissent").text(title);
+    }
+
+</script>

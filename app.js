@@ -9,7 +9,9 @@ var session = require('express-session');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var chat = require('./routes/chat');
+var d3 = require('./routes/d3');
 var ECT = require('ect'); // ECT 読み込み
+
 
 var app = express();
 
@@ -24,23 +26,33 @@ app.set('view engine', 'ect');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+var cookieParser = cookieParser('secret');
+var sessionStore = new session.MemoryStore();
+app.use(cookieParser);
 app.use(express.static(path.join(__dirname, '/public')));
 
-app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        maxAge: 30 * 60 * 1000
-    }
-}));
+//app.use(session({
+//    secret: 'keyboard cat',
+//    resave: false,
+//    saveUninitialized: false,
+//    cookie: {
+//        maxAge: 30 * 60 * 1000
+//    }
+//}));
+
+app.use(session({ secret: 'secret', store: sessionStore }));
+
+
+
+app.cookieParser = cookieParser;
+app.sessionStore = sessionStore;
 
 
 
 app.use('/', index);
 app.use('/users', users);
 app.use('/chat',chat);
+app.use('/d3',d3);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

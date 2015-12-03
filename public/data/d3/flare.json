@@ -1,0 +1,78 @@
+{
+  "name": "constructDataText",
+  "children": [
+    {
+      "name": "First Claim",
+      "children": [
+        {
+          "name": "First Warrant",
+          "children": [
+            {
+              "name": "First Evidence",
+              "size": 3938
+            },
+            {
+              "name": "Second Evidence",
+              "size": 3812
+            },
+            {
+              "name": "Third Evidence",
+              "size": 6714
+            },
+            {
+              "name": "Fouth Evidence",
+              "size": 743
+            }
+          ]
+        },
+        {
+          "name": "Second Warrant",
+          "children": [
+            {
+              "name": "First Evidence",
+              "size": 3938
+            },
+            {
+              "name": "Second Evidence",
+              "size": 3812
+            },
+            {
+              "name": "Third Evidence",
+              "size": 6714
+            },
+            {
+              "name": "Fouth Evidence",
+              "size": 743
+            }
+          ]
+        },
+        {
+          "name": "Third Warrant",
+          "children": [
+            {
+              "name": "First Evidence",
+              "size": 3938
+            },
+            {
+              "name": "Second Evidence",
+              "size": 3812
+            },
+            {
+              "name": "Third Evidence",
+              "size": 6714
+            },
+            {
+              "name": "Fouth Evidence",
+              "size": 743
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+
+
+
+

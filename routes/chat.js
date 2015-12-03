@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var chatController = require('../controller/chat.js');
 
+
 console.log(chatController.indexController.toString());
 
 
@@ -15,5 +16,9 @@ router.get('/login',chatController.loginController)
 router.post('/loginPost',chatController.loginPostController)
 
 router.get('/statement',chatController.stateMentController)
+
+router.get('/analyze',chatController.analyzeController)
+
+router.get('/_analyze',chatController._analyzeController)
 
 module.exports = router;

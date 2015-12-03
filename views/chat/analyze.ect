@@ -1,5 +1,45 @@
 <% extend 'layout' %>
-<div class="container">
+<style>
+body{
+  background-color: #ffffe6;
+}
+
+.btns {
+    background: #3498db;
+    background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+    background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+    background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+    background-image: -o-linear-gradient(top, #3498db, #2980b9);
+    background-image: linear-gradient(to bottom, #3498db, #2980b9);
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 20px;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+}
+
+.btns:hover {
+    background: #3cb0fd;
+    background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+    text-decoration: none;
+}
+
+
+</style>
+<div class="container" id="analyzeContainer">
+
+   <div id="buildDissentInput">
+
+   </div>
+
+<div class="panel-heading">正文の分析はここ</div>
   <form class="form-group">
 
   <div id="c1" class="claim" num="1"> <!-- c1 start -->
@@ -9,7 +49,7 @@
       <div class="input-group">
         <span class="input-group-addon">Claim: Pro-C1</span>
         <input type="text" class="form-control" placeholder="pro's first claim">
-        <span class="input-group-addon"><input type="checkbox"> Dissent</span>
+        <!--<span class="input-group-addon"><input type="checkbox"> Dissent</span>-->
       </div>
     </div>
   </div>
@@ -23,7 +63,7 @@
       <div class="input-group">
         <span class="input-group-addon">Warrant: Pro-W1C1</span>
         <input type="text" class="form-control" placeholder="pro's first warrant for Pro-C1">
-        <span class="input-group-addon"><input type="checkbox"> Dissent</span>
+        <!--<span class="input-group-addon"><input type="checkbox"> Dissent</span>-->
       </div>
     </div>
   </div>
@@ -39,7 +79,7 @@
       <div class="input-group">
         <span class="input-group-addon">Evidence: Pro-C1W1E1</span>
         <input type="text" class="form-control" placeholder="pro's first evidence for Pro-C1W1">
-        <span class="input-group-addon"><input type="checkbox"> Dissent</span>
+        <!--<span class="input-group-addon"><input type="checkbox"> Dissent</span>-->
       </div>
     </div>
   </div>
@@ -187,11 +227,126 @@
 
 
   </form>
+
+  <div class="row">
+
+
+      <div class="col-sm-offset-8">
+      <button class="btns" onclick="submit()" >サブミット</button>
+      </div>
+  </button>
 </div>
+
+
 
 
 <script type="text/javascript">
 
+
+        var submit = function(){
+            var arrData = [];
+            var i = 0;
+
+            var dissentObj = window.dissentObj || {};
+
+
+            while(true){
+                    i++;
+                if(!$("#c"+i).html()){
+                    i--;
+                    break;
+                }else{
+                    var nameClaim = $("#c"+i).find(".form-control").val();
+                    arrData.push({"name":nameClaim,"children":[]});
+
+                    var j = 0;
+                    while(true){
+                            j++;
+                            if(!$("#c"+i+"w"+j).html()){
+                                j--;
+                                break;
+                            }else{
+                                var nameWarrant = $("#c"+i+"w"+j).find(".form-control").val();
+                                arrData[i-1]["children"].push({"name":nameWarrant,"children":[]});
+
+                                var k = 0;
+                                while(true){
+                                        k++;
+                                        if(!$("#c"+i+"w"+j+"e"+k).html()){
+                                            k--;
+                                            break;
+                                        }else{
+                                            var nameEvidence = $("#c"+i+"w"+j+"e"+k).find(".form-control").val();
+                                            arrData[i-1]["children"][j-1]["children"].push({"name":nameEvidence,size:3938});
+                                        }
+                                }
+
+                            }
+                    }
+
+                }
+            }
+
+            window.arrData = arrData;
+
+            parent.setAnalyzeInformation(arrData,dissentObj);
+            $("input").val("");
+
+
+            [
+                {
+                    "name":"claim1",
+                    "children":[
+                        {
+                            "name":"warrant1",
+                            "children":[
+                                    {name:"first evidence",size:3938},
+                                    {name:"second evidence",size:3938},
+                                    {name:"thrid evidence",size:3738}
+                            ]
+                        },
+                        {
+                            "name":"warrant2",
+                            "children":[
+                                    {name:"first evidence",size:3938},
+                                    {name:"second evidence",size:3938},
+                                    {name:"thrid evidence",size:3738}
+                            ]
+
+                        }
+                    ]
+                }
+            ]
+
+        }
+
+
+        function buildDissentInput(obj){
+                window.dissentObj = obj;
+                for(var i in obj){
+                    $("#buildDissentInput").append(
+                    "<p>"+obj[i].content+"</p>"+
+                    "<div id='dissent"+i+"'></div>"
+                    );
+
+                    $("#dissent"+i).append(buildIframe("dissent"+i,"/chat/_analyze"));
+                    $("#dissent"+i).append("<hr/>");
+                }
+
+
+
+        }
+
+        function buildIframe(id,url){
+        var iframe = document.createElement('iframe');
+        iframe.src = url;
+        iframe.id = id;
+        iframe.width = "100%";
+        return iframe;
+        }
+
+
+        buildDissentInput();
 
         var fun = function(obj){
 
@@ -242,6 +397,7 @@
           var node = $(obj).parents('.warrant')
           _n = parseInt(node.attr('num'))
           _n = _n + 1
+
 
           var nodeClaim = $(obj).parents('.claim')
           _cn = parseInt(nodeClaim.attr('num'))
@@ -318,5 +474,10 @@
        v=n%100;
    return n+(s[(v-20)%10]||s[v]||s[0]);
 }
+
+function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+}
+
 
   </script>
