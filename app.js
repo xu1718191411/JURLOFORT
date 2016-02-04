@@ -10,6 +10,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var chat = require('./routes/chat');
 var d3 = require('./routes/d3');
+var admin = require('./routes/admin');
 var ECT = require('ect'); // ECT 読み込み
 
 
@@ -53,6 +54,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/chat',chat);
 app.use('/d3',d3);
+app.use('/admin',admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -248,7 +248,13 @@ body{
             var i = 0;
 
             var dissentObj = window.dissentObj || {};
+            var arrData2 = [];
 
+            for(var s in dissentObj){
+               var res = document.getElementById("_dissent"+s).contentWindow.readResult();
+                arrData2.push(res);
+                console.log(res);
+            }
 
             while(true){
                     i++;
@@ -289,7 +295,7 @@ body{
 
             window.arrData = arrData;
 
-            parent.setAnalyzeInformation(arrData,dissentObj);
+            parent.setAnalyzeInformation(arrData,arrData2);
             $("input").val("");
 
 
@@ -329,7 +335,7 @@ body{
                     "<div id='dissent"+i+"'></div>"
                     );
 
-                    $("#dissent"+i).append(buildIframe("dissent"+i,"/chat/_analyze"));
+                    $("#dissent"+i).append(buildIframe("_dissent"+i,"/chat/_analyze"));
                     $("#dissent"+i).append("<hr/>");
                 }
 

@@ -122,6 +122,18 @@
 
 <script>
 
+
+(function($) {
+
+$.fn.selfHtml = function(options){
+	if($(this).get(0)){
+		return $(this).get(0).outerHTML;
+	}
+}
+
+})(jQuery);
+
+
 var analysis = new analysis();
 
 function setInformation(data){
@@ -133,13 +145,23 @@ function clickOnCircle(d,i){
         $("#myModalTitle").text(d.name);
 }
 
+
+function concatLinesSend(concatLinesData){
+         socket.emit('concatLines',concatLinesData);
+}
+
+function iframePickConcatLines(){
+         return window.concatLines[window.concatLines.length-1];
+}
+
+
 function isEmpty(obj) {
     return Object.keys(obj).length === 0;
 }
 
-function setAnalyzeInformation(data,dissentObj){
+function setAnalyzeInformation(data,data2){
 
-        var json = analysis.receiveFromIframe(data,dissentObj);
+        var json = analysis.receiveFromIframe(data,data2);
 
         socket.emit('writeJson',JSON.stringify(json));
 
@@ -161,18 +183,24 @@ socket.on('_testEvent',function(msg){
 
 socket.on('receiveAnalysis',function(obj){
         console.log("receive object"+obj);
-        analysis.receive();
+        analysis.receive(obj.jsonFileName);
 });
 
 
 socket.on('sendAnalysis',function(obj){
         console.log("send object"+obj);
-        analysis.send();
+        analysis.send(obj.jsonFileName);
 });
 
 socket.on('buildDissentInput',function(obj){
         analysis.buildDissentInput(obj);
 });
+
+socket.on('concatLines',function(obj){
+        console.log(obj);
+        window.concatLines = obj;
+});
+
 
 var statusAdjust = new statusAdjust();
 socket.on('checkStatus',function(status){
@@ -220,8 +248,6 @@ socket.on('checkStatus',function(status){
     };
 
 
-
-
     $("._toggleS").click(function(){
         $(".toggleS").toggle();
     })
@@ -229,6 +255,7 @@ socket.on('checkStatus',function(status){
     $("._toggleC").click(function(){
         $(".toggleC").toggle();
     })
+
 
 </script>
 

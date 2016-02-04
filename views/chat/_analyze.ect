@@ -236,8 +236,11 @@ body{
 
 <script type="text/javascript">
 
+        function readResult(){
+            return getReulst();
+        }
 
-        var submit = function(){
+        var getReulst = function(){
             var arrData = [];
             var i = 0;
             while(true){
@@ -277,36 +280,7 @@ body{
                 }
             }
 
-            window.arrData = arrData;
-
-            $("input").val("");
-
-
-            [
-                {
-                    "name":"claim1",
-                    "children":[
-                        {
-                            "name":"warrant1",
-                            "children":[
-                                    {name:"first evidence",size:3938},
-                                    {name:"second evidence",size:3938},
-                                    {name:"thrid evidence",size:3738}
-                            ]
-                        },
-                        {
-                            "name":"warrant2",
-                            "children":[
-                                    {name:"first evidence",size:3938},
-                                    {name:"second evidence",size:3938},
-                                    {name:"thrid evidence",size:3738}
-                            ]
-
-                        }
-                    ]
-                }
-            ]
-
+           return arrData;
         }
 
 

@@ -5,6 +5,7 @@ var fs = require("fs");
 var SessionSockets = require('session.socket.io');
 var Steps = require("ocsteps") ;
 var claimFile = require("./claimFile.js");
+var analysisFile = require("./analysisFile.js");
 
 
 app.set('port', process.env.PORT || 8000);
@@ -25,8 +26,22 @@ sessionSockets.on('connection', function (err, socket, session) {
     //and you can still use your io object
 
 
+
     socket.on('testEvent',function(msg){
-        claimFile.write()
+
+
+        var a = session.user.support+"claim";
+
+        session[a] = session[a] || 0;
+
+        session[a] = session[a] + 1;
+
+        session.save();
+
+        console.log(a+" is");
+        console.log(session[a]);
+
+        claimFile.write(msg,session.user.support,session[a]);
         console.log('testEvent'+msg);
         //io.emit('testEvent',msg);
         session.nowStatus = session.user.support+"SendClaim";
@@ -49,25 +64,33 @@ sessionSockets.on('connection', function (err, socket, session) {
 
     socket.on('writeJson',function(jsonData){
 
-        Steps(
-            function(){
-                fs.writeFile('/Users/xuzhongwei/Dropbox/research_project/home/public/data/d3/tmp.json', jsonData, this.hold(function (err) {
-                    if (err) throw err;
-                    console.log('It\'s saved!');
-                }));
-            },function(){
-                session.nowStatus = session.user.support+"SendAnalysis";
-                session.save();
-                io.sockets.emit("checkStatus",session.nowStatus);
-            },function(){
-                var jsonObject = JSON.parse(jsonData);
-                socket.broadcast.emit('receiveAnalysis',jsonObject);
-                socket.emit('sendAnalysis',jsonObject);
-            }
-        )();
+        analysisFile.write(session,jsonData,io,socket);
 
     })
 
+    socket.on('concatLines',function(concatLinesData){
+        console.log(concatLinesData);
+
+        var b = session.user.support+"analysis";
+        var cnum = session[b] || 0;
+        cnum--;
+        console.log(cnum);
+
+
+        var a = session.user.support+"concatLines";
+
+        session[a] = session[a] || [];
+        session[a][cnum] = session[a][cnum] || [];
+        session[a][cnum].push(concatLinesData);
+        session.save();
+
+        console.log("session concatLines is");
+        console.log(session[a]);
+
+        io.emit('concatLines', session[a]);
+
+
+    })
 });
 
 

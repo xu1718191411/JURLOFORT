@@ -1,1 +1,19 @@
-{"name":"My Analysis","children":[{"name":"asdasdas","children":[{"name":"adsa","children":[{"name":"asdasd","size":3938}]}]}]}
+{
+  "name": "My Analysis",
+  "children": [
+    {
+      "name": "11111",
+      "children": [
+        {
+          "name": "2222",
+          "children": [
+            {
+              "name": "asdas",
+              "size": 3938
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

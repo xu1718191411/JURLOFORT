@@ -1,31 +1,53 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<style>
+html,body{
+    height:100%;
+    margin:0px;
+    woverflow: scroll;
+}
+
+</style>
+
 
 <body>
 </body>
 <script src="/javascripts/graphic/d3.js"></script>
-
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script>
 
-    function clickOnCircle(d,i){
+    window.concatLines = [];
+
+
+    window.startHeight = 10;
+
+     d3.select("svg").remove();
+
+     window.canvas = d3.select("body").append("svg")
+                    .attr("width",800)
+                    .attr("height",800)
+                    .append("g")
+                    .attr("transform","translate(50,0)");
+
+    function clickOnCircle(d,i,that){
+
+        var cnum = $.inArray($(that).parents(".g1")[0], $(that).parents(".g1").parent("g").children(".g1"));
+
+        var concatLines = {"start":{"x":d.x+cnum*window.startHeight,"y":d.y}};
+
+        console.log(concatLines);
+        parent.concatLinesSend(concatLines);
         parent.clickOnCircle(d,i)
     }
 
-
-    var d3Load = function(pos){
+    var d3Load = function(pos,jsonFileName){
 
              window.color = pos=="pro"?"black":"blue";
 
-             d3.select("svg").remove();
+             readFile("/data/d3/"+jsonFileName,0,window.startHeight);
 
-             window.canvas = d3.select("body").append("svg")
-                            .attr("width",800)
-                            .attr("height",800)
-                            .append("g")
-                            .attr("transform","translate(50,0)");
-
-             readFile("/data/d3/tmp.json",0,0);
-
+             window.startHeight+=250;
+//             d3.select("svg").attr("height",d3.select("svg").attr("height")+250);
     }
 
     function readFile(pathname,x,y){
@@ -36,11 +58,47 @@
                 d3.json(pathname,function(data){
                         var n = data.children.length
 
+                        if(data.children.length>1){
+                        console.log("datas are:");
+                        console.log(data.children.length);
+                        console.log(data.children[1].children);
+                        console.log(data.children[1].children.length);
+                        console.log(parent.iframePickConcatLines().length);
+
+                        var a = data.children[1].children;
+                        var b = parent.iframePickConcatLines();
+                        var len = parent.iframePickConcatLines().length;
+
+
+// var lineData = [ { "x": 1,   "y": 5},  { "x": 20,  "y": 20},
+//                 { "x": 40,  "y": 10}, { "x": 60,  "y": 40},
+//                 { "x": 80,  "y": 5},  { "x": 100, "y": 60}];
+
+
+                        var lineData = [];
+                        for(var i=0;i<len;i++){
+                            console.log("a[i]");
+                            console.log(a[i]);
+                            console.log(a[i].x);
+                            console.log(a[i].depth);
+                            console.log(a[i]["x"]);
+                            lineData.push({"x":a[i]["x"],"y":a[i]["y"]});
+                            lineData.push({"x":b[i].start.x,"y":b[i].start.y})
+                        }
+
+
+                        gc(lineData);
+
+                        }
+
                         var nodes = tree.nodes(data);
+
                         //nodes.shift()
 
                         var links = tree.links(nodes);
 
+
+                        //window.concatLines.push({"start":{"x":links[1].source.x+y,"y":links[1].source.y}});
 
                         for(var i=0;i<n;i++){
                             links.shift();
@@ -49,7 +107,6 @@
                         group(nodes,links,x,y);
                 })
     }
-
 
     function group(nodes,links,x,y){
 
@@ -68,7 +125,7 @@
                                 .attr("r",15)
                                 .attr("fill",window.color)
                                 .on("click",function(d,i){
-                                        clickOnCircle(d,i);
+                                        clickOnCircle(d,i,this);
                                 }
                                 );
 
@@ -89,5 +146,92 @@
                                 .attr("d",diagonal);
     }
 
-//d3Load()
+
+
+function cloneSO(obj) {
+
+    // Handle the 3 simple types, and null or undefined
+    if (null == obj || "object" != typeof obj) return obj;
+
+    // Handle Date
+    if (obj instanceof Date) {
+        var copy = new Date();
+        copy.setTime(obj.getTime());
+        return copy;
+    }
+
+    // Handle Array
+    if (obj instanceof Array) {
+        var copy = [];
+        for (var i = 0, len = obj.length; i < len; i++) {
+            copy[i] = cloneSO(obj[i]);
+        }
+        return copy;
+    }
+
+
+
+
+
+
+    // Handle Object
+    if (obj instanceof Object) {
+        var copy = {};
+        for (var attr in obj) {
+            if (obj.hasOwnProperty(attr)){
+
+                window.setTimeout(function(){
+                        copy[attr] = cloneSO(obj[attr]);
+                },0)
+
+            }
+        }
+        return copy;
+    }
+
+    throw new Error("Unable to copy obj! Its type isn't supported.");
+}
+
+
+
+//d3Load("con","tmp.json")
+//d3Load("pro","tmp2.json")
+
+function gc(testData){
+
+console.log("testData is:");
+console.log(testData);
+
+// The data for our line
+// var lineData = [ { "x": 1,   "y": 5},  { "x": 20,  "y": 20},
+//                 { "x": 40,  "y": 10}, { "x": 60,  "y": 40},
+//                 { "x": 80,  "y": 5},  { "x": 100, "y": 60}];
+
+
+
+                 console.log(testData);
+
+
+//This is the accessor function we talked about above
+var lineFunction = d3.svg.line()
+                         .x(function(d) { return d.x; })
+                         .y(function(d) { return d.y; })
+                         .interpolate("linear");
+
+//The SVG Container
+//var svgContainer = d3.select("body").append("svg")
+//                                    .attr("width", 200)
+//                                    .attr("height", 200);
+
+//The line SVG Path we draw
+
+var gc = window.canvas.append("g").attr("class","gc");
+
+var lineGraph = gc.append("path")
+                            .attr("d", lineFunction(testData))
+                            .attr("stroke", "blue")
+                            .attr("stroke-width", 2)
+                            .attr("fill", "none");
+}
+
 </script>
