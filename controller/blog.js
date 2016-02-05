@@ -21,6 +21,7 @@ module.exports = {
     detailController:function(req,res){
         var _id = req.query._id;
         mongo.find("Articles",{_id:new mongodb.ObjectID(_id)},{},function(doc){
+            var content = doc[0];
             console.log(content);
             res.render('blog/detail',{content:content})
         })
