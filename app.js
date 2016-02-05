@@ -44,11 +44,8 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 app.use(session({ secret: 'secret', store: sessionStore }));
 
-
-
 app.cookieParser = cookieParser;
 app.sessionStore = sessionStore;
-
 
 
 app.use('/', index);
