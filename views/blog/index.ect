@@ -63,7 +63,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
+                            <li><a href="/admin/list">Admin</a></li>
                             <li><a href="#">Another action</a></li>
                             <li><a href="#">Something else here</a></li>
                             <li role="separator" class="divider"></li>
@@ -86,7 +86,15 @@
 
           <div class="col-sm-6 col-md-4">
               <div class="thumbnail">
-                  <img src="/static/1.jpg" alt="...">
+
+
+                  <% if link?.targetName : %>
+                   <img src="/upload/<%-link.targetName %>" alt="...">
+                  <% else : %>
+                   <img src="/static/1.jpg" alt="...">
+                  <% end %>
+
+
                   <div class="caption">
                       <p><%= link.title %></p>
                       <p><a href="/blog/detail?_id=<%= link._id %>" class="btn btn-primary" role="button">更多</a> <a href="#" class="btn btn-default" role="button">收藏</a></p>

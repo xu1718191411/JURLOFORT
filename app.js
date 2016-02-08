@@ -14,7 +14,6 @@ var admin = require('./routes/admin');
 var blog = require('./routes/blog');
 var ECT = require('ect'); // ECT 読み込み
 
-
 var app = express();
 
 // view engine setup
@@ -32,6 +31,9 @@ var cookieParser = cookieParser('secret');
 var sessionStore = new session.MemoryStore();
 app.use(cookieParser);
 app.use(express.static(path.join(__dirname, '/public')));
+
+
+
 
 //app.use(session({
 //    secret: 'keyboard cat',
@@ -54,6 +56,8 @@ app.use('/chat',chat);
 app.use('/d3',d3);
 app.use('/admin',admin);
 app.use('/blog',blog);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

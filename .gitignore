@@ -4,3 +4,4 @@ tmp
 .idea
 projectFilesBackup*
 public/data/
+public/upload/*
