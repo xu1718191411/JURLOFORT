@@ -98,6 +98,9 @@ module.exports = {
 
 
         })
-    }
+    },
+    timeLineController: function(req,res){
+        res.render('admin/timeLine', {});
+    },
 
 }

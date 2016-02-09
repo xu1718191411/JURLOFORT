@@ -23,5 +23,6 @@ router.get('/del',adminController.delController);
 router.get('/edit',adminController.editController);
 router.post('/update',adminController.updateController);
 router.post('/upload',upload.array('files', 1),adminController.uploadController);
+router.get('/timeLine',adminController.timeLineController);
 
 module.exports = router;
