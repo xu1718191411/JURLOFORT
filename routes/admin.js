@@ -24,5 +24,8 @@ router.get('/edit',adminController.editController);
 router.post('/update',adminController.updateController);
 router.post('/upload',upload.array('files', 1),adminController.uploadController);
 router.get('/timeLine',adminController.timeLineController);
+router.post('/postClassMate',adminController.postClassMateController);
+router.get('/editClassMate',adminController.editClassMateController);
+router.post('/updateClassMate',adminController.updateClassMateController);
 
 module.exports = router;

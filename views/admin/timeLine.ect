@@ -124,18 +124,34 @@
                 <thead>
                 <tr>
                     <th></th>
-                    <th>Country</th>
-                    <th>Users</th>
-                    <th>Online</th>
+                    <th>组织</th>
+                    <th>姓名</th>
+                    <th>编辑,删除</th>
                     <th>Performance</th>
                 </tr>
                 </thead>
                 <tbody>
+
+
+
+<% for link in @links : %>
                 <tr>
-                    <td><img src="/admin/img/Germany.png" style="height:18px; margin-top:-2px;"></td>
-                    <td>Germany</td>
-                    <td>2563</td>
-                    <td>1025</td>
+                    <td><img src="/admin/img/india.png" style="height:18px; margin-top:-2px;"></td>
+                    <td>
+
+                    <% if link?.class=="1" : %>
+                         高四18班
+                    <% else : %>
+                         兄弟连
+                    <% end %>
+
+
+                    </td>
+                    <td><%= link.name %></td>
+                    <td>
+                         <a class="btn btn-primary" href="/admin/editClassMate?_id=<%= link._id %>"><i class="icon_info_alt"></i></a>
+                      <a class="btn btn-primary" href="/admin/delClassMate?_id=<%= link._id %>"><i class="icon_close_alt2"></i></a>
+                    </td>
                     <td>
                         <div class="progress thin">
                             <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="73" aria-valuemin="0" aria-valuemax="100" style="width: 73%">
@@ -146,111 +162,12 @@
                         <span class="sr-only">73%</span>
                     </td>
                 </tr>
-                <tr>
-                    <td><img src="/admin/img/India.png" style="height:18px; margin-top:-2px;"></td>
-                    <td>India</td>
-                    <td>3652</td>
-                    <td>2563</td>
-                    <td>
-                        <div class="progress thin">
-                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="57" aria-valuemin="0" aria-valuemax="100" style="width: 57%">
-                            </div>
-                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100" style="width: 43%">
-                            </div>
-                        </div>
-                        <span class="sr-only">57%</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td><img src="/admin/img/Spain.png" style="height:18px; margin-top:-2px;"></td>
-                    <td>Spain</td>
-                    <td>562</td>
-                    <td>452</td>
-                    <td>
-                        <div class="progress thin">
-                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="93" aria-valuemin="0" aria-valuemax="100" style="width: 93%">
-                            </div>
-                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100" style="width: 7%">
-                            </div>
-                        </div>
-                        <span class="sr-only">93%</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td><img src="/admin/img/India.png" style="height:18px; margin-top:-2px;"></td>
-                    <td>Russia</td>
-                    <td>1258</td>
-                    <td>958</td>
-                    <td>
-                        <div class="progress thin">
-                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                            </div>
-                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                            </div>
-                        </div>
-                        <span class="sr-only">20%</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td><img src="/admin/img/Spain.png" style="height:18px; margin-top:-2px;"></td>
-                    <td>USA</td>
-                    <td>4856</td>
-                    <td>3621</td>
-                    <td>
-                        <div class="progress thin">
-                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                            </div>
-                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                            </div>
-                        </div>
-                        <span class="sr-only">20%</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td><img src="/admin/img/Germany.png" style="height:18px; margin-top:-2px;"></td>
-                    <td>Brazil</td>
-                    <td>265</td>
-                    <td>102</td>
-                    <td>
-                        <div class="progress thin">
-                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                            </div>
-                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                            </div>
-                        </div>
-                        <span class="sr-only">20%</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td><img src="/admin/img/Germany.png" style="height:18px; margin-top:-2px;"></td>
-                    <td>Coloumbia</td>
-                    <td>265</td>
-                    <td>102</td>
-                    <td>
-                        <div class="progress thin">
-                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                            </div>
-                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                            </div>
-                        </div>
-                        <span class="sr-only">20%</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td><img src="/admin/img/Germany.png" style="height:18px; margin-top:-2px;"></td>
-                    <td>France</td>
-                    <td>265</td>
-                    <td>102</td>
-                    <td>
-                        <div class="progress thin">
-                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                            </div>
-                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                            </div>
-                        </div>
-                        <span class="sr-only">20%</span>
-                    </td>
-                </tr>
+<% end %>
+
+
+
+
+
                 </tbody>
             </table>
         </div>
@@ -263,6 +180,38 @@
 
 <!-- statics end -->
 
+
+<!-- Inline form-->
+<div class="row">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                添加人数
+            </header>
+            <div class="panel-body">
+                <form class="form-inline" role="form" method="post" action="/admin/postClassMate">
+                    <div class="form-group">
+                        <label class="sr-only" for="exampleInputEmail2">姓名</label>
+                        <input type="text" class="form-control" name="name" placeholder="张三">
+                    </div>
+
+                    <div class="radios">
+                        <label class="label_radio" for="radio-01">
+                            <input name="class" id="radio-01" value="1" type="radio" checked /> 高四18班
+                        </label>
+                        <label class="label_radio" for="radio-02">
+                            <input name="class" id="radio-02" value="2" type="radio" /> 兄弟连
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">添加</button>
+                </form>
+
+            </div>
+        </section>
+
+    </div>
+</div>
 
 </section>
 </section>
@@ -344,23 +293,6 @@
         $('select.styled').customSelect();
     });
 
-    /* ---------- Map ---------- */
-    $(function(){
-        $('#map').vectorMap({
-            map: 'world_mill_en',
-            series: {
-                regions: [{
-                    values: gdpData,
-                    scale: ['#000', '#000'],
-                    normalizeFunction: 'polynomial'
-                }]
-            },
-            backgroundColor: '#eef3f7',
-            onLabelShow: function(e, el, code){
-                el.html(el.html()+' (GDP - '+gdpData[code]+')');
-            }
-        });
-    });
 
 
 
