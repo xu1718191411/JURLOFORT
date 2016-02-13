@@ -8,4 +8,5 @@ module.exports = {
     indexController: function(req,res){
         res.render('timeLine/index', {});
     }
+
 }

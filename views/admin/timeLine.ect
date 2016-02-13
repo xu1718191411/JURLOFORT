@@ -18,7 +18,7 @@
 <link href="css/style.css" rel="stylesheet">
 <link href="css/style-responsive.css" rel="stylesheet" />
 <link href="css/xcharts.min.css" rel=" stylesheet">
-<link href="css/jquery-ui-1.10.4.min.css" rel="stylesheet"
+<link href="css/jquery-ui-1.10.4.min.css" rel="stylesheet">
 <body>
 <!-- container section start -->
 <section id="container" class="">
@@ -81,30 +81,6 @@
 
 </div><!--/.row-->
 
-<div class="row">
-    <div class="col-md-12 portlets">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2><strong>Calendar</strong></h2>
-                <div class="panel-actions">
-                    <a href="#" class="wminimize"><i class="fa fa-chevron-up"></i></a>
-                    <a href="#" class="wclose"><i class="fa fa-times"></i></a>
-                </div>
-
-            </div><br><br><br>
-            <div class="panel-body">
-                <!-- Widget content -->
-
-                <!-- Below line produces calendar. I am using FullCalendar plugin. -->
-                <div id="calendar"></div>
-
-            </div>
-        </div>
-
-    </div>
-
-</div>
-<!-- project team & activity end -->
 
 
 <div class="row">
@@ -126,7 +102,7 @@
                     <th></th>
                     <th>组织</th>
                     <th>姓名</th>
-                    <th>编辑,删除</th>
+                    <th>编辑,删除,记忆</th>
                     <th>Performance</th>
                 </tr>
                 </thead>
@@ -151,6 +127,7 @@
                     <td>
                          <a class="btn btn-primary" href="/admin/editClassMate?_id=<%= link._id %>"><i class="icon_info_alt"></i></a>
                       <a class="btn btn-primary" href="/admin/delClassMate?_id=<%= link._id %>"><i class="icon_close_alt2"></i></a>
+                      <a class="btn btn-primary" href="/admin/personTimeLine?_id=<%= link._id %>"><i class="icon_house_alt"></i></a>
                     </td>
                     <td>
                         <div class="progress thin">

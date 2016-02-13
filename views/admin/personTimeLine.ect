@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<% include 'admin/head', {} %>
+<style>
+    #timeLine {
+        font-family: arial, sans-serif;
+        font-size: 11pt;
+        padding:12px;
+    }
+
+    #timeLine textarea {
+        width: 800px;
+        height: 100px;
+    }
+
+    #timeLine .buttons {
+        margin: 20px 0;
+    }
+
+    #timeLine .buttons input {
+        padding: 10px;
+    }
+</style>
+
+
+<!-- javascripts -->
+<script src="/admin/js/jquery.js"></script>
+<script src="/admin/js/jquery-ui-1.10.4.min.js"></script>
+<script src="/admin/js/jquery-1.8.3.min.js"></script>
+<script type="/admin/text/javascript" src="js/jquery-ui-1.9.2.custom.min.js"></script>
+<!-- bootstrap -->
+<script src="/admin/js/bootstrap.min.js"></script>
+<!-- nice scroll -->
+<script src="/admin/js/jquery.scrollTo.min.js"></script>
+<script src="/admin/js/jquery.nicescroll.js" type="text/javascript"></script>
+<!-- charts scripts -->
+<script src="/admin/assets/jquery-knob/js/jquery.knob.js"></script>
+<script src="/admin/js/jquery.sparkline.js" type="text/javascript"></script>
+<script src="/admin/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.js"></script>
+<script src="/admin/js/owl.carousel.js" ></script>
+
+<!--script for this page only-->
+
+<script src="/admin/js/jquery.rateit.min.js"></script>
+<!-- custom select -->
+<script src="/admin/js/jquery.customSelect.min.js" ></script>
+<script src="/admin/assets/chart-master/Chart.js"></script>
+
+<!--custome script for all page-->
+<script src="/admin/js/scripts.js"></script>
+<!-- custom script for this page-->
+<script src="/admin/js/sparkline-chart.js"></script>
+<script src="/admin/js/easy-pie-chart.js"></script>
+<script src="/admin/js/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="/admin/js/jquery-jvectormap-world-mill-en.js"></script>
+<script src="/admin/js/xcharts.min.js"></script>
+<script src="/admin/js/jquery.autosize.min.js"></script>
+<script src="/admin/js/jquery.placeholder.min.js"></script>
+<script src="/admin/js/gdp-data.js"></script>
+<script src="/admin/js/morris.min.js"></script>
+<script src="/admin/js/sparklines.js"></script>
+<script src="/admin/js/charts.js"></script>
+<script src="/admin/js/jquery.slimscroll.min.js"></script>
+
+
+<title>Creative - Bootstrap Admin Template</title>
+
+  <script src="/admin/js/vis.js"></script>
+  <link href="/admin/css/vis.css" rel="stylesheet" type="text/css" />
+  <script src="http://t4t5.github.io/sweetalert/dist/sweetalert.min.js"></script>
+  <link href="http://t4t5.github.io/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css"/>
+
+<!-- easy pie chart-->
+<link href="assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css" media="screen"/>
+<!-- owl carousel -->
+<link rel="stylesheet" href="css/owl.carousel.css" type="text/css">
+<link href="css/jquery-jvectormap-1.2.2.css" rel="stylesheet">
+<!-- Custom styles -->
+<link rel="stylesheet" href="css/fullcalendar.css">
+<link href="css/widgets.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+<link href="css/style-responsive.css" rel="stylesheet" />
+<link href="css/xcharts.min.css" rel=" stylesheet">
+<link href="css/jquery-ui-1.10.4.min.css" rel="stylesheet">
+<body>
+<!-- container section start -->
+<section id="container" class="">
+
+<% include 'admin/header', {} %>
+<!--header end-->
+
+
+<!--sidebar start-->
+<% include 'admin/sidebar', {} %>
+<!--sidebar end-->
+
+
+<!--main content start-->
+<section id="main-content">
+<section class="wrapper">
+<!--overview start-->
+<div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header"><i class="fa fa-laptop"></i> Dashboard</h3>
+        <ol class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="index.html">Home</a></li>
+            <li><i class="fa fa-laptop"></i>Dashboard</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <div class="info-box blue-bg">
+            <i class="fa fa-cloud-download"></i>
+            <div class="count">6.674</div>
+            <div class="title">Download</div>
+        </div><!--/.info-box-->
+    </div><!--/.col-->
+
+    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <div class="info-box brown-bg">
+            <i class="fa fa-shopping-cart"></i>
+            <div class="count">7.538</div>
+            <div class="title">Purchased</div>
+        </div><!--/.info-box-->
+    </div><!--/.col-->
+
+    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <div class="info-box dark-bg">
+            <i class="fa fa-thumbs-o-up"></i>
+            <div class="count">4.362</div>
+            <div class="title">Order</div>
+        </div><!--/.info-box-->
+    </div><!--/.col-->
+
+    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <div class="info-box green-bg">
+            <i class="fa fa-cubes"></i>
+            <div class="count">1.426</div>
+            <div class="title">Stock</div>
+        </div><!--/.info-box-->
+    </div><!--/.col-->
+
+</div><!--/.row-->
+
+
+<div class="container-fluid" id="timeLine">
+
+
+<div class="row">
+    <h1 class="navbar-text navbar-left"><%= @content.name%>的时间轴
+
+    <span>他在
+<% if @content?.class=="1" : %>
+    17班
+<% else : %>
+    兄弟连
+<% end %>
+    的故事</span>
+    </h1>
+
+</div>
+
+<div class="row">
+    <div id="visualization"></div>
+</div>
+
+    <hr/>
+
+<div class="row">
+        <textarea id="data">
+            <%= @content.timeLine%>
+        </textarea>
+
+        <div class="buttons">
+            <input type="button" id="load" value="&darr; Load" title="Load data from textarea into the Timeline">
+            <input type="button" id="save" value="&uarr; Save" title="Save data from the Timeline into the textarea">
+        </div>
+</div>
+
+
+<div class="row">
+  <div id="log"></div>
+</div>
+
+</div>
+
+
+<div class="row">
+
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="addNewImpression" data-whatever="@mdo">Open modal for @mdo</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2" id="editNewImpression" data-whatever="@fat">Open modal for @fat</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">新的记忆</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">印象:</label>
+            <input type="text" class="form-control" id="newImpression">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">回忆:</label>
+            <textarea class="form-control" id="newRemember"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="insertNewImpressionClose">关闭</button>
+        <button type="button" class="btn btn-primary" id="insertNewImpression">添加</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">这个记忆</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">印象:</label>
+            <input type="text" class="form-control" id="myImpression">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">回忆:</label>
+            <textarea class="form-control" id="myRemember"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="updateNewImpressionClose">关闭</button>
+        <button type="button" class="btn btn-primary" id="updateNewImpression">修改</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+
+    <script>
+
+        var txtData = document.getElementById('data');
+        var btnLoad = document.getElementById('load');
+        var btnSave = document.getElementById('save');
+
+
+        var min = new Date(2003, 3, 1); // 1 april
+        var max = new Date(2017, 3, 30, 23, 59, 59); // 30 april
+
+        // Create an empty DataSet.
+        // This DataSet is used for two way data binding with the Timeline.
+        var items = new vis.DataSet();
+
+        // create a timeline
+        var container = document.getElementById('visualization');
+
+  var options = {
+    editable: true,
+
+    onAdd: function (_item, callback) {
+            console.log(111111111111);
+            console.log(_item);
+//      prettyPrompt('添加新的记忆', '印象:', item.content, function (value) {
+//        if (value) {
+//          item.content = value;
+//          callback(item); // send back adjusted new item
+//          saveData();
+//        }
+//        else {
+//          callback(null); // cancel item creation
+//        }
+//      });
+
+        lunch("exampleModal");
+
+        selfPrompt(_item,function(value1,value2){
+
+                if(value1){
+                    _item.content = value1;
+                }
+
+                if(value2){
+                    _item.contentDetail = value2;
+                }
+
+                callback(_item);
+                saveData();
+
+                $("#insertNewImpressionClose").click();
+                $("#newImpression").val("");
+                $("#newRemember").val("");
+
+        })
+
+    },
+    onMove: function (item, callback) {
+      var title = 'Do you really want to move the item to\n' +
+          'start: ' + item.start + '\n' +
+          'end: ' + item.end + '?';
+
+      prettyConfirm('Move item', title, function (ok) {
+        if (ok) {
+          callback(item); // send back item as confirmation (can be changed)
+          saveData();
+        }
+        else {
+          callback(null); // cancel editing item
+        }
+      });
+    },
+
+    onMoving: function (item, callback) {
+      if (item.start < min) item.start = min;
+      if (item.start > max) item.start = max;
+      if (item.end   > max) item.end   = max;
+
+      callback(item); // send back the (possibly) changed item
+      saveData();
+    },
+
+    onUpdate: function (item, callback) {
+
+        console.log(11111);
+        console.log(item);
+//      prettyPrompt('Update item', 'Edit items text:', item.content, function (value) {
+//        if (value) {
+//          item.content = value;
+//          callback(item); // send back adjusted item
+//          saveData();
+//        }
+//        else {
+//          callback(null); // cancel updating the item
+//        }
+//      });
+
+        lunch("exampleModal2");
+        selfPrompt2(item,function(value1,value2){
+
+            console.log(222222222222);
+            console.log(item);
+          item.content = value1;
+          item.contentDetail = value2;
+          callback(item); // send back adjusted item
+          saveData();
+
+        $("#updateNewImpressionClose").click();
+        //$("#myImpression").val("");
+        //$("#myRemember").val("");
+
+        });
+
+    },
+
+    onRemove: function (item, callback) {
+      prettyConfirm('Remove item', 'Do you really want to remove item ' + item.content + '?', function (ok) {
+        if (ok) {
+          callback(item); // confirm deletion
+          saveData();
+        }
+        else {
+          callback(null); // cancel deletion
+        }
+      });
+    }
+  };
+
+        var timeline = new vis.Timeline(container, items, options);
+
+        function loadData () {
+            // get and deserialize the data
+            var data = JSON.parse(txtData.value);
+
+            // update the data in the DataSet
+            //
+            // Note: when retrieving updated data from a server instead of a complete
+            // new set of data, one can simply update the existing data like:
+            //
+            //   items.update(data);
+            //
+            // Existing items will then be updated, and new items will be added.
+            items.clear();
+            items.add(data);
+
+            // adjust the timeline window such that we see the loaded data
+            timeline.fit();
+        }
+        btnLoad.onclick = loadData;
+
+        function saveData() {
+            // get the data from the DataSet
+            // Note that we specify the output type of the fields start and end
+            // as ISODate, which is safely serializable. Other serializable types
+            // are Number (unix timestamp) or ASPDate.
+            //
+            // Alternatively, it is possible to configure the DataSet to convert
+            // the output automatically to ISODates like:
+            //
+            //   var options = {
+            //     type: {start: 'ISODate', end: 'ISODate'}
+            //   };
+            //   var items = new vis.DataSet(options);
+            //   // now items.get() will automatically convert start and end to ISO dates.
+            //
+            var data = items.get({
+                type: {
+                    start: 'ISODate',
+                    end: 'ISODate'
+                }
+            });
+
+            // serialize the data and put it in the textarea
+            txtData.value = JSON.stringify(data, null, 2);
+
+
+            saveTxtData(txtData.value);
+
+        }
+        btnSave.onclick = saveData;
+
+        // load the initial data
+        loadData();
+
+
+
+        function prettyPrompt(title, text, inputValue, callback) {
+            swal({
+              title: title,
+              text: text,
+              type: 'input',
+              showCancelButton: true,
+              inputValue: inputValue,
+            }, callback);
+          }
+
+
+          function selfPrompt(item,callback){
+                //点击以后再执行下面的回调函数
+
+                document.getElementById("insertNewImpression").addEventListener("click", function(){
+
+                     return callback($("#newImpression").val(),$("#newRemember").val());
+                }, false);
+
+          }
+
+          function selfPrompt2(item,callback){
+                $("#myImpression").val(item.content);
+                $("#myRemember").val(item.contentDetail);
+               // document.getElementById("updateNewImpression").addEventListener("click", function(){
+               //     return callback($("#myImpression").val(),$("#myRemember").val());
+               // },false)
+
+
+                $( "#updateNewImpression" ).one( "click", function( event ) {
+
+                   return callback($("#myImpression").val(),$("#myRemember").val());
+                });
+
+
+          }
+
+
+
+
+        function prettyConfirm(title, text, callback) {
+          swal({
+            title: title,
+            text: text,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55"
+          }, callback);
+        }
+
+        function logEvent(event, properties) {
+          var log = document.getElementById('log');
+          var msg = document.createElement('div');
+          msg.innerHTML = 'event=' + JSON.stringify(event) + ', ' +
+              'properties=' + JSON.stringify(properties);
+          log.firstChild ? log.insertBefore(msg, log.firstChild) : log.appendChild(msg);
+        }
+
+
+    function lunch(id){
+            $('#'+id).modal({
+              keyboard: false
+            })
+
+    }
+
+
+    </script>
+
+</section>
+</section>
+<!--main content end-->
+
+
+</section>
+<!-- container section start -->
+
+</body>
+
+
+
+
+<script>
+
+
+
+
+
+    //knob
+    $(function() {
+        $(".knob").knob({
+            'draw' : function () {
+                $(this.i).val(this.cv + '%')
+            }
+        })
+    });
+
+    //carousel
+    $(document).ready(function() {
+        $("#owl-slider").owlCarousel({
+            navigation : true,
+            slideSpeed : 300,
+            paginationSpeed : 400,
+            singleItem : true
+
+        });
+    });
+
+    //custom select box
+
+    $(function(){
+        $('select.styled').customSelect();
+    });
+
+</script>
+
+
+
+<script>
+
+function saveTxtData(data){
+
+        console.log(data);
+
+$.ajax({
+   type: "POST",
+   url: "/admin/saveTxtData",
+   data: {dataSet:data},
+   success: function(msg){
+
+
+   }
+ });
+
+
+}
+
+</script>
+
+</html>

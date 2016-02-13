@@ -27,5 +27,8 @@ router.get('/timeLine',adminController.timeLineController);
 router.post('/postClassMate',adminController.postClassMateController);
 router.get('/editClassMate',adminController.editClassMateController);
 router.post('/updateClassMate',adminController.updateClassMateController);
+router.get('/personTimeLine',adminController.personTimeLineController);
+router.post('/saveTxtData',adminController.saveTxtDataController);
+
 
 module.exports = router;

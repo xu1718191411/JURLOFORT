@@ -1,6 +1,5 @@
 var Script = function () {
 
-
     /* initialize the external events
      -----------------------------------------------------------------*/
 
@@ -24,6 +23,8 @@ var Script = function () {
 
     });
 
+    moment("20111031", "YYYYMMDD").fromNow();
+
 
     /* initialize the calendar
      -----------------------------------------------------------------*/
@@ -35,7 +36,7 @@ var Script = function () {
 
     $('#calendar').fullCalendar({
         header: {
-            left: 'prev,next today',
+            left: 'prevYear,prev,next today,nextYear',
             center: 'title',
             right: 'month,basicWeek,basicDay'
         },
@@ -110,6 +111,10 @@ var Script = function () {
                 url: 'http://google.com/'
             }
         ]
-    });
+    })
+
+
+
+
 
 }();
