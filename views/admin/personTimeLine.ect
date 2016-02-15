@@ -298,6 +298,8 @@
                     _item.contentDetail = value2;
                 }
 
+                _item.from = "root";
+
                 callback(_item);
                 saveData();
 
@@ -335,8 +337,11 @@
 
     onUpdate: function (item, callback) {
 
-        console.log(11111);
-        console.log(item);
+        if(item.from !="root"){
+             alert("你不是这条回忆记录的所有者");
+             return false;
+        }
+
 //      prettyPrompt('Update item', 'Edit items text:', item.content, function (value) {
 //        if (value) {
 //          item.content = value;

@@ -15,5 +15,9 @@ var blogController = require('../controller/blog.js');
 
 router.get('/',blogController.indexController);
 router.get('/detail',blogController.detailController);
+router.get('/signUp',blogController.signUpController);
+router.get('/login',blogController.loginController);
+router.post('/register',blogController.registerController);
+router.post('/checkLogin',blogController.checkLoginController);
 
 module.exports = router;

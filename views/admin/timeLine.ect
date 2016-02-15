@@ -102,7 +102,7 @@
                     <th></th>
                     <th>组织</th>
                     <th>姓名</th>
-                    <th>编辑,删除,记忆</th>
+                    <th>编辑,删除,编辑记忆,查看记忆</th>
                     <th>Performance</th>
                 </tr>
                 </thead>
@@ -128,6 +128,7 @@
                          <a class="btn btn-primary" href="/admin/editClassMate?_id=<%= link._id %>"><i class="icon_info_alt"></i></a>
                       <a class="btn btn-primary" href="/admin/delClassMate?_id=<%= link._id %>"><i class="icon_close_alt2"></i></a>
                       <a class="btn btn-primary" href="/admin/personTimeLine?_id=<%= link._id %>"><i class="icon_house_alt"></i></a>
+                     <a class="btn btn-primary" href="/timeLine?_id=<%= link._id %>"><i class="icon_house_alt"></i></a>
                     </td>
                     <td>
                         <div class="progress thin">
