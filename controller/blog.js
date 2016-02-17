@@ -8,6 +8,7 @@ var mongo = require("../model/mongo.js");
 var mongodb = require("mongodb");
 var steps = require("ocsteps");
 
+
 module.exports = {
     indexController: function(req,res){
 
@@ -61,7 +62,7 @@ module.exports = {
 
         },function(content){
             var tablesName = ["UserInfo17","UserInfoBro","UserInfo38"];
-            mongo.insert(tablesName[parseInt(req.body.class)],{name:content.name,class:content.class,password:req.body.password},{},this.hold(function(doc){
+            mongo.insert(tablesName[parseInt(req.body.class)-1],{name:content.name,class:content.class,password:req.body.password},{},this.hold(function(doc){
                 console.log(doc);
                 if(parseInt(doc.result.ok)==1 && parseInt(doc.result.n)>0){
                     req.session.loginSession = {login:1,name:content.name,class:content.class}
@@ -75,16 +76,69 @@ module.exports = {
         console.log(req.body);
         var tablesName = ["UserInfo17","UserInfoBro","UserInfo38"];
 
-        mongo.find(tablesName[parseInt(req.body.class)],{name:req.body.name,class:req.body.class,password:req.body.password},{},function(doc){
+
+        mongo.createIfNotExists(tablesName[parseInt(req.body.class)-1],function(doc){
+            console.log(1111111111111);
             console.log(doc);
-            doc = doc || {}
-            if(doc.length==0){
-                res.end("{error:1,msg:'错误的密码或者名字'}");
-            }else{
-                req.session.loginSession = {login:1,name:req.body.name,class:req.body.class}
-                res.end("{error:0,msg:'登陆成功'}");
+
+            mongo.find(tablesName[parseInt(req.body.class)-1],{name:req.body.name,class:req.body.class,password:req.body.password},{},function(doc){
+                console.log(doc);
+                doc = doc || {}
+                if(doc.length==0){
+                    res.end("{error:1,msg:'错误的密码或者名字'}");
+                }else{
+                    req.session.loginSession = {login:1,name:req.body.name,class:req.body.class}
+                    res.end("{error:0,msg:'登陆成功'}");
+                }
+            })
+
+        });
+    },
+    AllTimeLineController:function(req,res){
+        steps(function(){
+
+            if(isEmpty(req.session.loginSession)){
+                res.redirect("/blog/login")
             }
-        })
+            var _class = req.session.loginSession.class;
+            var tablesName = ["UserInfo17","UserInfoBro","UserInfo38"];
+
+            this.renderObj = []
+            steps(
+            function(){
+                mongo.find(tablesName[parseInt(_class)-1],{class:_class},{},this.hold(function(doc){
+                        return doc;
+                }))
+            },function(doc){
+
+                    for(var i in doc){
+                        (function(j,dot,that){
+                            mongo.find("ClassMates",{name:dot.name,class:dot.class},{},that.hold(function(docs){
+                                docs[0].profile = docs[0].profile || {};
+                                doc[j].profile = docs[0].profile.profile;
+                                doc[j].__id = docs[0]._id;
+                                return doc;
+                            }))
+
+                        })(i,doc[i],this)
+                    }
+
+            },function(doc){
+                    res.render("blog/allTimeLine",{content:doc,classNumber:req.session.loginSession.class})
+            })();
+
+        })()
     }
+}
+
+
+
+function isEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+
+    return true;
 }
 

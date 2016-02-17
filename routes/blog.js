@@ -19,5 +19,5 @@ router.get('/signUp',blogController.signUpController);
 router.get('/login',blogController.loginController);
 router.post('/register',blogController.registerController);
 router.post('/checkLogin',blogController.checkLoginController);
-
+router.get('/AllTimeLine',blogController.AllTimeLineController);
 module.exports = router;

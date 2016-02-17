@@ -80,9 +80,38 @@ function remove(collection_name, query, options, callback){
     });
 }
 
+
+function createIfNotExists(collection,callback){
+    db.collections(function(err, collections) {
+        console.log('collection is')
+        console.log(collection)
+        //console.log(collections)
+
+        for(var i in collections){
+            if(collection == collections[i]['s']['name']){
+
+                callback(1);
+                return;
+
+
+            }
+        }
+
+        db.createCollection(collection, function(err, result) {
+            if(err) throw err;
+            callback(0);
+        });
+
+
+    });
+
+}
+
+
 module.exports = {
     find: find,
     insert: insert,
     update: update,
-    remove: remove
+    remove: remove,
+    createIfNotExists:createIfNotExists
 }
