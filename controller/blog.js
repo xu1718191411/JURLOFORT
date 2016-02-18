@@ -24,6 +24,7 @@ module.exports = {
         var _id = req.query._id;
         mongo.find("Articles",{_id:new mongodb.ObjectID(_id)},{},function(doc){
             console.log(doc);
+            var content = doc[0];
             res.render('blog/detail',{content:content})
         })
     },
