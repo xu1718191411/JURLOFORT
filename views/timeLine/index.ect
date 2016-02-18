@@ -13,12 +13,13 @@
 	<title>Responsive Vertical Timeline</title>
 </head>
 <body>
-	<header>
+	<header style="height:80px;">
 		<h1>大家一起为<%=@content.name%>构筑的的回忆线</h1>
 	</header>
-
+	<header style="height:220px;">
+		<h3><a href="/timeLine/add?_id=<%= @content._id%>">添加你对他的回忆</a></h3>
+	</header>
 	<section id="cd-timeline" class="cd-container">
-
         <% for link in @contentTimeLines : %>
             <div class="cd-timeline-block">
                 <div class="cd-timeline-img cd-picture">

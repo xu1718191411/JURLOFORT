@@ -13,6 +13,7 @@ var timeLineController = require('../controller/timeLine.js');
 
 
 router.get('/',timeLineController.indexController);
+router.get('/add',timeLineController.addController);
 
 module.exports = router;
 
