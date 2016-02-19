@@ -15,7 +15,9 @@ module.exports = {
         mongo.find("Articles",{},{},function(doc){
             console.log(doc);
             //res.render('blog/index', {});
-            res.render('blog/index', {contents:doc});
+
+            req.session = req.session || {};
+            res.render('blog/index', {contents:doc,loginSession:req.session.loginSession});
         })
 
 
@@ -73,6 +75,10 @@ module.exports = {
         })()
 
     },
+    LogoutController:function(req,res){
+        delete req.session.loginSession;
+        res.redirect('/blog');
+    },
     checkLoginController:function(req,res){
         console.log(req.body);
         var tablesName = ["UserInfo17","UserInfoBro","UserInfo38"];
@@ -125,7 +131,7 @@ module.exports = {
                     }
 
             },function(doc){
-                    res.render("blog/allTimeLine",{content:doc,classNumber:req.session.loginSession.class})
+                    res.render("blog/allTimeLine",{content:doc,classNumber:req.session.loginSession.class,nameTxt:req.session.loginSession.name})
             })();
 
         })()

@@ -13,6 +13,7 @@ var d3 = require('./routes/d3');
 var admin = require('./routes/admin');
 var blog = require('./routes/blog');
 var timeLine = require('./routes/timeLine');
+var profile = require('./routes/profile');
 var ECT = require('ect'); // ECT 読み込み
 
 var app = express();
@@ -58,6 +59,7 @@ app.use('/d3',d3);
 app.use('/admin',admin);
 app.use('/blog',blog);
 app.use('/timeLine',timeLine);
+app.use('/profile',profile);
 
 
 

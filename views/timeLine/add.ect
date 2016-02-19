@@ -70,8 +70,10 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Link <span class="sr-only">(添加回忆)</span></a></li>
+        <li class="active"><a href="#">添加回忆<span class="sr-only">(添加回忆)</span></a></li>
         <li><a href="/timeLine/?_id=<%=  @content._id %>">前往时间轴</a></li>
+        <li><a href="/profile?nameTxt=<%=@fromName%>&classNumber=<%=@fromClass%>">个人主页</a></li>
+        <li><a href="/blog/AllTimeLine">组织信息</a></li>
 
       </ul>
 
@@ -135,6 +137,13 @@
             <label for="message-text" class="control-label">回忆:</label>
             <textarea class="form-control" id="newRemember"></textarea>
           </div>
+
+         <div class="form-group" id="anonymity">
+            <label class="radio-inline"><input type="radio" name="anonymity" value="1" checked>公开</label>
+            <label class="radio-inline"><input type="radio" name="anonymity" value="2">匿名</label>
+        </div>
+
+
         </form>
       </div>
       <div class="modal-footer">
@@ -162,6 +171,13 @@
             <label for="message-text" class="control-label">回忆:</label>
             <textarea class="form-control" id="myRemember"></textarea>
           </div>
+
+           <div class="form-group" id="anonymityUpdate">
+              <label class="radio-inline"><input type="radio" name="anonymity" value="1">公开</label>
+              <label class="radio-inline"><input type="radio" name="anonymity" value="2">匿名</label>
+          </div>
+
+
         </form>
       </div>
       <div class="modal-footer">
@@ -220,7 +236,7 @@
 
         lunch("exampleModal");
 
-        selfPrompt(_item,function(value1,value2){
+        selfPrompt(_item,function(value1,value2,value3){
 
                 if(value1){
                     _item.content = value1;
@@ -228,6 +244,10 @@
 
                 if(value2){
                     _item.contentDetail = value2;
+                }
+
+                if(value3){
+                    _item.anonymity = value3;
                 }
 
                 _item.from = {name:$("#fromName").val(),class:$("#fromClass").val()};
@@ -286,12 +306,13 @@
 //      });
 
         lunch("exampleModal2");
-        selfPrompt2(item,function(value1,value2){
+        selfPrompt2(item,function(value1,value2,value3){
 
             console.log(222222222222);
             console.log(item);
           item.content = value1;
           item.contentDetail = value2;
+          item.anonymity = value3;
           callback(item); // send back adjusted item
           saveData();
 
@@ -390,7 +411,7 @@
 
                 document.getElementById("insertNewImpression").addEventListener("click", function(){
 
-                     return callback($("#newImpression").val(),$("#newRemember").val());
+                     return callback($("#newImpression").val(),$("#newRemember").val(),$('#anonymity  input[name="anonymity"]:checked').val());
                 }, false);
 
           }
@@ -398,20 +419,32 @@
           function selfPrompt2(item,callback){
                 $("#myImpression").val(item.content);
                 $("#myRemember").val(item.contentDetail);
+                $("#anonymityUpdate").children().children("input").attr("checked",0);
+
+
+
+                if(item.anonymity){
+                    if(item.anonymity == "1"){
+                          $('#anonymityUpdate  input[name="anonymity"]').eq(0).attr("checked",1);
+                    }
+
+                    if(item.anonymity == "2"){
+                          $('#anonymityUpdate  input[name="anonymity"]').eq(1).attr("checked",1);
+                    }
+                }
+
+
+
+
                // document.getElementById("updateNewImpression").addEventListener("click", function(){
                //     return callback($("#myImpression").val(),$("#myRemember").val());
                // },false)
 
-
                 $( "#updateNewImpression" ).one( "click", function( event ) {
-
-                   return callback($("#myImpression").val(),$("#myRemember").val());
+                   return callback($("#myImpression").val(),$("#myRemember").val(),$('#anonymityUpdate input[name="anonymity"]:checked').val());
                 });
 
-
           }
-
-
 
 
         function prettyConfirm(title, text, callback) {

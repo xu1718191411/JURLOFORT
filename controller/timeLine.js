@@ -10,15 +10,27 @@ module.exports = {
     indexController: function(req,res){
 
         steps(function(){
-
             var _id = req.query._id;
-            console.log(1110)
-            console.log(_id);
+            if(!_id){
+                res.redirect('/blog')
+                this.terminate();
+            }
+
+            if(isEmpty(req.session.loginSession)){
+                res.redirect("/blog/login")
+                this.terminate();
+            }
+
             mongo.find("ClassMates",{_id:new mongodb.ObjectID(_id)},{},function(doc){
+
+                if(doc.length<1){
+                    res.redirect('/blog')
+                    this.terminate();
+                }
                 var content = doc[0];
                 var timeLine = content.timeLine || {}
 
-                res.render('timeLine/index', {content:content,contentTimeLines:eval(timeLine)});
+                res.render('timeLine/index', {content:content,contentTimeLines:eval(timeLine),loginSession:req.session.loginSession});
             })
 
         })();

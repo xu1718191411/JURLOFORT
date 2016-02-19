@@ -10,15 +10,61 @@
 	<link rel="stylesheet" href="/timeLine/css/style.css"> <!-- Resource style -->
 	<script src="/timeLine/js/modernizr.js"></script> <!-- Modernizr -->
 
+    <!-- jQuery -->
+    <script src="/AllTimeLine/js/jquery.js"></script>
+
 	<title>Responsive Vertical Timeline</title>
+
+	<style>
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    li {
+        float: left;
+    }
+
+    li a {
+        display: inline-block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    li a:hover {
+        background-color: #111;
+    }
+
+	</style>
 </head>
 <body>
+    <p>
+	<ul>
+      <li><a class="active" href="/blog/">主页</a></li>
+      <li><a href="/timeLine/add?_id=<%=@content._id%>">添加回忆</a></li>
+
+      <li><a href="/profile?nameTxt=<%= @loginSession.name%>&classNumber=<%= @loginSession.class%>">个人主页</a></li>
+
+      <li><a href="/blog/AllTimeLine">组织信息</a></li>
+
+    </ul>
+    </p>
+
 	<header style="height:80px;">
+
+
 		<h1>大家一起为<%=@content.name%>构筑的的回忆线</h1>
 	</header>
 	<header style="height:220px;">
 		<h3><a href="/timeLine/add?_id=<%= @content._id%>">添加你对他的回忆</a></h3>
 	</header>
+
 	<section id="cd-timeline" class="cd-container">
         <% for link in @contentTimeLines : %>
             <div class="cd-timeline-block">
@@ -27,6 +73,21 @@
                 </div> <!-- cd-timeline-img -->
 
                 <div class="cd-timeline-content">
+
+                    <% if link?.from : %>
+
+
+                                <% if link.anonymity=="1" : %>
+                                        <p><%= link.from.name%>对他的回忆</p>
+                                <% else :%>
+                                        <p>神秘人对他的回忆</p>
+                                <% end %>
+                    <% else : %>
+                                <p>未知来源</p>
+                    <% end %>
+
+
+
                     <h2><%= link.content %></h2>
                     <p><%= link.contentDetail %></p>
                     <span class="cd-date"><%= link.start%></span>

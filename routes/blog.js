@@ -20,4 +20,5 @@ router.get('/login',blogController.loginController);
 router.post('/register',blogController.registerController);
 router.post('/checkLogin',blogController.checkLoginController);
 router.get('/AllTimeLine',blogController.AllTimeLineController);
+router.get('/logout',blogController.LogoutController);
 module.exports = router;
