@@ -9,5 +9,7 @@ var profileController = require('../controller/profile.js');
 
 
 router.get('/',profileController.indexController);
+router.post('/update',profileController.updateController);
+
 
 module.exports = router;

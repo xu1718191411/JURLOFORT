@@ -30,7 +30,13 @@
         <!--字体图标cdd-->
         <link href="/profile/css/font.css" rel="stylesheet" type="text/css">
 
-        <title>谁的简历</title>
+
+
+        <script src="http://t4t5.github.io/sweetalert/dist/sweetalert.min.js"></script>
+        <link href="http://t4t5.github.io/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css"/>
+
+
+        <title>个人页面</title>
 
         <style>
 
@@ -126,36 +132,52 @@
                         <a href="javascript:;" class="avatar_pic circle"><em class="circle doing">详细</em></a>
                         <b class="doing r5">
 
+                        <% if @content?.profile: %>
                                         <% if @content.profile.sex=="1" : %>
                                                 男
                                         <% else : %>
                                                 女
                                         <% end %>
+                        <% else: %>
 
+                                        性别神秘
+                        <% end %>
 
                         </b>
                     </div>
                     <div class="base">
                         <p class="desc">大家好，我是</p>
-                        <h2><%= @content.name%></h2>
-
-
-                        <% if @content?.profile : %>
-                                    <p><%= @content.profile.profile%></p>
+                                     <p style="display:none" id="classNumber"><%= @content.class%></p>
+                        <h2 id="nameTxt"><%= @content.name%></h2>
 
 
 
+                        <% if @content?.profile: %>
+
+                        <p onclick="edit(this,'profile')"><%= @content.profile.profile%></p>
+
+
+
+
+                         <% if @content?.profile.mail: %>
                                     <p>
                                     <a href="javascript:;" class="tel_me">
                                     <i aria-hidden="true" data-icon="&#xe010;"></i>
-                                    <%= @content.profile.mail%>
-                                    </a></p>
+                                            <%= @content.profile.mail%>
+                                    </a>
+                                    </p>
+                         <% else : %>
+                                    <p onclick="edit(this,'mail')">他还没有添加邮件信息</p>
+                         <% end %>
+
 
 
 
                         <% else : %>
-                                    <p>他还没有添加简介</p>
+                                    <p onclick="edit(this,'profile')">他还没有添加简介</p>
                         <% end %>
+
+
 
 
 
@@ -806,4 +828,49 @@
         <script type="text/javascript" src="/profile/js/common.js"></script>
 
     </body>
+
+    <script>
+
+        function edit(obj,key){
+             td = $(obj);
+             var txt = td.text();
+             var input = $("<input type='text'value='" + txt + "'/>");
+             td.html(input);
+             input.click(function() { return false; });
+             //获取焦点
+             input.trigger("focus");
+             //文本框失去焦点后提交内容，重新变为文本
+             input.blur(function() {
+             var newtxt = $(this).val();
+             //判断文本有没有修改
+             if (newtxt != txt) {
+             td.html(newtxt);
+
+             //*不需要使用数据库的这段可以不需要
+             var _class = $.trim($("#classNumber").text());
+             var name = $.trim($("#nameTxt").text());
+
+                $.ajax({
+                   type: "POST",
+                   url: "/profile/update",
+                   data: {name:name,_class:_class,key:key,content:newtxt},
+                   success: function(msg){
+                        var msg = eval('('+msg+')');
+                        if(msg.err!=0){
+                            swal("有些问题", msg.msg)
+                        }
+                   }
+                 });
+
+             }
+             else
+             {
+             td.html(newtxt);
+             }
+
+
+             })
+        }
+
+    </script>
 </html>
