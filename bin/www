@@ -6,10 +6,10 @@ var SessionSockets = require('session.socket.io');
 var Steps = require("ocsteps") ;
 var claimFile = require("./claimFile.js");
 var analysisFile = require("./analysisFile.js");
+var wwwConfig = require("../config/www.js")
 
-
-app.set('port', process.env.PORT || 8000);
-console.log("server is listening on port 8000");
+app.set('port', process.env.PORT || wwwConfig.wwwPort);
+console.log("server is listening on port "+wwwConfig.wwwConfig);
 
 var server = app.listen(app.get('port'), function() {
   debug('Express server listening on port ' + server.address().port);
