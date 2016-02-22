@@ -15,7 +15,6 @@ module.exports = {
         mongo.find("Articles",{},{},function(doc){
             console.log(doc);
             //res.render('blog/index', {});
-
             req.session = req.session || {};
             res.render('blog/index', {contents:doc,loginSession:req.session.loginSession});
         })
@@ -27,7 +26,8 @@ module.exports = {
         mongo.find("Articles",{_id:new mongodb.ObjectID(_id)},{},function(doc){
             console.log(doc);
             var content = doc[0];
-            res.render('blog/detail',{content:content})
+            req.session = req.session || {};
+            res.render('blog/detail',{content:content,loginSession:req.session.loginSession})
         })
     },
     signUpController:function(req,res){
