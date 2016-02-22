@@ -14,6 +14,46 @@ module.exports = {
     indexController: function(req,res){
         res.render('admin/index', {});
     },
+    logoutController:function(req,res){
+      req.session.adminLogin = 0;
+      res.redirect('/admin/login');
+    },
+    loginController:function(req,res){
+        var s = parseInt(Math.random()*10000);
+        console.log(s);
+        req.session.random  = s
+        console.log(req.session.random)
+        res.render('admin/login', {random:s});
+
+        res.end();
+    },
+    loginPostController:function(req,res){
+        if(isEmpty(req.body.userName) || isEmpty(req.body.passWord) || isEmpty(req.body.random)){
+           res.redirect('/admin/login')
+           res.end();
+        }
+
+        if(req.body.random != req.session.random){
+            console.log(req.body.random);
+            console.log(req.session.random)
+            res.redirect('/admin/login');
+            res.end()
+        }
+
+        var userName = req.body.userName;
+        var passWord = req.body.passWord;
+
+        if((userName == "villa_ak99") && (passWord == "kmkt2gb")){
+
+            req.session.adminLogin = 1;
+            res.redirect('/admin/list');
+            res.end()
+        }else{
+            res.redirect('/admin/login');
+            res.end()
+        }
+
+    },
     formController: function(req,res){
         res.render('admin/form', {});
     },
