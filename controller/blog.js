@@ -135,6 +135,21 @@ module.exports = {
             })();
 
         })()
+    },
+    saveTxtDataController:function(req,res){
+        steps(function(){
+            req.session = req.session || {}
+
+            if(!req.session._id){
+                res.end("no _id;");
+            }
+        },function(){
+            mongo.update("ClassMates",{_id:new mongodb.ObjectID(req.session._id)},{$set:{timeLine:req.body.dataSet}},function(doc){
+                console.log("updating")
+                console.log(doc);
+                res.end("{err:0,doc:"+doc+"}")
+            })
+        })()
     }
 }
 

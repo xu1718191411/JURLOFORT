@@ -90,7 +90,7 @@
 
 <hr/>
 
-<div class="row" style="display:none">
+<div class="row" style="">
         <textarea id="data">
             <%= @content.timeLine%>
         </textarea>
@@ -197,9 +197,6 @@
 
 </div>
 
-
-
-
     <script>
 
         var txtData = document.getElementById('data');
@@ -253,6 +250,8 @@
                 _item.from = {name:$("#fromName").val(),class:$("#fromClass").val()};
 
                 callback(_item);
+
+
                 saveData();
 
                 $("#insertNewImpressionClose").click();
@@ -288,6 +287,10 @@
     },
 
     onUpdate: function (item, callback) {
+        if(!item.from){
+             alert("神秘人信息无法做出修改");
+             return false;f
+        }
 
         if(item.from.name !=$("#fromName").val() || item.from.class != $("#fromClass").val()){
              alert("你不是这条回忆记录的所有者");
@@ -483,9 +486,15 @@ function saveTxtData(data){
 
 $.ajax({
    type: "POST",
-   url: "/admin/saveTxtData",
+   url: "/blog/saveTxtData",
    data: {dataSet:data},
    success: function(msg){
+        if(parseInt(msg.err)>0){
+              swal({
+                title: "有些问题",
+                text: msg.msg
+                });
+        }
    }
  });
 
