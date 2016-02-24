@@ -4,6 +4,7 @@
     <title>注册你的信息</title>
     <link href='http://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
     <script src="/admin/js/jquery.js"></script>
+    <script src="/javascripts/jquery.validate.js"></script>
     <script src="http://t4t5.github.io/sweetalert/dist/sweetalert.min.js"></script>
     <link href="http://t4t5.github.io/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css"/>
     <style>
@@ -132,7 +133,7 @@
 <body>
 
 
-<form action="index.html" method="post" id="form">
+<form action="index.html" method="post" onsubmit="return false"  id="form">
 
     <h1>注册</h1>
 
@@ -147,9 +148,14 @@
         <label for="password">密码:</label>
         <input type="password" id="password" name="password">
 
+
+        <label for="password">密码:</label>
+        <input type="password" id="repassword" name="repassword">
+
+
         <label>性别<label>
-        <input type="radio" id="under_13" value="1" name="sex"><label for="under_13" class="light">男生</label><br>
-        <input type="radio" id="over_13" value="2" name="sex"><label for="over_13" class="light">女生</label>
+        <input type="radio" id="under_13" value="1" name="sex" required><label for="under_13" class="light">男生</label><br>
+        <input type="radio" id="over_13" value="2" name="sex" required><label for="over_13" class="light">女生</label>
     </fieldset>
 
     <fieldset>
@@ -159,7 +165,7 @@
     </fieldset>
     <fieldset>
         <label for="job">你的组织:</label>
-        <select id="job" name="class">
+        <select id="job" name="class" required>
             <optgroup label="成年前">
                 <option value="3">初三八班</option>
                 <option value="1">高四18班</option>
@@ -177,16 +183,78 @@
 -->
     </fieldset>
         <button  onclick="return submits();">注册</button>
+        <button  onclick="return goToSignUp()">登陆</button>
 </form>
 
 
 <script>
 
-    function submits(){
 
-            var data = $("#form").serializeArray();
-            _request(data);
-            return false;
+
+           var validator = $("#form").validate({
+                      	 invalidHandler: function() {
+                            console.log( validator.numberOfInvalids() + " field(s) are invalid" );
+                          },
+            			rules: {
+
+            				name: {
+            					required: true,
+            					minlength: 2
+            				},
+            				password: {
+            					required: true,
+            					minlength: 5
+            				},
+            				repassword: {
+            					required: true,
+            					minlength: 5,
+            					equalTo: "#password"
+            				},
+            				mail: {
+            					required: true,
+            					email: true
+            				},
+            				class:{
+            				    required: true
+            				},
+            				agree: "required"
+            			},
+            			messages: {
+            				name: {
+            					required: "请填写姓名",
+            					minlength: "名字长度至少两位"
+            				},
+            				password: {
+            					required: "请填写密码",
+            					minlength: "密码长度至少五位"
+            				},
+            				repassword: {
+            					required: "请填写重复密码",
+            					minlength: "密码长度至少五位",
+            					equalTo: "密码不一致"
+            				},
+            				mail: "请填写正确的邮箱",
+            				class: "请选择你的组织",
+            				sex: "你是男生还是女孩"
+            			}
+            		});
+
+
+
+
+
+
+    function goToSignUp(){
+        location = '/blog/login';
+        return false;
+    }
+
+    function submits(){
+            if(validator.form()){
+                var data = $("#form").serializeArray();
+                _request(data);
+                return false;
+            }
 
     }
 
@@ -210,7 +278,7 @@
                                 swal("注册成功!","即将完成跳转");
                                        setTimeout(function(){
                                             location = "/blog/AllTimeLine"
-                                       },3000);
+                                       },1000);
                           }else{
                                 failureAlert(msg.msg);
                           }

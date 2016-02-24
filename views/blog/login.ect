@@ -5,6 +5,7 @@
     <link href='http://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
 
     <script src="/admin/js/jquery.js"></script>
+    <script src="/javascripts/jquery.validate.js"></script>
     <script src="http://t4t5.github.io/sweetalert/dist/sweetalert.min.js"></script>
     <link href="http://t4t5.github.io/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css"/>
 
@@ -134,7 +135,7 @@
 <body>
 
 
-<form action="index.html" method="post" id="form">
+<form action="index.html" onsubmit="return false;" method="post" id="form">
 
     <h1>登陆</h1>
 
@@ -142,10 +143,10 @@
         <legend><span class="number">1</span>你的信息</legend>
 
         <label for="text">姓名:</label>
-        <input type="text" id="name" name="name">
+        <input type="text" id="name" name="name" required>
 
         <label for="password">密码:</label>
-        <input type="password" id="password" name="password">
+        <input type="password" id="password" name="password" required>
     <fieldset>
         <label for="job">你的组织:</label>
         <select id="job" name="class">
@@ -162,17 +163,50 @@
 
     </fieldset>
 
-
     <button  onclick="return submits();">登陆</button>
-    <button  onclick="location='/blog/signup'">注册</button>
+    <button  onclick="return goToLogin()">注册</button>
 </form>
 
 
 <script>
 
+
+     var validator = $("#form").validate({
+        			rules: {
+
+        				name: {
+        					required: true,
+        					minlength: 2
+        				},
+        				password: {
+        					required: true,
+        					minlength: 3
+        				}
+
+        			},
+        			messages: {
+        				name: {
+        					required: "请输入用户名"
+        				},
+        				password: {
+        					required: "请输入密码"
+        				}
+        			}
+        		});
+
+
+
+        function goToLogin(){
+            location = '/blog/signup';
+            return false;
+        }
+
         function submits(){
-                _request();
-                return false;
+                if(validator.form()){
+                                _request();
+                                return false;
+                }
+
         }
 
         function _request(){
@@ -186,7 +220,7 @@
                             swal("登陆成功!","即将完成跳转");
                                    setTimeout(function(){
                                         location = "/blog/AllTimeLine"
-                                   },3000);
+                                   },500);
                       }else{
                             failureAlert(msg.msg);
                       }
@@ -198,6 +232,11 @@
     function failureAlert(msg){
       swal("有些问题", msg)
     }
+
+
+
+
+
 </script>
 </body>
 </html>
