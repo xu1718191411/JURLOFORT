@@ -53,6 +53,7 @@ module.exports = {
                 mongo.find("ClassMates",{_id:new mongodb.ObjectID(_id)},{},this.hold(function(doc){
                     var content = doc[0];
                     console.log(content);
+                    content.timeLine = content.timeLine || "[]"
                     return content
                 }))
 
