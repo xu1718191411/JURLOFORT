@@ -153,6 +153,7 @@ module.exports = {
         console.log(_query);
 
         mongo.find("ClassMates",_query,{},function(doc){
+            console.log('bbbbbbbbbbbb')
             console.log(doc);
             res.render('admin/timeLine', {links:doc});
         })
@@ -161,16 +162,24 @@ module.exports = {
     },
     postClassMateController:function(req,res){
         console.log(req.body)
-        mongo.find("ClassMates",{name:req.body.name,class:req.body.class},{},function(doc){
-            if(doc.length>0){
-                res.redirect('/admin/timeLine?class=A'+req.body.class);
-            }else{
-                mongo.insert("ClassMates",req.body,function(doc){
-                    console.log(doc);
+
+
+        mongo.createIfNotExists("ClassMates",function(result){
+
+            console.log("result is "+result);
+            mongo.find("ClassMates",{name:req.body.name,class:req.body.class},{},function(doc){
+                if(doc.length>0){
                     res.redirect('/admin/timeLine?class=A'+req.body.class);
-                })
-            }
+                }else{
+                    mongo.insert("ClassMates",req.body,function(doc){
+                        console.log('aaaaaaaaaaaa')
+                        console.log(doc);
+                        res.redirect('/admin/timeLine?class=A'+req.body.class);
+                    })
+                }
+            })
         })
+
 
     },
     editClassMateController:function(req,res){
@@ -193,7 +202,6 @@ module.exports = {
 
         mongo.find("ClassMates",{name:req.body.name,class:req.body.class},{},function(doc){
             if(doc.length>1){
-                console.llg(22222)
                 res.redirect('/admin/timeLine?class=A'+req.body.class);
             }else{
                 mongo.update("ClassMates",{name:req.body.name},{$set:{'profile':_update}},{},function(doc){
@@ -203,7 +211,30 @@ module.exports = {
             }
         })
     },
+    delClassMateController:function(req,res){
+        var _id = req.query._id;
+        var _class = "A1";
 
+        steps(function(){
+
+            mongo.find("ClassMates",{_id:new mongodb.ObjectID(_id)},{},function(doc){
+                if(doc.length>1){
+                    res.redirect('/admin/list');
+                }else{
+                    _class = "A"+doc[0]['class'];
+                    mongo.remove("ClassMates",{_id:new mongodb.ObjectID(_id)},function(doc){
+                        res.redirect('/admin/timeLine?class='+_class)
+                    })
+                }
+            })
+
+        },function(){
+
+        })();
+
+
+
+    },
     personTimeLineController:function(req,res){
             steps(
                 function(){

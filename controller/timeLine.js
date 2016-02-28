@@ -5,6 +5,9 @@
 var mongo = require("../model/mongo.js");
 var mongodb = require("mongodb");
 var steps = require('ocsteps');
+var im = require('imagemagick');
+var fs = require("fs")
+var path = require("path")
 
 module.exports = {
     indexController: function(req,res){
@@ -76,7 +79,45 @@ module.exports = {
                 res.end("{err:0,doc:"+doc+"}")
             })
         })()
+    },
+    uploadController:function(req,res){
+
+        var file = req.files[0];
+
+
+        var filename = file.filename;
+
+        var target_path = path.join(__dirname, "../public/timeLineupload")
+        var originalPath = path.join(__dirname, "../upload")
+
+        console.log(file);
+        console.log(target_path)
+        console.log(originalPath);
+        var targetName = Math.random().toString(36).substring(2);
+
+        fs.rename(originalPath+"/"+filename,target_path+'/' +targetName+".jpg",function(err){
+            if(err) throw err;
+
+
+            im.resize({
+                srcPath: target_path+'/' +targetName+".jpg",
+                dstPath: target_path+'/' +targetName+"-thumb.jpg",
+                height:  450
+
+            }, function(err, stdout, stderr){
+                if (err) throw err;
+                console.log('resized kittens.jpg to fit within 256x256px');
+                res.end(JSON.stringify({targetName:targetName+"-thumb.jpg"}));
+            });
+
+//            fs.unlink(originalPath+"/"+file.filename,function(err){
+//                if(err) throw err;
+//
+//            })
+
+        })
     }
+
 }
 
 

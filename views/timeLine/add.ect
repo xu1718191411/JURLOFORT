@@ -143,8 +143,21 @@
             <label class="radio-inline"><input type="radio" name="anonymity" value="2">匿名</label>
         </div>
 
-
         </form>
+
+
+       <form class="form-horizontal" id="fileupload-form" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="control-label">Select Files</label>
+                        <input type="file" name="files" id="fileupload">
+                   </div>
+       </form>
+
+      <div class="row">
+           <label class="col-sm-2 control-label" >封面图片</label>
+           <img id="thumb" class="col-sm-3 src="" alt="thumbnail" class="img-thumbnail">
+      </div>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" id="insertNewImpressionClose">关闭</button>
@@ -177,6 +190,20 @@
               <label class="radio-inline"><input type="radio" name="anonymity" value="2">匿名</label>
           </div>
 
+
+        </form>
+
+         <form class="form-horizontal" id="fileupload-form-update" enctype="multipart/form-data">
+                      <div class="form-group">
+                          <label class="control-label">Select Files</label>
+                          <input type="file" name="files" id="fileuploadUpdate">
+                     </div>
+         </form>
+
+        <div class="row">
+             <label class="col-sm-2 control-label" >封面图片</label>
+             <img id="thumbUpdate" class="col-sm-3  alt="thumbnailUpdate" class="img-thumbnail">
+        </div>
 
         </form>
       </div>
@@ -233,7 +260,7 @@
 
         lunch("exampleModal");
 
-        selfPrompt(_item,function(value1,value2,value3){
+        selfPrompt(_item,function(value1,value2,value3,value4){
 
                 if(value1){
                     _item.content = value1;
@@ -245,6 +272,10 @@
 
                 if(value3){
                     _item.anonymity = value3;
+                }
+
+                if(value4){
+                    _item.targetname = value4;
                 }
 
                 _item.from = {name:$("#fromName").val(),class:$("#fromClass").val()};
@@ -297,6 +328,12 @@
              return false;
         }
 
+
+
+        $("#thumbUpdate").attr("src","/timeLineupload/"+item.targetName);
+        $("#thumbUpdate").attr("targetName",item.targetname);
+
+
 //      prettyPrompt('Update item', 'Edit items text:', item.content, function (value) {
 //        if (value) {
 //          item.content = value;
@@ -309,13 +346,12 @@
 //      });
 
         lunch("exampleModal2");
-        selfPrompt2(item,function(value1,value2,value3){
+        selfPrompt2(item,function(value1,value2,value3,value4){
 
-            console.log(222222222222);
-            console.log(item);
           item.content = value1;
           item.contentDetail = value2;
           item.anonymity = value3;
+          item.targetName = value4;
           callback(item); // send back adjusted item
           saveData();
 
@@ -414,7 +450,7 @@
 
                 document.getElementById("insertNewImpression").addEventListener("click", function(){
 
-                     return callback($("#newImpression").val(),$("#newRemember").val(),$('#anonymity  input[name="anonymity"]:checked').val());
+                     return callback($("#newImpression").val(),$("#newRemember").val(),$('#anonymity  input[name="anonymity"]:checked').val(),$("#thumb").attr('targetname'));
                 }, false);
 
           }
@@ -436,15 +472,12 @@
                     }
                 }
 
-
-
-
                // document.getElementById("updateNewImpression").addEventListener("click", function(){
                //     return callback($("#myImpression").val(),$("#myRemember").val());
                // },false)
 
                 $( "#updateNewImpression" ).one( "click", function( event ) {
-                   return callback($("#myImpression").val(),$("#myRemember").val(),$('#anonymityUpdate input[name="anonymity"]:checked').val());
+                   return callback($("#myImpression").val(),$("#myRemember").val(),$('#anonymityUpdate input[name="anonymity"]:checked').val(),$("#thumbUpdate").attr('targetName'));
                 });
 
           }
@@ -500,6 +533,52 @@ $.ajax({
 
 
 }
+
+
+// 绑定了`submit`事件。
+   $('#fileupload-form,#fileupload-form-update').on('submit',(function(e) {
+
+    var idSource = $(this).attr("id");
+
+
+    e.preventDefault();
+
+
+             if(idSource=="fileupload-form"){
+                var fd = new FormData($('#fileupload-form').get(0));
+             }else{
+                var fd = new FormData($('#fileupload-form-update').get(0));
+             }
+
+            $.ajax({
+               url: "/timeLine/upload",
+               type: "POST",
+               data: fd,
+               processData: false,
+               contentType: false,
+               success: function (res) {
+               var res = eval("("+res+")");
+
+                    if(idSource=="fileupload-form"){
+                            var targetId = "#thumb";
+                    }else{
+                            var targetId = "#thumbUpdate"
+                    }
+
+
+                         $(targetId).attr("src","/timeLineupload/"+res.targetName);
+                         $(targetId).attr("targetName",res.targetName);
+               }
+             });
+   }));
+
+
+
+
+$("#fileupload,#fileuploadUpdate").on("change", function(){
+
+   $(this).parents("form").submit();
+});
 
 </script>
 

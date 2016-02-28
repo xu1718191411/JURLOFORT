@@ -89,7 +89,7 @@ function createIfNotExists(collection,callback){
 
         for(var i in collections){
             if(collection == collections[i]['s']['name']){
-
+                console.log("collection is"+collection)
                 callback(1);
                 return;
 

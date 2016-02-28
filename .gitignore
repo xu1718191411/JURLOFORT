@@ -5,3 +5,5 @@ tmp
 projectFilesBackup*
 public/data/
 public/upload/*
+public/uploads/*
+public/timeLineupload/*
