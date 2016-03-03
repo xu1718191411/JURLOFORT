@@ -30,14 +30,14 @@ module.exports = {
     loginPostController:function(req,res){
         if(isEmpty(req.body.userName) || isEmpty(req.body.passWord) || isEmpty(req.body.random)){
            res.redirect('/admin/login')
-           res.end();
         }
 
         if(req.body.random != req.session.random){
             console.log(req.body.random);
             console.log(req.session.random)
             res.redirect('/admin/login');
-            res.end()
+
+
         }
 
         var userName = req.body.userName;
@@ -47,12 +47,13 @@ module.exports = {
 
             req.session.adminLogin = 1;
             res.redirect('/admin/list');
-            res.end()
+
         }else{
             res.redirect('/admin/login');
-            res.end()
+
         }
 
+        res.end()
     },
     formController: function(req,res){
         res.render('admin/form', {});
@@ -72,6 +73,48 @@ module.exports = {
             res.render('admin/list', {links:doc});
         })
     },
+
+    historyController:function(req,res){
+            var _class = req.query._class;
+            var _className
+            var cid;
+
+            if(_class=="A1"){
+                _className = '高四十八班'
+                cid = 1;
+            }else if(_class == "A2"){
+                _className =  '兄弟连'
+                cid = 2;
+            }else if(_class == "A3"){
+                _className = '初三八班'
+                cid = 2;
+            }else{
+                res.redirect(302,'/admin/list');
+                next();
+
+            }
+
+            steps(function(){
+
+                mongo.createIfNotExists("historyList"+cid,this.hold(function(doc){
+                        if(parseInt(doc)==0){
+                            res.render("admin/history",{_className:_className,docs:[]});
+                            res.end()
+                        }
+                }))
+
+            },function(){
+                mongo.find("historyList"+cid,{toUserClass:cid.toString()},{},this.hold(function(doc){
+                    doc = doc || []
+                    for(var i in doc){
+                        doc[i]['date'] = changeDate(doc[i]['date']);
+                    }
+                    res.render("admin/history",{_className:_className,docs:doc});
+
+                }))
+            })()
+    },
+
     delController:function(req,res){
         var _id = req.query._id;
         mongo.remove("Articles",{_id:new mongodb.ObjectID(_id)},function(doc){
@@ -278,3 +321,43 @@ function isEmpty(obj) {
     }
     return true;
 }
+
+function changeDate(str){
+    var now_date, now_date_format;
+    now_date = new Date(parseInt(str));
+    now_date_format = now_date.getFullYear();
+
+    if (parseInt(now_date.getMonth()) < 9) {
+        now_date_format += "-" + "0" + (parseInt(now_date.getMonth()) + 1);
+    } else {
+        now_date_format += "-" + (parseInt(now_date.getMonth()) + 1);
+    }
+    if (parseInt(now_date.getDate()) < 9) {
+        now_date_format += "-" + "0" + (parseInt(now_date.getDate()) + 1);
+    } else {
+        now_date_format += "-" + (parseInt(now_date.getDate()) + 1);
+    }
+
+    if (parseInt(now_date.getHours()) < 9) {
+        now_date_format += " " + "0" + (parseInt(now_date.getHours()));
+    } else {
+        now_date_format += " " + (parseInt(now_date.getHours()));
+    }
+
+
+    if (parseInt(now_date.getMinutes()) < 9) {
+        now_date_format += ":" + "0" + (parseInt(now_date.getMinutes()));
+    } else {
+        now_date_format += ":" + (parseInt(now_date.getMinutes()));
+    }
+
+    if (parseInt(now_date.getSeconds()) < 9) {
+        now_date_format += ":" + "0" + (parseInt(now_date.getSeconds()));
+    } else {
+        now_date_format += ":" + (parseInt(now_date.getSeconds()));
+    }
+
+    return now_date_format;
+
+}
+

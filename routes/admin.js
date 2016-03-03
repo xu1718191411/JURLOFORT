@@ -24,6 +24,8 @@ router.post('/login',adminController.loginPostController);
 router.get('/form',adminController.formController);
 router.post('/post',adminController.postController);
 router.get('/list',adminController.listController);
+router.get('/history',adminController.historyController);
+
 router.get('/del',adminController.delController);
 router.get('/edit',adminController.editController);
 router.post('/update',adminController.updateController);

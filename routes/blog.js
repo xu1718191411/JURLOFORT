@@ -22,4 +22,11 @@ router.post('/checkLogin',blogController.checkLoginController);
 router.get('/AllTimeLine',blogController.AllTimeLineController);
 router.get('/logout',blogController.LogoutController);
 router.post('/saveTxtData',blogController.saveTxtDataController);
+router.post('/historySaveTxtData',blogController.historySaveTxtDataController);
+router.post('/updateHistorySaveTxtData',blogController.updateHistorySaveTxtDataController);
+router.post('/deleteHistorySaveTxtData',blogController.deleteHistorySaveTxtDataController);
+
+
+
+
 module.exports = router;

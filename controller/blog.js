@@ -102,8 +102,6 @@ module.exports = {
         });
     },
     AllTimeLineController:function(req,res){
-        steps(function(){
-
             if(isEmpty(req.session.loginSession)){
                 res.redirect("/blog/login")
             }
@@ -133,10 +131,9 @@ module.exports = {
             },function(doc){
                     res.render("blog/allTimeLine",{content:doc,classNumber:req.session.loginSession.class,nameTxt:req.session.loginSession.name})
             })();
-
-        })()
     },
     saveTxtDataController:function(req,res){
+
         steps(function(){
             req.session = req.session || {}
 
@@ -149,6 +146,119 @@ module.exports = {
                 console.log(doc);
                 res.end("{err:0,doc:"+doc+"}")
             })
+        })()
+    },
+    historySaveTxtDataController:function(req,res){
+
+        req.session  = req.session || {}
+        if(isEmpty(req.session.loginSession)){
+            res.end("{err:1,msg:'not login'}")
+        }
+        var from = {fromName:req.session.loginSession.name,fromClass:req.session.loginSession.class}
+        var ToUserid = req.session._id
+        var content = req.body.content;
+        var contentDetail = req.body.contentDetail;
+        var anonymity = req.body.anonymity;
+        var targetname = req.body.targetname;
+        var date = Date.parse(new Date());
+        var toUserName;
+        var toUserClass;
+
+        var insertObj = {};
+        insertObj.from = from;
+        insertObj.content = content;
+        insertObj.contentDetail = contentDetail;
+        insertObj.anonymity = anonymity;
+        insertObj.targetname = targetname;
+        insertObj.date = date;
+        insertObj.randomStr = randomString(6);
+
+
+
+        steps(function(){
+            mongo.find("ClassMates",{_id:new mongodb.ObjectID(req.session._id)},{},this.hold(function(doc){
+                if(doc.length<1){
+                    res.end("{err:1,msg:'We do not know who you want to comment to'}");
+                    this.terminate();
+                }else{
+                    return doc[0]
+                }
+            }))
+        },function(content){
+           toUserName = content.name;
+           toUserClass = content.class;
+           insertObj.toUserName = toUserName;
+           insertObj.toUserClass = toUserClass;
+
+
+
+            mongo.createIfNotExists("historyList"+from.fromClass,this.hold(function(res){
+                if(parseInt(res)>0){
+                       console.log("create table"+"historyList"+from.fromClass);
+                }else{
+                       console.log("table "+"historyList"+from.fromClass+" already exists")
+                }
+            }))
+
+        },function(){
+            mongo.insert("historyList"+from.fromClass,insertObj,{},function(doc){
+                    if(parseInt(doc.insertedCount)>0){
+                        console.log(doc.insertedIds[0]['id'])
+                        res.end("{err:0,msg:'"+insertObj.randomStr+"'}")
+                    }
+            })
+
+        })()
+    },
+    updateHistorySaveTxtDataController:function(req,res){
+        req.session  = req.session || {}
+        if(isEmpty(req.session.loginSession)){
+            res.end("{err:1,msg:'not login'}")
+        }
+        var updateObj = {}
+        var content = req.body.content;
+        var contentDetail = req.body.contentDetail;
+        var anonymity = req.body.anonymity;
+        var targetname = req.body.targetname;
+        var date = Date.parse(new Date());
+
+        updateObj.content = content;
+        updateObj.contentDetail = contentDetail;
+        updateObj.anonymity = anonymity;
+        updateObj.targetname = targetname;
+        updateObj.date = date;
+
+        var historyRandom = req.body.historyRandom;
+
+        steps(function(){
+            mongo.createIfNotExists("historyList"+req.body["from[class]"],this.hold(function(doc){
+
+            }))
+        },function(){
+            mongo.update("historyList"+req.body["from[class]"],{randomStr:historyRandom},{$set:{content:content,contentDetail:contentDetail,anonymity:anonymity,targetname:targetname,date:date}},this.hold(function(doc){
+                    res.end("{err:0,msg:'ok'}")
+            }))
+        })()
+
+
+    },
+    deleteHistorySaveTxtDataController:function(req,res){
+        req.session  = req.session || {}
+        if(isEmpty(req.session.loginSession)){
+            res.end("{err:1,msg:'not login'}")
+        }
+
+        steps(function(){
+            mongo.createIfNotExists("historyList"+req.body["from[class]"],this.hold(function(doc){
+
+            }))
+        },function(){
+            mongo.remove("historyList"+req.body["from[class]"],{randomStr:req.body.historyRandom},{},this.hold(function(doc){
+                console.log(doc.result.n)
+
+                    res.end("{err:0,msg:'ok'}")
+
+            }))
         })()
     }
 }
@@ -164,3 +274,13 @@ function isEmpty(obj) {
     return true;
 }
 
+
+function randomString(len, charSet) {
+    charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var randomString = '';
+    for (var i = 0; i < len; i++) {
+        var randomPoz = Math.floor(Math.random() * charSet.length);
+        randomString += charSet.substring(randomPoz,randomPoz+1);
+    }
+    return randomString;
+}

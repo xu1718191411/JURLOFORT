@@ -280,16 +280,29 @@
                     _item.targetname = value4;
                 }
 
-                _item.from = {name:$("#fromName").val(),class:$("#fromClass").val()};
 
-                callback(_item);
+                historySaveData(_item,function(res){
+
+                    if(parseInt(res.err)==0){
+
+                                    _item.from = {name:$("#fromName").val(),class:$("#fromClass").val()};
+                                    _item.historyRandom = res.msg;
+
+                                    callback(_item);
+
+                                    saveData();
+
+                                    $("#insertNewImpressionClose").click();
+                                    $("#newImpression").val("");
+                                    $("#newRemember").val("");
+
+                    }else{
+                            alert(res.msg);
+                    }
+
+                })
 
 
-                saveData();
-
-                $("#insertNewImpressionClose").click();
-                $("#newImpression").val("");
-                $("#newRemember").val("");
 
         })
 
@@ -354,12 +367,24 @@
           item.contentDetail = value2;
           item.anonymity = value3;
           item.targetName = value4;
-          callback(item); // send back adjusted item
-          saveData();
 
-        $("#updateNewImpressionClose").click();
-        //$("#myImpression").val("");
-        //$("#myRemember").val("");
+
+          updateHistorySaveData(item,function(res){
+
+              if(parseInt(res.err)==0){
+                  callback(item); // send back adjusted item
+                  saveData();
+
+                  $("#updateNewImpressionClose").click();
+                  //$("#myImpression").val("");
+                  //$("#myRemember").val("");
+              }else{
+                  alert(res.msg)
+              }
+
+          })
+
+
 
         });
 
@@ -368,8 +393,15 @@
     onRemove: function (item, callback) {
       prettyConfirm('Remove item', 'Do you really want to remove item ' + item.content + '?', function (ok) {
         if (ok) {
-          callback(item); // confirm deletion
-          saveData();
+
+
+            deleteHistorySaveData(item,function(res){
+                         //if(parseInt(res.err)==0){
+                            callback(item); // confirm deletion
+                            saveData();
+                         //}
+            })
+
         }
         else {
           callback(null); // cancel deletion
@@ -567,7 +599,6 @@ $.ajax({
                             var targetId = "#thumbUpdate"
                     }
 
-
                          $(targetId).attr("src","/timeLineupload/"+res.targetName);
                          $(targetId).attr("targetName",res.targetName);
                }
@@ -581,6 +612,43 @@ $("#fileupload,#fileuploadUpdate").on("change", function(){
 
    $(this).parents("form").submit();
 });
+
+
+function historySaveData(content,cb){
+
+                    $.ajax({
+                       url: "/blog/historySaveTxtData",
+                       type: "POST",
+                       data: content,
+                       success: function (res) {
+                            cb(eval('('+res+')'));
+                       }
+                     });
+}
+
+function updateHistorySaveData(content,cb){
+
+                    $.ajax({
+                       url: "/blog/updateHistorySaveTxtData",
+                       type: "POST",
+                       data: content,
+                       success: function (res) {
+                            cb(eval('('+res+')'));
+                       }
+                     });
+}
+
+
+function deleteHistorySaveData(content,cb){
+                        $.ajax({
+                           url: "/blog/deleteHistorySaveTxtData",
+                           type: "POST",
+                           data: content,
+                           success: function (res) {
+                                cb(eval('('+res+')'));
+                           }
+                         });
+}
 
 </script>
 
