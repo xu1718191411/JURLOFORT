@@ -89,6 +89,7 @@ module.exports = {
             console.log(doc);
 
             mongo.find(tablesName[parseInt(req.body.class)-1],{name:req.body.name,class:req.body.class,password:req.body.password},{},function(doc){
+
                 console.log(doc);
                 doc = doc || {}
                 if(doc.length==0){
