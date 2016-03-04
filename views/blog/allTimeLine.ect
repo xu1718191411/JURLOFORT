@@ -44,13 +44,13 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#">About</a>
+                        <a href="#">场景</a>
                     </li>
                     <li>
-                        <a href="#">Services</a>
+                        <a href="#">大家的位置</a>
                     </li>
                     <li>
-                        <a href="#">Contact</a>
+                        <a href="#">新的大事件</a>
                     </li>
                 </ul>
 
@@ -104,14 +104,15 @@
         <!-- /.row -->
 
 
-        <div class="row">
+        <div class="row" class="col-lg-12">
           <% for link in @content : %>
-            <div class="col-md-2 portfolio-item">
+          <div  class="col-lg-6">
+            <div class="col-lg-4 portfolio-item">
                 <a href="#">
                     <img class="img-responsive img-circle" width="150" height="150" src="/images/headCapture/2.jpg" alt="">
                 </a>
             </div>
-            <div class="col-md-4 portfolio-item">
+            <div class="col-lg-8 portfolio-item">
                 <h3>
                     <a href="/timeLine?_id=<%= link.__id %>">
                         <%= link.name %>
@@ -121,6 +122,9 @@
                     <%= link.profile %>
                 </p>
             </div>
+            </div>
+
+
         <% end %>
 
         </div>
