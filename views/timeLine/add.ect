@@ -412,6 +412,7 @@
 
         var timeline = new vis.Timeline(container, items, options);
 
+
         function loadData () {
             // get and deserialize the data
             var data = JSON.parse(txtData.value);
@@ -466,7 +467,7 @@
         // load the initial data
         loadData();
 
-
+        timeline.setSelection("<%=@_ids%>",{focus: true})
 
         function prettyPrompt(title, text, inputValue, callback) {
             swal({
@@ -652,6 +653,7 @@ function deleteHistorySaveData(content,cb){
                            }
                          });
 }
+
 
 </script>
 

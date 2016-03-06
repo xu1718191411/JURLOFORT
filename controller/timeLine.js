@@ -41,14 +41,14 @@ module.exports = {
 
 
 
-                res.render('timeLine/index', {content:content,contentTimeLines:timeLine,loginSession:req.session.loginSession});
+                res.render('timeLine/index', {_id:_id,content:content,contentTimeLines:timeLine,loginSession:req.session.loginSession});
             })
 
         })();
 
     },
     addController:function(req,res){
-
+        var _ids = req.query._ids
         steps(
             function(){
                 if(isEmpty(req.session.loginSession)){
@@ -66,7 +66,7 @@ module.exports = {
                 }))
 
             } ,function(doc){
-                res.render("timeLine/add",{content:doc,fromName:req.session.loginSession.name,fromClass:req.session.loginSession.class});
+                res.render("timeLine/add",{_ids:_ids,content:doc,fromName:req.session.loginSession.name,fromClass:req.session.loginSession.class});
             })()
     },
     saveTxtDataController:function(req,res){
