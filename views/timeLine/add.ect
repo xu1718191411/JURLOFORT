@@ -345,7 +345,7 @@
 
 
 
-        $("#thumbUpdate").attr("src","/timeLineupload/"+item.targetName);
+        $("#thumbUpdate").attr("src","/timeLineupload/"+item.targetname);
         $("#thumbUpdate").attr("targetName",item.targetname);
 
 
@@ -366,7 +366,7 @@
           item.content = value1;
           item.contentDetail = value2;
           item.anonymity = value3;
-          item.targetName = value4;
+          item.targetname = value4;
 
 
           updateHistorySaveData(item,function(res){
@@ -482,11 +482,14 @@
           function selfPrompt(item,callback){
                 //点击以后再执行下面的回调函数
 
-                document.getElementById("insertNewImpression").addEventListener("click", function(){
+                  $("#insertNewImpression").click(addEventListenerClick(callback));
+          }
 
-                     return callback($("#newImpression").val(),$("#newRemember").val(),$('#anonymity  input[name="anonymity"]:checked').val(),$("#thumb").attr('targetname'));
-                }, false);
-
+          function addEventListenerClick(callback){
+                return function(){
+                    $("#insertNewImpression").off("click")
+                    return callback($("#newImpression").val(),$("#newRemember").val(),$('#anonymity  input[name="anonymity"]:checked').val(),$("#thumb").attr('targetname'));
+                }
           }
 
           function selfPrompt2(item,callback){
