@@ -10,8 +10,24 @@
 	<link rel="stylesheet" href="/timeLine/css/style.css"> <!-- Resource style -->
 	<script src="/timeLine/js/modernizr.js"></script> <!-- Modernizr -->
 
-    <!-- jQuery -->
-    <script src="/AllTimeLine/js/jquery.js"></script>
+
+
+
+    <!-- jQuery 1.7.2+ or Zepto.js 1.0+ -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+    <!-- Magnific Popup core CSS file -->
+    <link rel="stylesheet" href="/dimsemenov-Magnific-Popup/dist/magnific-popup.css">
+
+
+
+    <!-- Magnific Popup core JS file -->
+    <script src="/dimsemenov-Magnific-Popup/dist/jquery.magnific-popup.js"></script>
+
+
+
+
 
 	<title>Responsive Vertical Timeline</title>
 
@@ -91,7 +107,7 @@
                     <h2><%= link.content %></h2>
                     <p><%= link.contentDetail %></p>
                     <p>
-                    <img src="/timeLineupload/<%= link.targetname%>">
+                    <img class="test-popup-link" href="/timeLineupload/<%= link.targetName%>" src="/timeLineupload/<%= link.targetname%>">
                     </p>
                     <span class="cd-date"><%= link.start%></span>
                 </div> <!-- cd-timeline-content -->
@@ -99,7 +115,19 @@
         <% end %>
 
 	</section> <!-- cd-timeline -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="/timeLine/js/main.js"></script> <!-- Resource jQuery -->
 </body>
 </html>
+
+
+<script>
+
+$(document).ready(function($) {
+
+$('.test-popup-link').magnificPopup({
+    type: 'image' // this is default type
+});
+
+});
+
+</script>

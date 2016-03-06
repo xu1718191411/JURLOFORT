@@ -31,9 +31,17 @@ module.exports = {
                     this.terminate();
                 }
                 var content = doc[0];
-                var timeLine = content.timeLine || {}
+                var timeLine = content.timeLine || []
+                timeLine = eval(timeLine)
+                for(var i in timeLine){
+                   timeLine[i].targetname = timeLine[i].targetname || ""
 
-                res.render('timeLine/index', {content:content,contentTimeLines:eval(timeLine),loginSession:req.session.loginSession});
+                   timeLine[i].targetName =  timeLine[i].targetname.replace("-thumb","")
+                }
+
+
+
+                res.render('timeLine/index', {content:content,contentTimeLines:timeLine,loginSession:req.session.loginSession});
             })
 
         })();
