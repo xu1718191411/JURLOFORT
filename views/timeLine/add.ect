@@ -33,6 +33,42 @@
     #timeLine .buttons input {
         padding: 10px;
     }
+
+    .menu {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin: 10px;
+        z-index: 9999;
+    }
+
+
+    .btn {
+      background: #3498db;
+      background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+      background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+      background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+      background-image: -o-linear-gradient(top, #3498db, #2980b9);
+      background-image: linear-gradient(to bottom, #3498db, #2980b9);
+      -webkit-border-radius: 28;
+      -moz-border-radius: 28;
+      border-radius: 28px;
+      font-family: Arial;
+      color: #ffffff;
+      font-size: 20px;
+      padding: 10px 20px 10px 20px;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: #3cb0fd;
+      background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+      background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+      background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+      background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+      background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+      text-decoration: none;
+    }
 </style>
 
 </head>
@@ -85,7 +121,14 @@
 </div>
 
 <div class="row">
-    <div id="visualization"></div>
+    <div id="visualization">
+        <div class="menu">
+            <input type="button" class="btn" id="zoomIn" value="放大"/>
+            <input type="button" class="btn" id="zoomOut" value="缩小"/>
+            <input type="button" class="btn" id="moveLeft" value="左移动"/>
+            <input type="button" class="btn" id="moveRight" value="右移动"/>
+        </div>
+    </div>
 </div>
 
 <hr/>
@@ -245,7 +288,7 @@
 
   var options = {
     editable: true,
-
+    height: '450px',
     onAdd: function (_item, callback) {
             console.log(111111111111);
             console.log(_item);
@@ -428,6 +471,8 @@
             items.clear();
             items.add(data);
 
+            console.log("loaded data")
+            console.log(data)
             // adjust the timeline window such that we see the loaded data
             timeline.fit();
         }
@@ -467,7 +512,47 @@
         // load the initial data
         loadData();
 
-        timeline.setSelection("<%=@_ids%>",{focus: true})
+        <% if @_ids? : %>
+            timeline.setSelection("<%=@_ids%>",{focus: true})
+        <% end %>
+
+
+
+    /**
+     * Move the timeline a given percentage to left or right
+     * @param {Number} percentage   For example 0.1 (left) or -0.1 (right)
+     */
+    function move (percentage) {
+        var range = timeline.getWindow();
+        var interval = range.end - range.start;
+
+        timeline.setWindow({
+            start: range.start.valueOf() - interval * percentage,
+            end:   range.end.valueOf()   - interval * percentage
+        });
+    }
+
+    /**
+     * Zoom the timeline a given percentage in or out
+     * @param {Number} percentage   For example 0.1 (zoom out) or -0.1 (zoom in)
+     */
+    function zoom (percentage) {
+        var range = timeline.getWindow();
+        var interval = range.end - range.start;
+
+        timeline.setWindow({
+            start: range.start.valueOf() - interval * percentage,
+            end:   range.end.valueOf()   + interval * percentage
+        });
+    }
+
+    // attach events to the navigation buttons
+    document.getElementById('zoomIn').onclick    = function () { zoom(-0.2); };
+    document.getElementById('zoomOut').onclick   = function () { zoom( 0.2); };
+    document.getElementById('moveLeft').onclick  = function () { move( 0.2); };
+    document.getElementById('moveRight').onclick = function () { move(-0.2); };
+
+
 
         function prettyPrompt(title, text, inputValue, callback) {
             swal({
