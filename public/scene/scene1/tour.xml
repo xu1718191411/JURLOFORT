@@ -36,7 +36,7 @@
 	</action>
 
 
-	<scene name="scene_a0" title="a0" onstart="" thumburl="panos/a0.tiles/thumb.jpg" lat="33.54905278" lng="133.48602222" heading="0.0" devices="flash">
+	<scene name="scene_a0" title="a0" onstart="" thumburl="panos/a0.tiles/thumb.jpg" lat="33.54905278" lng="133.48602222" heading="0.0" devices="html5+flash">
 
 		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
 
@@ -59,7 +59,7 @@
 
 	</scene>
 
-		<scene name="scene_a1" title="a1" onstart="" thumburl="panos/a1.tiles/thumb.jpg" lat="33.54906389" lng="133.48593056" heading="181.5" devices="flash">
+		<scene name="scene_a1" title="a1" onstart="" thumburl="panos/a1.tiles/thumb.jpg" lat="33.54906389" lng="133.48593056" heading="181.5" devices="html5+flash">
 
 		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
 
@@ -83,7 +83,7 @@
 
 	</scene>
 
-	<scene name="scene_a2" title="a2" onstart="" thumburl="panos/a2.tiles/thumb.jpg" lat="33.54905278" lng="133.48591667" heading="103.8" devices="flash">
+	<scene name="scene_a2" title="a2" onstart="" thumburl="panos/a2.tiles/thumb.jpg" lat="33.54905278" lng="133.48591667" heading="103.8" devices="html5+flash">
 
 		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
 
