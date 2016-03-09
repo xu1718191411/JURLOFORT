@@ -37,6 +37,11 @@ module.exports = {
                    timeLine[i].targetname = timeLine[i].targetname || ""
 
                    timeLine[i].targetName =  timeLine[i].targetname.replace("-thumb","")
+
+
+                    var patt = /([0-9][0-9][0-9][0-9])-([0-9][0-9])-([0-0][0-9])/;
+                    var regRes = patt.exec(timeLine[i].start);
+                    timeLine[i].start = regRes[1]+"年"+regRes[2]+"月"+regRes[3]+"日"
                 }
 
 
