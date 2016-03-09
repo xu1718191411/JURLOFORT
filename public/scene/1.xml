@@ -1,0 +1,16 @@
+<krpano version="1.18">
+	
+	<!-- the skin -->
+	<include url="skin/defaultskin.xml" />
+	
+	<!-- view settings -->
+	<view hlookat="0" vlookat="0" maxpixelzoom="1.0" fovmax="150" limitview="auto" />
+	
+
+	<preview url="1.tiles/preview.jpg" />
+
+	<image hfov="270.00" vfov="88.103331" voffset="0.00">
+		<sphere url="1.tiles/pano.jpg" />
+	</image>
+
+</krpano>
