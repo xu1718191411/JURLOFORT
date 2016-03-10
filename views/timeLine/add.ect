@@ -180,7 +180,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">新的记忆</h4>
+        <h4 class="modal-title">新的记忆  <span class="startTime"></span></h4>
       </div>
       <div class="modal-body">
         <form>
@@ -193,10 +193,18 @@
             <textarea class="form-control" id="newRemember"></textarea>
           </div>
 
+        隐藏自己身份
          <div class="form-group" id="anonymity">
             <label class="radio-inline"><input type="radio" name="anonymity" value="1" checked>公开</label>
             <label class="radio-inline"><input type="radio" name="anonymity" value="2">匿名</label>
         </div>
+
+        隐藏对方身份
+         <div class="form-group" id="display">
+            <label class="radio-inline"><input type="radio" name="display" value="1" checked>公开</label>
+            <label class="radio-inline"><input type="radio" name="display" value="2">匿名</label>
+        </div>
+
 
         </form>
 
@@ -227,7 +235,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">这个记忆</h4>
+        <h4 class="modal-title">这个记忆<span class="startTime"></span></h4>
       </div>
       <div class="modal-body">
         <form>
@@ -239,13 +247,17 @@
             <label for="message-text" class="control-label">回忆:</label>
             <textarea class="form-control" id="myRemember"></textarea>
           </div>
-
+           隐藏自己身份
            <div class="form-group" id="anonymityUpdate">
               <label class="radio-inline"><input type="radio" name="anonymity" value="1">公开</label>
               <label class="radio-inline"><input type="radio" name="anonymity" value="2">匿名</label>
           </div>
 
-
+        隐藏对方身份
+         <div class="form-group" id="displayUpdate">
+            <label class="radio-inline"><input type="radio" name="display" value="1" checked>公开</label>
+            <label class="radio-inline"><input type="radio" name="display" value="2">匿名</label>
+        </div>
         </form>
 
          <form class="form-horizontal" id="fileupload-form-update" enctype="multipart/form-data">
@@ -300,8 +312,9 @@
     editable: true,
     height: '300px',
     onAdd: function (_item, callback) {
-            console.log(111111111111);
-            console.log(_item);
+            $(".startTime").text(changeDate(Date.parse((new Date(_item.start)))))
+
+
 //      prettyPrompt('添加新的记忆', '印象:', item.content, function (value) {
 //        if (value) {
 //          item.content = value;
@@ -315,7 +328,7 @@
 
         lunch("exampleModal");
 
-        selfPrompt(_item,function(value1,value2,value3,value4){
+        selfPrompt(_item,function(value1,value2,value3,value4,value5){
 
                 if(value1){
                     _item.content = value1;
@@ -332,6 +345,13 @@
                 if(value4){
                     _item.targetname = value4;
                 }
+
+
+                if(value5){
+                    _item.display = value5
+                }
+
+
 
 
                 historySaveData(_item,function(res){
@@ -386,6 +406,7 @@
     },
 
     onUpdate: function (item, callback) {
+        $(".startTime").text(changeDate(Date.parse((new Date(item.start)))))
         if(!item.from){
              alert("神秘人信息无法做出修改");
              return false;f
@@ -414,12 +435,13 @@
 //      });
 
         lunch("exampleModal2");
-        selfPrompt2(item,function(value1,value2,value3,value4){
+        selfPrompt2(item,function(value1,value2,value3,value4,value5){
 
           item.content = value1;
           item.contentDetail = value2;
           item.anonymity = value3;
           item.targetname = value4;
+          item.display = value5;
 
 
           updateHistorySaveData(item,function(res){
@@ -464,6 +486,8 @@
   };
 
         var timeline = new vis.Timeline(container, items, options);
+
+
 
 
         function loadData () {
@@ -584,7 +608,7 @@
           function addEventListenerClick(callback){
                 return function(){
                     $("#insertNewImpression").off("click")
-                    return callback($("#newImpression").val(),$("#newRemember").val(),$('#anonymity  input[name="anonymity"]:checked').val(),$("#thumb").attr('targetname'));
+                    return callback($("#newImpression").val(),$("#newRemember").val(),$('#anonymity  input[name="anonymity"]:checked').val(),$("#thumb").attr('targetname'),$('#display  input[name="display"]:checked').val());
                 }
           }
 
@@ -605,12 +629,29 @@
                     }
                 }
 
+
+
+                if(item.display){
+                    if(item.anonymity == "1"){
+                          $('#displayUpdate  input[name="display"]').eq(0).attr("checked",1);
+                    }
+
+                    if(item.anonymity == "2"){
+                          $('#displayUpdate  input[name="display"]').eq(1).attr("checked",1);
+                    }
+                }
+
+
+
+
+
+
                // document.getElementById("updateNewImpression").addEventListener("click", function(){
                //     return callback($("#myImpression").val(),$("#myRemember").val());
                // },false)
 
                 $( "#updateNewImpression" ).one( "click", function( event ) {
-                   return callback($("#myImpression").val(),$("#myRemember").val(),$('#anonymityUpdate input[name="anonymity"]:checked').val(),$("#thumbUpdate").attr('targetName'));
+                   return callback($("#myImpression").val(),$("#myRemember").val(),$('#anonymityUpdate input[name="anonymity"]:checked').val(),$("#thumbUpdate").attr('targetName'),$('#displayUpdate input[name="display"]:checked').val());
                 });
 
           }
@@ -747,6 +788,47 @@ function deleteHistorySaveData(content,cb){
                                 cb(eval('('+res+')'));
                            }
                          });
+}
+
+
+
+function changeDate(str){
+    var now_date, now_date_format;
+    now_date = new Date(parseInt(str));
+    now_date_format = now_date.getFullYear();
+
+    if (parseInt(now_date.getMonth()) < 9) {
+        now_date_format += "-" + "0" + (parseInt(now_date.getMonth()) + 1);
+    } else {
+        now_date_format += "-" + (parseInt(now_date.getMonth()) + 1);
+    }
+    if (parseInt(now_date.getDate()) <= 9) {
+        now_date_format += "-" + "0" + (parseInt(now_date.getDate()));
+    } else {
+        now_date_format += "-" + (parseInt(now_date.getDate()));
+    }
+
+    if (parseInt(now_date.getHours()) < 9) {
+        now_date_format += " " + "0" + (parseInt(now_date.getHours()));
+    } else {
+        now_date_format += " " + (parseInt(now_date.getHours()));
+    }
+
+
+    if (parseInt(now_date.getMinutes()) < 9) {
+        now_date_format += ":" + "0" + (parseInt(now_date.getMinutes()));
+    } else {
+        now_date_format += ":" + (parseInt(now_date.getMinutes()));
+    }
+
+    if (parseInt(now_date.getSeconds()) < 9) {
+        now_date_format += ":" + "0" + (parseInt(now_date.getSeconds()));
+    } else {
+        now_date_format += ":" + (parseInt(now_date.getSeconds()));
+    }
+
+    return now_date_format;
+
 }
 
 

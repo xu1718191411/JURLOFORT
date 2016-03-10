@@ -39,9 +39,14 @@ module.exports = {
                    timeLine[i].targetName =  timeLine[i].targetname.replace("-thumb","")
 
 
-                    var patt = /([0-9][0-9][0-9][0-9])-([0-9][0-9])-([0-0][0-9])/;
+                    var patt = /([0-9][0-9][0-9][0-9])-([0-9][0-9])-([0-9][0-9])T([0-9][0-9]):([0-9][0-9]):([0-9][0-9])\.([0-9][0-9][0-9])Z/;
                     var regRes = patt.exec(timeLine[i].start);
-                    timeLine[i].start = regRes[1]+"年"+regRes[2]+"月"+regRes[3]+"日"
+
+                    if(!isEmpty(regRes)) {
+                        var d = new Date(regRes[1], regRes[2], regRes[3], regRes[4], regRes[5], regRes[6]);
+                        timeLine[i].start = utc2Jtc(d)
+                        console.log(timeLine[i].start)
+                    }
                 }
 
 
@@ -146,3 +151,48 @@ function isEmpty(obj) {
     return true;
 }
 
+function utc2Jtc(date){
+    var d = Date.parse(date)+9*60*60*1000;
+    return changeDate(d);
+}
+
+
+
+function changeDate(str){
+    var now_date, now_date_format;
+    now_date = new Date(parseInt(str));
+    now_date_format = now_date.getFullYear();
+
+    if (parseInt(now_date.getMonth()) <= 9) {
+        now_date_format += "-" + "0" + (parseInt(now_date.getMonth()));
+    } else {
+        now_date_format += "-" + (parseInt(now_date.getMonth()));
+    }
+    if (parseInt(now_date.getDate()) <= 9) {
+        now_date_format += "-" + "0" + (parseInt(now_date.getDate()));
+    } else {
+        now_date_format += "-" + (parseInt(now_date.getDate()));
+    }
+
+    if (parseInt(now_date.getHours()) <= 9) {
+        now_date_format += " " + "0" + (parseInt(now_date.getHours()));
+    } else {
+        now_date_format += " " + (parseInt(now_date.getHours()));
+    }
+
+
+    if (parseInt(now_date.getMinutes()) <= 9) {
+        now_date_format += ":" + "0" + (parseInt(now_date.getMinutes()));
+    } else {
+        now_date_format += ":" + (parseInt(now_date.getMinutes()));
+    }
+
+    if (parseInt(now_date.getSeconds()) <= 9) {
+        now_date_format += ":" + "0" + (parseInt(now_date.getSeconds()));
+    } else {
+        now_date_format += ":" + (parseInt(now_date.getSeconds()));
+    }
+
+    return now_date_format;
+
+}
