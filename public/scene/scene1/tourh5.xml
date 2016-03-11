@@ -1,0 +1,111 @@
+<krpano version="1.18" title="Virtual Tour" onstart="startup();">
+
+	<include url="skin/vtourskin.xml" />
+
+	<!-- set skin settings: bingmaps? gyro? thumbnails? tooltips? -->
+	<skin_settings maps="true"
+	               maps_type="bing"
+	               maps_bing_api_key=""
+	               maps_zoombuttons="false"
+	               gyro="true"
+	               title="true"
+	               thumbs="true"
+	               thumbs_width="120" thumbs_height="80" thumbs_padding="10" thumbs_crop="0|40|240|160"
+	               thumbs_opened="false"
+	               thumbs_text="false"
+	               thumbs_dragging="true"
+	               thumbs_onhoverscrolling="false"
+	               thumbs_scrollbuttons="false"
+	               thumbs_scrollindicator="false"
+	               thumbs_loop="false"
+	               tooltips_thumbs="false"
+	               tooltips_hotspots="false"
+	               tooltips_mapspots="false"
+	               loadscene_flags="MERGE"
+	               loadscene_blend="BLEND(0.5)"
+	               controlbar_offset="20"
+	               />
+
+	<!-- set optional skin logo url -->
+	<layer name="skin_logo" url="" scale="0.25" opened_onclick="openurl('...',_blank);" />
+
+
+	<action name="startup">
+		if(startscene === null, copy(startscene,scene[0].name));
+		loadscene(get(startscene), null, MERGE);
+	</action>
+
+
+	<scene name="scene_a0" title="a0" onstart="" thumburl="panos/a0.tiles/thumb.jpg" lat="33.54905278" lng="133.48602222" heading="0.0" >
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/a0.tiles/preview.jpg" />
+
+		<image type="SPHERE" hfov="270.00" vfov="58.236850" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13612" tiledimageheight="2936">
+				<sphere url="panos/a0.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6806" tiledimageheight="1468">
+				<sphere url="panos/a0.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3404" tiledimageheight="734">
+				<sphere url="panos/a0.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="64.351" atv="-0.924" linkedscene="scene_a1" />
+
+	</scene>
+
+		<scene name="scene_a1" title="a1" onstart="" thumburl="panos/a1.tiles/thumb.jpg" lat="33.54906389" lng="133.48593056" heading="181.5" >
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/a1.tiles/preview.jpg" />
+
+		<image type="SPHERE" hfov="270.00" vfov="59.238333" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13628" tiledimageheight="2990">
+				<sphere url="panos/a1.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6814" tiledimageheight="1496">
+				<sphere url="panos/a1.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="748">
+				<sphere url="panos/a1.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-109.362" atv="1.061" linkedscene="scene_a2" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="71.935" atv="5.467" linkedscene="scene_a0" />
+
+	</scene>
+
+	<scene name="scene_a2" title="a2" onstart="" thumburl="panos/a2.tiles/thumb.jpg" lat="33.54905278" lng="133.48591667" heading="103.8" >
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/a2.tiles/preview.jpg" />
+
+		<image type="SPHERE" hfov="270.00" vfov="58.245408" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13610" tiledimageheight="2936">
+				<sphere url="panos/a2.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6806" tiledimageheight="1468">
+				<sphere url="panos/a2.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3404" tiledimageheight="734">
+				<sphere url="panos/a2.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="127.576" atv="9.151" linkedscene="scene_a1" />
+
+	</scene>
+
+
+
+</krpano>
