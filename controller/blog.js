@@ -7,7 +7,8 @@
 var mongo = require("../model/mongo.js");
 var mongodb = require("mongodb");
 var steps = require("ocsteps");
-
+var tools = require("./tool.js");
+var isEmpty = tools.isEmpty
 
 module.exports = {
     indexController: function(req,res){
@@ -132,6 +133,41 @@ module.exports = {
             },function(doc){
                     res.render("blog/allTimeLine",{content:doc,classNumber:req.session.loginSession.class,nameTxt:req.session.loginSession.name})
             })();
+    },
+    newEventsController:function(req,res){
+            if(isEmpty(req.session.loginSession)){
+                res.redirect("/blog/login")
+            }
+
+            var _class = req.session.loginSession.class;
+            var tablesName = ["UserInfo17","UserInfoBro","UserInfo38"];
+
+
+            steps(function(){
+                mongo.find("ClassMates",{class:_class,},{name:1,timeLine:1},this.hold(function(doc){
+
+                    doc = eval(doc) || []
+                    var resArr = []
+                    for(var i in doc){
+                         var _resArr = eval(doc[i].timeLine) || []
+                         for(var j in _resArr){
+                             if(parseInt(_resArr[j].anonymity)==2 || parseInt(_resArr[j].display)==2){
+
+                                 _resArr[j].start = tools.ampt(_resArr[j].start)
+                                 _resArr[j].targetName = _resArr[j].targetname?_resArr[j].targetname.replace("-thumb",""):""
+                                 resArr.push({__id:doc[i]._id,name:doc[i].name,from:_resArr[j].from,content:_resArr[j]})
+                             }
+                         }
+                    }
+
+                    console.log(resArr)
+                    return resArr;
+                }))
+            },function(resArr){
+                res.render("blog/newEvents",{classNumber:req.session.loginSession.class,nameTxt:req.session.loginSession.name,resArr:resArr});
+            })()
+
+
     },
     saveTxtDataController:function(req,res){
 
@@ -266,14 +302,7 @@ module.exports = {
 
 
 
-function isEmpty(obj) {
-    for(var prop in obj) {
-        if(obj.hasOwnProperty(prop))
-            return false;
-    }
 
-    return true;
-}
 
 
 function randomString(len, charSet) {
@@ -285,3 +314,5 @@ function randomString(len, charSet) {
     }
     return randomString;
 }
+
+

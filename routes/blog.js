@@ -20,6 +20,7 @@ router.get('/login',blogController.loginController);
 router.post('/register',blogController.registerController);
 router.post('/checkLogin',blogController.checkLoginController);
 router.get('/AllTimeLine',blogController.AllTimeLineController);
+router.get('/newEvents',blogController.newEventsController);
 router.get('/logout',blogController.LogoutController);
 router.post('/saveTxtData',blogController.saveTxtDataController);
 router.post('/historySaveTxtData',blogController.historySaveTxtDataController);
