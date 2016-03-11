@@ -615,29 +615,28 @@
           function selfPrompt2(item,callback){
                 $("#myImpression").val(item.content);
                 $("#myRemember").val(item.contentDetail);
-                $("#anonymityUpdate").children().children("input").attr("checked",0);
 
-
+            
 
                 if(item.anonymity){
                     if(item.anonymity == "1"){
-                          $('#anonymityUpdate  input[name="anonymity"]').eq(0).attr("checked",1);
+                          $('#anonymityUpdate').find('input[name="anonymity"]').eq(0).prop("checked",true);
                     }
 
                     if(item.anonymity == "2"){
-                          $('#anonymityUpdate  input[name="anonymity"]').eq(1).attr("checked",1);
+                          $('#anonymityUpdate').find('input[name="anonymity"]').eq(1).prop("checked",true);
                     }
                 }
 
 
 
                 if(item.display){
-                    if(item.anonymity == "1"){
-                          $('#displayUpdate  input[name="display"]').eq(0).attr("checked",1);
+                    if(item.display == "1"){
+                          $('#displayUpdate  input[name="display"]').eq(0).prop("checked",true);
                     }
 
-                    if(item.anonymity == "2"){
-                          $('#displayUpdate  input[name="display"]').eq(1).attr("checked",1);
+                    if(item.display == "2"){
+                          $('#displayUpdate  input[name="display"]').eq(1).prop("checked",true);
                     }
                 }
 
