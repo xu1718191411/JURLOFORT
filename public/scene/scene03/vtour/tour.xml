@@ -1,7 +1,6 @@
 <krpano version="1.18" title="Virtual Tour" onstart="startup();">
-
 	<include url="skin/vtourskin.xml" />
-
+	<include url="%SWFPATH%/plugins/showtext.xml" />
 	<!-- set skin settings: bingmaps? gyro? thumbnails? tooltips? -->
 	<skin_settings maps="true"
 	               maps_type="bing"
@@ -31,12 +30,49 @@
 
 
 	<action name="startup">
+		
+
 		if(startscene === null, copy(startscene,scene[0].name));
 		loadscene(get(startscene), null, MERGE);
 	</action>
 
-	
+
+
 	<scene name="scene_IMG_0001" title="IMG_0001" onstart="" thumburl="panos/IMG_0001.tiles/thumb.jpg" lat="33.54344444" lng="133.48896667" heading="134.8">
+
+<layer name="text"
+       url="textfield.swf"
+       align="lefttop" x="10" y="10"
+       html="导航[br][b]出门后的阳台[/b]"
+       css="font-family:Arial; font-size:16px; color:#000000;"
+       autowidth="auto"
+       autoheight="auto"
+       vcenter="false"
+       padding="2"
+       wordwrap="true"
+       selectable="false"
+       embeddedfonts="false"
+       background="true"
+       backgroundcolor="0xFFFFFF"
+       backgroundalpha="1.0"
+       border="false"
+       bordercolor="0x000000"
+       borderalpha="1.0"
+       borderwidth="1.0"
+       roundedge="0"
+       shadow="0.0"
+       shadowrange="4.0"
+       shadowangle="45"
+       shadowcolor="0x000000"
+       shadowalpha="1.0"
+       textshadow="0.0"
+       textshadowrange="4.0"
+       textshadowangle="45"
+       textshadowcolor="0x000000"
+       textshadowalpha="1.0"
+       onautosized=""
+       />
+
 
 		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
 
@@ -51,11 +87,13 @@
 			</level>
 		</image>
 
+		<style name="spotstyle"  url="./extension/a.JPG" />
 		<!-- place your scene hotspots here -->
 		<hotspot name="spot1" style="skin_hotspotstyle" ath="0.425" atv="0.044" linkedscene="scene_img_2435" />
 		<hotspot name="spot2" style="skin_hotspotstyle" ath="0.203" atv="-0.003" linkedscene="scene_img_2439" />
 		<hotspot name="spot3" style="skin_hotspotstyle" ath="0.153" atv="0.013" linkedscene="scene_img_2440" />
-		
+		<hotspot name="spot4" width="50" height="50" style="spotstyle" ath="0.153" atv="0.023" linkedscene="scene_img_2440" />
+
 
 	</scene>
 
