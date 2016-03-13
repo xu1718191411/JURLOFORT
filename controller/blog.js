@@ -121,6 +121,7 @@ module.exports = {
                     for(var i in doc){
                         (function(j,dot,that){
                             mongo.find("ClassMates",{name:dot.name,class:dot.class},{},that.hold(function(docs){
+                                docs[0].profile =  docs[0].profile || {}
                                 docs[0].profile = docs[0].profile || {};
                                 doc[j].profile = docs[0].profile.profile;
                                 doc[j].__id = docs[0]._id;
