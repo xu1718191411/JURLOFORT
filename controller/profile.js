@@ -36,7 +36,7 @@ module.exports = {
     },
     uploadController:function(req,res){
         steps(function(){
-            tools.upload(req,res,"../public/ProfileUpload",this.hold(function(err,doc){
+            tools.upload(req,res,"../public/profileUpload",this.hold(function(err,doc){
                 if(err){
                     throw err
                 }
