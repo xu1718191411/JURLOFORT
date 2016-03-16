@@ -66,10 +66,11 @@ function upload(req,res,_path,cb) {
 
         }))
     },function(){
-        im.resize({
+        im.crop({
             srcPath: target_path + '/' + targetName + ".jpg",
             dstPath: target_path + '/' + targetName + "-thumb.jpg",
-            height: 450
+            height: 450,
+            width:450
 
         }, this.hold(function (err, stdout, stderr) {
             if (err){
