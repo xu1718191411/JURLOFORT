@@ -7,6 +7,7 @@
 var mongo = require("../model/mongo.js");
 var mongodb = require("mongodb");
 var steps = require("ocsteps");
+var tools = require('./tool.js')
 
 
 module.exports = {
@@ -30,8 +31,34 @@ module.exports = {
         },
         function(doc){
             console.log(doc);
-            res.render("profile/index",{content:doc[0]});
+            res.render("profile/index",{content:doc[0],classNumber:req.session.loginSession.class,nameTxt:req.session.loginSession.name});
         })()
+    },
+    uploadController:function(req,res){
+        steps(function(){
+            tools.upload(req,res,"../public/ProfileUpload",this.hold(function(err,doc){
+                if(err){
+                    throw err
+                }
+                return doc
+            }))
+        },function(doc){
+            mongo.find("ClassMates",{name:req.session.loginSession.name,class:req.session.loginSession.class},{},this.hold(function(list){
+                console.log(list)
+                var profile = list[0].profile || {}
+                profile.targetName = eval("("+doc+")").targetName
+                return profile
+
+
+            }))
+        },function(_profile){
+            mongo.update("ClassMates",{name:req.session.loginSession.name,class:req.session.loginSession.class},{$set:{profile:_profile}},{},this.hold(function(_result){
+                console.log(JSON.stringify({targetName:_profile.targetName}))
+
+                res.end(JSON.stringify({targetName:_profile.targetName}))
+            }))
+        }
+        )()
     },
     updateController:function(req,res){
         var name = req.body.name;

@@ -10,7 +10,14 @@ $(function() {
     });
 
     //animate avatar info
+
     $('.avatar_pic,.tel_me').click(function(){
+
+        $("#fileupload").click()
+
+
+
+        /*
         $('.tip_avatar_bg').show().transition({ 
             opacity: 100,
             top: '0',
@@ -35,7 +42,11 @@ $(function() {
                 });
             });
         });
+        */
+
+
     });
+
 
     $('.tip_close').click(function(){
         $(this).transition({

@@ -126,7 +126,7 @@
                   <li><a class="active" href="/blog/">主页</a></li>
                   <li><a href="/timeLine/add?_id=<%=@content._id%>">添加回忆</a></li>
 
-                  <li><a href="/profile?nameTxt=&classNumber=">个人主页</a></li>
+                  <li><a href="/profile?nameTxt=<%=@nameTxt%>&classNumber=<%=@classNumber%>">个人主页</a></li>
 
                   <li><a href="/blog/AllTimeLine">组织信息</a></li>
 
@@ -139,7 +139,28 @@
                 <!--header-->
                 <div class="header clearfix">
                     <div class="avatar">
+
+                        <div style="display:none">
+
+                                <form class="form-horizontal" id="fileupload-form" enctype="multipart/form-data">
+                                      <div class="form-group">
+                                          <label class="col-sm-2 control-label" >封面图片</label>
+                                          <input class="col-sm-10" type="file" name="files" id="fileupload">
+                                      </div>
+                                      <div class="row">
+                                           <label class="col-sm-2 control-label" >封面图片</label>
+
+
+
+                                      </div>
+                                </form>
+
+                        </div>
+                        <% if @content?.profile: %>
+                        <a href="javascript:;" class="avatar_pic circle" style='background-image: url("/profileUpload/<%= @content.profile.targetName%>")'><em class="circle doing">详细</em></a>
+                        <% else: %>
                         <a href="javascript:;" class="avatar_pic circle"><em class="circle doing">详细</em></a>
+                        <% end %>
                         <b class="doing r5">
 
                         <% if @content?.profile: %>
@@ -841,6 +862,7 @@
 
     <script>
 
+
         function edit(obj,key){
              td = $(obj);
              var txt = td.text();
@@ -881,6 +903,36 @@
 
              })
         }
+
+
+
+
+   // 绑定了`submit`事件。
+       $('#fileupload-form').on('submit',(function(e) {
+
+       	e.preventDefault();
+
+          var fd = new FormData($('#fileupload-form').get(0));
+                $.ajax({
+                   url: "/profile/upload",
+                   type: "POST",
+                   data: fd,
+                   processData: false,
+                   contentType: false,
+                   success: function (res) {
+                   var res = eval('('+res+')');
+                   console.log(res)
+                        $(".avatar_pic").css({backgroundImage: 'url("/profileUpload/'+res.targetName+'")'})
+                   }
+                 });
+       }));
+
+    //绑定文件选择事件，一选择了图片，就让`form`提交。
+
+       $("#fileupload").on("change", function() {
+           $("#fileupload-form").submit();
+    });
+
 
     </script>
 </html>

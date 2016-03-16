@@ -23,6 +23,21 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!-- jQuery -->
+    <script src="/AllTimeLine/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/AllTimeLine/js/bootstrap.min.js"></script>
+
+
+    <!-- Magnific Popup core CSS file -->
+    <link rel="stylesheet" href="/dimsemenov-Magnific-Popup/dist/magnific-popup.css">
+
+
+
+    <!-- Magnific Popup core JS file -->
+    <script src="/dimsemenov-Magnific-Popup/dist/jquery.magnific-popup.js"></script>
+
 </head>
 
 <script>
@@ -39,7 +54,7 @@
 
 <body>
 
-   <% include 'blog/navy.ect', {} %>
+   <% include 'blog/navy.ect', {classNumber:@classNumber,nameTxt:@nameTxt} %>
 
     <!-- Page Content -->
     <div class="container">
@@ -75,9 +90,31 @@
           <% for link in @content : %>
           <div  class="col-lg-6">
             <div class="col-lg-4 portfolio-item">
-                <a href="#">
-                    <img class="img-responsive img-circle" width="150" height="150" src="/images/headCapture/2.jpg" alt="">
-                </a>
+
+
+
+
+                <% if link?._profile: %>
+
+                     <% if link?._profile.targetName: %>
+                         <a href="#">
+                              <img class="img-responsive img-circle test-popup-link" href="/profileUpload/<%= link._profile.targetName%>"  width="150" height="150" src="/profileUpload/<%= link._profile.targetName%>" alt="">
+                          </a>
+
+                      <% else:%>
+
+                       <a href="#">
+                        <img class="img-responsive img-circle" width="150" height="150" src="/images/headCapture/2.jpg" alt="">
+                       </a>
+
+                      <% end %>
+                <% else:%>
+
+                  <a href="#">
+                      <img class="img-responsive img-circle" width="150" height="150" src="/images/headCapture/2.jpg" alt="">
+                  </a>
+                <% end %>
+
             </div>
             <div class="col-lg-8 portfolio-item">
                 <h3>
@@ -86,7 +123,7 @@
                     </a>
                 </h3>
                 <p>
-                    <%= link.profile %>
+                    <%= link.profile.profile %>
                 </p>
             </div>
             </div>
@@ -148,12 +185,19 @@
     </div>
     <!-- /.container -->
 
-    <!-- jQuery -->
-    <script src="/AllTimeLine/js/jquery.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="/AllTimeLine/js/bootstrap.min.js"></script>
 
 </body>
 
 </html>
+<script>
+
+$(document).ready(function($) {
+
+$('.test-popup-link').magnificPopup({
+    type: 'image' // this is default type
+});
+
+});
+
+</script>

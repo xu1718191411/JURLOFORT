@@ -28,6 +28,11 @@
 	<!-- set optional skin logo url -->
 	<layer name="skin_logo" url="" scale="0.25" opened_onclick="openurl('...',_blank);" />
 
+	<action name="customize">
+		set(var1, 'hello');
+		set(var2, get(mouse.x));
+		 lookto(5,20,50);
+	</action>
 
 	<action name="startup">
 		
@@ -71,6 +76,7 @@
        textshadowcolor="0x000000"
        textshadowalpha="1.0"
        onautosized=""
+       onclick="customize()"
        />
 
 

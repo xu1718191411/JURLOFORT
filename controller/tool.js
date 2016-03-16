@@ -3,6 +3,10 @@
  * Created by xuzhongwei on 12/3/15.
  */
 
+var fs = require("fs");
+var path = require("path")
+var im = require('imagemagick');
+var steps = require('ocsteps');
 
 exports.getCurrentDate = function(){
     var Dates = new Date();
@@ -14,7 +18,7 @@ exports.utc2Jtc = utc2Jtc
 exports.changeDate = changeDate
 exports.ampt = ampt
 exports.isEmpty = isEmpty
-
+exports.upload = upload
 
 
 
@@ -24,6 +28,60 @@ function utc2Jtc(date){
 }
 
 
+function upload(req,res,_path,cb) {
+
+
+    var file = req.files[0];
+
+
+    var filename = file.filename;
+
+    var target_path = path.join(__dirname, _path)
+    var originalPath = path.join(__dirname, "../uploads")
+
+    console.log(file);
+    console.log(target_path)
+    console.log(originalPath);
+    var targetName = Math.random().toString(36).substring(2);
+
+    steps(
+    function(){
+        fs.exists(target_path, this.hold(function(exists) {
+           return exists;
+        }));
+    },
+    function(_exists){
+        if(!_exists){
+            fs.mkdir(target_path,this.hold(function(_result){
+
+            }))
+        }
+    },
+    function(){
+        fs.rename(originalPath + "/" + filename, target_path + '/' + targetName + ".jpg", this.hold(function (err) {
+            if (err){
+                throw err;
+                cb(err,null)
+            }
+
+        }))
+    },function(){
+        im.resize({
+            srcPath: target_path + '/' + targetName + ".jpg",
+            dstPath: target_path + '/' + targetName + "-thumb.jpg",
+            height: 450
+
+        }, this.hold(function (err, stdout, stderr) {
+            if (err){
+                throw err;
+                cb(err,null)
+            }
+            console.log('resized kittens.jpg to fit within 256x256px');
+            cb(null,JSON.stringify({targetName: targetName + "-thumb.jpg"}))
+        }))
+    })()
+
+}
 
 function changeDate(str){
     var now_date, now_date_format;
