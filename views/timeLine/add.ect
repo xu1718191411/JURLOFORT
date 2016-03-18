@@ -14,6 +14,9 @@
 
 <script src="/admin/js/jquery.js"></script>
 <script src="/admin/js/bootstrap.min.js"></script>
+
+
+
 <style>
     #timeLine {
         font-family: arial, sans-serif;
@@ -205,8 +208,25 @@
             <label class="radio-inline"><input type="radio" name="display" value="2">匿名</label>
         </div>
 
-
         </form>
+
+        <div class="row">
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+             和<%= @content.name%>一起经历过这件事的成员
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <% for link in @allMembers : %>
+                      <li onclick="selectAtMembers('<%= link.name %>')"><a><%= link.name %></a></li>
+                    <% end %>
+          </ul>
+        </div>
+        </div>
+
+          <div class="row" id="memberLabels">
+
+          </div>
 
 
        <form class="form-horizontal" id="fileupload-form" enctype="multipart/form-data">
@@ -229,6 +249,8 @@
     </div>
   </div>
 </div>
+
+
 
 <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
   <div class="modal-dialog" role="document">
@@ -259,6 +281,26 @@
             <label class="radio-inline"><input type="radio" name="display" value="2">匿名</label>
         </div>
         </form>
+
+                <div class="row">
+                <div class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                     和<%= @content.name%>一起经历过这件事的成员
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <% for link in @allMembers : %>
+                              <li onclick="selectAtMembers('<%= link.name %>',2)"><a><%= link.name %></a></li>
+                            <% end %>
+                  </ul>
+                </div>
+                </div>
+
+                  <div class="row" id="memberLabelsUpdate">
+
+                  </div>
+
+
 
          <form class="form-horizontal" id="fileupload-form-update" enctype="multipart/form-data">
                       <div class="form-group">
@@ -328,7 +370,7 @@
 
         lunch("exampleModal");
 
-        selfPrompt(_item,function(value1,value2,value3,value4,value5){
+        selfPrompt(_item,function(value1,value2,value3,value4,value5,value6){
 
                 if(value1){
                     _item.content = value1;
@@ -346,13 +388,14 @@
                     _item.targetname = value4;
                 }
 
+                if(value6){
+                    _item.relatedMembers = value6
+                }
+
 
                 if(value5){
                     _item.display = value5
                 }
-
-
-
 
                 historySaveData(_item,function(res){
 
@@ -374,8 +417,6 @@
                     }
 
                 })
-
-
 
         })
 
@@ -406,10 +447,12 @@
     },
 
     onUpdate: function (item, callback) {
+
+        _arrs = []
         $(".startTime").text(changeDate(Date.parse((new Date(item.start)))))
         if(!item.from){
              alert("神秘人信息无法做出修改");
-             return false;f
+             return false;
         }
 
         if(item.from.name !=$("#fromName").val() || item.from.class != $("#fromClass").val()){
@@ -421,6 +464,10 @@
 
         $("#thumbUpdate").attr("src","/timeLineupload/"+item.targetname);
         $("#thumbUpdate").attr("targetName",item.targetname);
+
+        for(var i in item.relatedMembers){
+           selectAtMembers(item.relatedMembers[i],2)
+        }
 
 
 //      prettyPrompt('Update item', 'Edit items text:', item.content, function (value) {
@@ -435,14 +482,14 @@
 //      });
 
         lunch("exampleModal2");
-        selfPrompt2(item,function(value1,value2,value3,value4,value5){
+        selfPrompt2(item,function(value1,value2,value3,value4,value5,value6){
 
           item.content = value1;
           item.contentDetail = value2;
           item.anonymity = value3;
           item.targetname = value4;
           item.display = value5;
-
+          item.relatedMembers = value6
 
           updateHistorySaveData(item,function(res){
 
@@ -486,9 +533,6 @@
   };
 
         var timeline = new vis.Timeline(container, items, options);
-
-
-
 
         function loadData () {
             // get and deserialize the data
@@ -608,7 +652,7 @@
           function addEventListenerClick(callback){
                 return function(){
                     $("#insertNewImpression").off("click")
-                    return callback($("#newImpression").val(),$("#newRemember").val(),$('#anonymity  input[name="anonymity"]:checked').val(),$("#thumb").attr('targetname'),$('#display  input[name="display"]:checked').val());
+                    return callback($("#newImpression").val(),$("#newRemember").val(),$('#anonymity  input[name="anonymity"]:checked').val(),$("#thumb").attr('targetname'),$('#display  input[name="display"]:checked').val(),_arrs);
                 }
           }
 
@@ -650,7 +694,7 @@
                // },false)
 
                 $( "#updateNewImpression" ).one( "click", function( event ) {
-                   return callback($("#myImpression").val(),$("#myRemember").val(),$('#anonymityUpdate input[name="anonymity"]:checked').val(),$("#thumbUpdate").attr('targetName'),$('#displayUpdate input[name="display"]:checked').val());
+                   return callback($("#myImpression").val(),$("#myRemember").val(),$('#anonymityUpdate input[name="anonymity"]:checked').val(),$("#thumbUpdate").attr('targetName'),$('#displayUpdate input[name="display"]:checked').val(),_arrs);
                 });
 
           }
@@ -682,7 +726,7 @@
 
     }
 
-    </script>
+</script>
 
 <script>
 
@@ -704,7 +748,6 @@ $.ajax({
    }
  });
 
-
 }
 
 
@@ -713,9 +756,7 @@ $.ajax({
 
     var idSource = $(this).attr("id");
 
-
     e.preventDefault();
-
 
              if(idSource=="fileupload-form"){
                 var fd = new FormData($('#fileupload-form').get(0));
@@ -748,13 +789,12 @@ $.ajax({
 
 
 $("#fileupload,#fileuploadUpdate").on("change", function(){
-
    $(this).parents("form").submit();
 });
 
 
-function historySaveData(content,cb){
 
+function historySaveData(content,cb){
                     $.ajax({
                        url: "/blog/historySaveTxtData",
                        type: "POST",
@@ -766,7 +806,6 @@ function historySaveData(content,cb){
 }
 
 function updateHistorySaveData(content,cb){
-
                     $.ajax({
                        url: "/blog/updateHistorySaveTxtData",
                        type: "POST",
@@ -830,6 +869,37 @@ function changeDate(str){
 
 }
 
+
+</script>
+
+
+<script>
+
+var _arrs = []
+function selectAtMembers(name,type=1){
+
+    if(_arrs.indexOf(name)>=0){
+        $("#memberLabels span").eq(_arrs.indexOf(name)).remove()
+        _arrs.splice(_arrs.indexOf(name),1);
+    }
+    var arrs = [
+              '<span class="label label-default">value&nbsp;</span>',
+              '<span class="label label-primary">value&nbsp;</span>',
+              '<span class="label label-success">value&nbsp;</span>',
+              '<span class="label label-info">value&nbsp;</span>'
+    ]
+
+    _arrs.push(name);
+
+    var _int = parseInt(Math.random()*3)
+    var _str = arrs[_int].replace('value',name);
+    if(type==2){
+            $("#memberLabelsUpdate").append(_str);
+    }else{
+            $("#memberLabels").append(_str);
+    }
+
+}
 
 </script>
 

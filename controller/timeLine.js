@@ -59,6 +59,7 @@ module.exports = {
     },
     addController:function(req,res){
         var _ids = req.query._ids
+        var allMembers = []
         steps(
             function(){
                 if(isEmpty(req.session.loginSession)){
@@ -76,7 +77,20 @@ module.exports = {
                 }))
 
             } ,function(doc){
-                res.render("timeLine/add",{_ids:_ids,content:doc,fromName:req.session.loginSession.name,fromClass:req.session.loginSession.class});
+
+                mongo.find("ClassMates",{class:req.session.loginSession.class.toString()},{},this.hold(function(_allMembers){
+
+                    for(var i in _allMembers){
+
+                        if(_allMembers[i].name!=doc.name){
+                            allMembers.push(_allMembers[i])
+                        }
+                    }
+
+                    res.render("timeLine/add",{_ids:_ids,content:doc,fromName:req.session.loginSession.name,fromClass:req.session.loginSession.class,allMembers:allMembers});
+
+                }))
+
             })()
     },
     saveTxtDataController:function(req,res){
