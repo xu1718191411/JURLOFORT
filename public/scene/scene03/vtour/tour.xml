@@ -1,0 +1,758 @@
+<krpano version="1.18" title="Virtual Tour" onstart="startup();">
+	<include url="skin/vtourskin.xml" />
+	<include url="%SWFPATH%/plugins/showtext.xml" />
+	<!-- set skin settings: bingmaps? gyro? thumbnails? tooltips? -->
+	<skin_settings maps="true"
+	               maps_type="bing"
+	               maps_bing_api_key=""
+	               maps_zoombuttons="false"
+	               gyro="true"
+	               title="true"
+	               thumbs="true"
+	               thumbs_width="120" thumbs_height="80" thumbs_padding="10" thumbs_crop="0|40|240|160"
+	               thumbs_opened="false"
+	               thumbs_text="false"
+	               thumbs_dragging="true"
+	               thumbs_onhoverscrolling="false"
+	               thumbs_scrollbuttons="false"
+	               thumbs_scrollindicator="false"
+	               thumbs_loop="false"
+	               tooltips_thumbs="false"
+	               tooltips_hotspots="false"
+	               tooltips_mapspots="false"
+	               loadscene_flags="MERGE"
+	               loadscene_blend="BLEND(0.5)"
+	               controlbar_offset="20"
+	               />
+
+	<!-- set optional skin logo url -->
+	<layer name="skin_logo" url="" scale="0.25" opened_onclick="openurl('...',_blank);" />
+
+	<action name="customize">
+		set(var1, 'hello');
+		set(var2, get(mouse.x));
+		 lookto(5,20,50);
+	</action>
+
+	<action name="startup">
+		
+
+		if(startscene === null, copy(startscene,scene[0].name));
+		loadscene(get(startscene), null, MERGE);
+	</action>
+
+
+
+	<scene name="scene_IMG_0001" title="IMG_0001" onstart="" thumburl="panos/IMG_0001.tiles/thumb.jpg" lat="33.54344444" lng="133.48896667" heading="134.8">
+
+<layer name="text"
+       url="textfield.swf"
+       align="lefttop" x="10" y="10"
+       html="导航[br][b]出门后的阳台[/b]"
+       css="font-family:Arial; font-size:16px; color:#000000;"
+       autowidth="auto"
+       autoheight="auto"
+       vcenter="false"
+       padding="2"
+       wordwrap="true"
+       selectable="false"
+       embeddedfonts="false"
+       background="true"
+       backgroundcolor="0xFFFFFF"
+       backgroundalpha="1.0"
+       border="false"
+       bordercolor="0x000000"
+       borderalpha="1.0"
+       borderwidth="1.0"
+       roundedge="0"
+       shadow="0.0"
+       shadowrange="4.0"
+       shadowangle="45"
+       shadowcolor="0x000000"
+       shadowalpha="1.0"
+       textshadow="0.0"
+       textshadowrange="4.0"
+       textshadowangle="45"
+       textshadowcolor="0x000000"
+       textshadowalpha="1.0"
+       onautosized=""
+       onclick="customize()"
+       />
+
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_0001.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215701" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="5402" tiledimageheight="1166">
+				<cylinder url="panos/IMG_0001.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="2702" tiledimageheight="584">
+				<cylinder url="panos/IMG_0001.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<style name="spotstyle"  url="./extension/a.JPG" />
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="0.425" atv="0.044" linkedscene="scene_img_2435" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="0.203" atv="-0.003" linkedscene="scene_img_2439" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="0.153" atv="0.013" linkedscene="scene_img_2440" />
+		<hotspot name="spot4" width="50" height="50" style="spotstyle" ath="0.153" atv="0.023" linkedscene="scene_img_2440" />
+
+
+	</scene>
+
+	<scene name="scene_IMG_2426" title="IMG_2426" onstart="" thumburl="panos/IMG_2426.tiles/thumb.jpg" lat="33.54905833" lng="133.48594722" heading="138.7">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2426.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215376" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2426.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2426.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2426.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+
+	</scene>
+
+	<scene name="scene_IMG_2427" title="IMG_2427" onstart="" thumburl="panos/IMG_2427.tiles/thumb.jpg" lat="33.54906389" lng="133.48593056" heading="181.5">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2427.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.219401" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13628" tiledimageheight="2990">
+				<cylinder url="panos/IMG_2427.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6814" tiledimageheight="1496">
+				<cylinder url="panos/IMG_2427.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="748">
+				<cylinder url="panos/IMG_2427.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.372" atv="-0.007" linkedscene="scene_img_2428" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="0.288" atv="0.000" linkedscene="scene_img_2426" />
+
+	</scene>
+
+	<scene name="scene_IMG_2428" title="IMG_2428" onstart="" thumburl="panos/IMG_2428.tiles/thumb.jpg" lat="33.54905278" lng="133.48591667" heading="103.8">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2428.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215724" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13610" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2428.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6806" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2428.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3404" tiledimageheight="734">
+				<cylinder url="panos/IMG_2428.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="0.486" atv="0.003" linkedscene="scene_img_2427" />
+
+	</scene>
+
+	<scene name="scene_IMG_2435" title="IMG_2435" onstart="" thumburl="panos/IMG_2435.tiles/thumb.jpg" lat="33.54354444" lng="133.48913611" heading="283.6">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2435.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.220070" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="3000">
+				<cylinder url="panos/IMG_2435.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1500">
+				<cylinder url="panos/IMG_2435.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="750">
+				<cylinder url="panos/IMG_2435.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="0.461" atv="0.032" linkedscene="scene_img_2436" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="0.050" atv="0.004" linkedscene="scene_img_2438" />
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="-0.480" atv="0.002" linkedscene="scene_img_0001" />
+
+	</scene>
+
+	<scene name="scene_IMG_2436" title="IMG_2436" onstart="" thumburl="panos/IMG_2436.tiles/thumb.jpg" lat="33.54357778" lng="133.48922778" heading="312.4">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2436.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215376" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2436.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2436.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2436.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.402" atv="0.035" linkedscene="scene_img_2435" />
+
+	</scene>
+
+	<scene name="scene_IMG_2438" title="IMG_2438" onstart="" thumburl="panos/IMG_2438.tiles/thumb.jpg" lat="33.54350278" lng="133.48931944" heading="304.1">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2438.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.218163" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="2974">
+				<cylinder url="panos/IMG_2438.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1488">
+				<cylinder url="panos/IMG_2438.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="744">
+				<cylinder url="panos/IMG_2438.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="0.394" atv="0.020" linkedscene="scene_img_2435" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-0.213" atv="0.039" linkedscene="scene_img_2442" />
+		
+
+	</scene>
+
+	<scene name="scene_IMG_2439" title="IMG_2439" onstart="" thumburl="panos/IMG_2439.tiles/thumb.jpg" lat="33.54336111" lng="133.48904444" heading="195.5">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2439.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215819" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13604" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2439.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6802" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2439.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3402" tiledimageheight="734">
+				<cylinder url="panos/IMG_2439.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="0.462" atv="0.004" linkedscene="scene_img_0001" />
+
+	</scene>
+
+	<scene name="scene_IMG_2440" title="IMG_2440" onstart="" thumburl="panos/IMG_2440.tiles/thumb.jpg" lat="33.54356111" lng="133.48924167" heading="60.6">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2440.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.221831" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="3024">
+				<cylinder url="panos/IMG_2440.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1512">
+				<cylinder url="panos/IMG_2440.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="756">
+				<cylinder url="panos/IMG_2440.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.175" atv="0.079" linkedscene="scene_img_2441" />
+
+	</scene>
+
+	<scene name="scene_IMG_2441" title="IMG_2441" onstart="" thumburl="panos/IMG_2441.tiles/thumb.jpg" lat="33.54351944" lng="133.48908889" heading="222.0">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2441.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215376" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2441.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2441.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2441.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="0.217" atv="0.015" linkedscene="scene_img_2442" />
+
+	</scene>
+
+	<scene name="scene_IMG_2442" title="IMG_2442" onstart="" thumburl="panos/IMG_2442.tiles/thumb.jpg" lat="33.54362778" lng="133.48933333" heading="245.8">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2442.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215376" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2442.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2442.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2442.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.169" atv="-0.004" linkedscene="scene_img_2443" />
+
+	</scene>
+
+	<scene name="scene_IMG_2443" title="IMG_2443" onstart="" thumburl="panos/IMG_2443.tiles/thumb.jpg" lat="33.54370556" lng="133.48935000" heading="278.4">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2443.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215376" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2443.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2443.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2443.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="0.389" atv="0.012" linkedscene="scene_img_2442" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-0.359" atv="-0.027" linkedscene="scene_img_2444" />
+
+	</scene>
+
+	<scene name="scene_IMG_2444" title="IMG_2444" onstart="" thumburl="panos/IMG_2444.tiles/thumb.jpg" lat="33.54516944" lng="133.48890556" heading="179.2">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2444.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215882" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13600" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2444.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6800" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2444.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3400" tiledimageheight="734">
+				<cylinder url="panos/IMG_2444.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.061" atv="0.000" linkedscene="scene_img_2447" />
+
+	</scene>
+
+	<scene name="scene_IMG_2447" title="IMG_2447" onstart="" thumburl="panos/IMG_2447.tiles/thumb.jpg" lat="33.54530000" lng="133.48884444" heading="232.3">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2447.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215502" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13624" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2447.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6812" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2447.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3406" tiledimageheight="734">
+				<cylinder url="panos/IMG_2447.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.343" atv="-0.000" linkedscene="scene_img_2448" />
+
+	</scene>
+
+	<scene name="scene_IMG_2448" title="IMG_2448" onstart="" thumburl="panos/IMG_2448.tiles/thumb.jpg" lat="33.54556667" lng="133.48880000" heading="239.1">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2448.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215376" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2448.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2448.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2448.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="0.426" atv="0.017" linkedscene="scene_img_2447" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="-0.256" atv="-0.006" linkedscene="scene_img_2449" />
+		
+
+	</scene>
+
+	<scene name="scene_IMG_2449" title="IMG_2449" onstart="" thumburl="panos/IMG_2449.tiles/thumb.jpg" lat="33.54576111" lng="133.48867778" heading="204.1">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2449.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215470" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13626" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2449.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6814" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2449.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2449.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.117" atv="-0.053" linkedscene="scene_img_2450" />
+
+	</scene>
+
+	<scene name="scene_IMG_2450" title="IMG_2450" onstart="" thumburl="panos/IMG_2450.tiles/thumb.jpg" lat="33.54813333" lng="133.48758056" heading="197.2">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2450.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215376" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2450.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2450.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2450.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.060" atv="-0.002" linkedscene="scene_img_2451" />
+
+	</scene>
+
+	<scene name="scene_IMG_2451" title="IMG_2451" onstart="" thumburl="panos/IMG_2451.tiles/thumb.jpg" lat="33.54831944" lng="133.48776111" heading="284.2">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2451.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215470" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13626" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2451.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6814" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2451.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2451.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.355" atv="0.026" linkedscene="scene_img_2452" />
+
+	</scene>
+
+	<scene name="scene_IMG_2452" title="IMG_2452" onstart="" thumburl="panos/IMG_2452.tiles/thumb.jpg" lat="33.54836389" lng="133.48773056" heading="190.2">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2452.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215439" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13628" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2452.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6814" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2452.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2452.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.384" atv="-0.024" linkedscene="scene_img_2453" />
+
+	</scene>
+
+	<scene name="scene_IMG_2453" title="IMG_2453" onstart="" thumburl="panos/IMG_2453.tiles/thumb.jpg" lat="33.54842778" lng="133.48701389" heading="177.5">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2453.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215376" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2453.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2453.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2453.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="0.042" atv="0.012" linkedscene="scene_img_2454" />
+
+	</scene>
+
+	<scene name="scene_IMG_2454" title="IMG_2454" onstart="" thumburl="panos/IMG_2454.tiles/thumb.jpg" lat="33.54913611" lng="133.48678611" heading="252.3">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2454.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215502" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13624" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2454.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6812" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2454.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3406" tiledimageheight="734">
+				<cylinder url="panos/IMG_2454.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.267" atv="-0.007" linkedscene="scene_img_2455" />
+
+	</scene>
+
+	<scene name="scene_IMG_2455" title="IMG_2455" onstart="" thumburl="panos/IMG_2455.tiles/thumb.jpg" lat="33.54930833" lng="133.48672500" heading="194.1">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2455.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.220217" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="3002">
+				<cylinder url="panos/IMG_2455.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1502">
+				<cylinder url="panos/IMG_2455.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="752">
+				<cylinder url="panos/IMG_2455.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.246" atv="0.006" linkedscene="scene_img_2456" />
+
+	</scene>
+
+	<scene name="scene_IMG_2456" title="IMG_2456" onstart="" thumburl="panos/IMG_2456.tiles/thumb.jpg" lat="33.54924444" lng="133.48655833" heading="78.1">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2456.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215724" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13610" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2456.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6806" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2456.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3404" tiledimageheight="734">
+				<cylinder url="panos/IMG_2456.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="0.076" atv="0.015" linkedscene="scene_img_2457" />
+
+	</scene>
+
+	<scene name="scene_IMG_2457" title="IMG_2457" onstart="" thumburl="panos/IMG_2457.tiles/thumb.jpg" lat="33.54910556" lng="133.48631389" heading="80.2">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2457.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215407" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13630" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2457.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2457.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2457.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="0.201" atv="0.027" linkedscene="scene_img_2458" />
+
+	</scene>
+
+	<scene name="scene_IMG_2458" title="IMG_2458" onstart="" thumburl="panos/IMG_2458.tiles/thumb.jpg" lat="33.54916389" lng="133.48629722" heading="47.9">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2458.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215376" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2458.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2458.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2458.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.103" atv="-0.001" linkedscene="scene_img_2459" />
+
+	</scene>
+
+	<scene name="scene_IMG_2459" title="IMG_2459" onstart="" thumburl="panos/IMG_2459.tiles/thumb.jpg" lat="33.54916389" lng="133.48629722" heading="58.3">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2459.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215376" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2459.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2459.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2459.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.332" atv="-0.014" linkedscene="scene_img_2460" />
+
+	</scene>
+
+	<scene name="scene_IMG_2460" title="IMG_2460" onstart="" thumburl="panos/IMG_2460.tiles/thumb.jpg" lat="33.54906944" lng="133.48594722" heading="22.3">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2460.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215376" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2460.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2460.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2460.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="0.063" atv="-0.001" linkedscene="scene_img_2462" />
+
+	</scene>
+
+	<scene name="scene_IMG_2462" title="IMG_2462" onstart="" thumburl="panos/IMG_2462.tiles/thumb.jpg" lat="33.54907500" lng="133.48600833" heading="221.3">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2462.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215376" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13632" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2462.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2462.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2462.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.081" atv="-0.012" linkedscene="scene_img_2463" />
+
+	</scene>
+
+	<scene name="scene_IMG_2463" title="IMG_2463" onstart="" thumburl="panos/IMG_2463.tiles/thumb.jpg" lat="33.54906389" lng="133.48593056" heading="258.7">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/IMG_2463.tiles/preview.jpg" />
+
+		<image type="CYLINDER" hfov="1.00" vfov="0.215407" voffset="0.00" multires="true" tilesize="512" progressive="true">
+			<level tiledimagewidth="13630" tiledimageheight="2936">
+				<cylinder url="panos/IMG_2463.tiles/l3/%v/l3_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="6816" tiledimageheight="1468">
+				<cylinder url="panos/IMG_2463.tiles/l2/%v/l2_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="3408" tiledimageheight="734">
+				<cylinder url="panos/IMG_2463.tiles/l1/%v/l1_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-0.337" atv="-0.012" linkedscene="scene_img_2427" />
+
+	</scene>
+
+
+</krpano>
