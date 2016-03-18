@@ -356,6 +356,10 @@
     onAdd: function (_item, callback) {
             $(".startTime").text(changeDate(Date.parse((new Date(_item.start)))))
 
+        //@的人
+        $("#memberLabels span").remove()
+        _arrs = []
+
 
 //      prettyPrompt('添加新的记忆', '印象:', item.content, function (value) {
 //        if (value) {
@@ -448,7 +452,11 @@
 
     onUpdate: function (item, callback) {
 
+        //@的人
+        $("#memberLabelsUpdate span").remove()
         _arrs = []
+
+
         $(".startTime").text(changeDate(Date.parse((new Date(item.start)))))
         if(!item.from){
              alert("神秘人信息无法做出修改");
@@ -693,7 +701,13 @@
                //     return callback($("#myImpression").val(),$("#myRemember").val());
                // },false)
 
+
+
+
                 $( "#updateNewImpression" ).one( "click", function( event ) {
+
+
+
                    return callback($("#myImpression").val(),$("#myRemember").val(),$('#anonymityUpdate input[name="anonymity"]:checked').val(),$("#thumbUpdate").attr('targetName'),$('#displayUpdate input[name="display"]:checked').val(),_arrs);
                 });
 
@@ -879,14 +893,20 @@ var _arrs = []
 function selectAtMembers(name,type=1){
 
     if(_arrs.indexOf(name)>=0){
-        $("#memberLabels span").eq(_arrs.indexOf(name)).remove()
+        if(type==2){
+                $("#memberLabelsUpdate span").eq(_arrs.indexOf(name)).remove()
+        }else{
+                $("#memberLabels span").eq(_arrs.indexOf(name)).remove()
+        }
+
         _arrs.splice(_arrs.indexOf(name),1);
     }
+
     var arrs = [
-              '<span class="label label-default">value&nbsp;</span>',
-              '<span class="label label-primary">value&nbsp;</span>',
-              '<span class="label label-success">value&nbsp;</span>',
-              '<span class="label label-info">value&nbsp;</span>'
+              '<span class="label label-default" onclick="clearMember(this)">value&nbsp;</span>',
+              '<span class="label label-primary" onclick="clearMember(this)">value&nbsp;</span>',
+              '<span class="label label-success" onclick="clearMember(this)">value&nbsp;</span>',
+              '<span class="label label-info" onclick="clearMember(this)">value&nbsp;</span>'
     ]
 
     _arrs.push(name);
@@ -898,6 +918,15 @@ function selectAtMembers(name,type=1){
     }else{
             $("#memberLabels").append(_str);
     }
+
+}
+
+
+function clearMember(obj){
+    var _text = $(obj).text()
+    var n = $("#memberLabelsUpdate span").index(obj)
+    _arrs.splice(n,1);
+    $(obj).remove()
 
 }
 
