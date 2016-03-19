@@ -1,0 +1,64 @@
+ <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+
+                <a class="navbar-brand active" href="/blog"><span class="sr-only">(current)</span>主页</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">新玩意儿</a></li>
+                    <li><a href="#">生活纪录</a></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">场景<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/scene/scene03/vtour/tour.html">我在高知</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">人在囧途</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">天涯与海角</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="navbar-form navbar-left" role="search">
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="用户名">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="密码">
+                    </div>
+                    <button type="submit" class="btn btn-default">登陆</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/blog">博客日志</a></li>
+                    <li><a href="/static/static/public_html/index.html">关于我</a></li>
+
+
+                <% if @loginSession? : %>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">记忆线 <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/profile?nameTxt=<%=@loginSession.name%>&classNumber=<%=@loginSession.classNumber%>">我的主页</a></li>
+                            <li><a href="/blog/AllTimeLine">组织信息</a></li>
+                            <li><a href="/blog/logout"></a></li>
+                        </ul>
+                    </li>
+                <% else: %>
+
+                    <li><a href="/blog/login">时间线登陆</a></li>
+
+                <% end %>
+
+
+
+
+
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>

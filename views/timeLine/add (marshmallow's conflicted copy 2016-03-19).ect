@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="/admin/js/vis.js"></script>
+<link href="/admin/css/vis.css" rel="stylesheet" type="text/css" />
+<script src="http://t4t5.github.io/sweetalert/dist/sweetalert.min.js"></script>
+<link href="http://t4t5.github.io/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css"/>
+
+<!-- Bootstrap CSS -->
+<link href="/admin/css/bootstrap.min.css" rel="stylesheet">
+<!-- bootstrap theme -->
+<link href="/admin/css/bootstrap-theme.css" rel="stylesheet">
+
+
+<script src="/admin/js/jquery.js"></script>
+<script src="/admin/js/bootstrap.min.js"></script>
+
+
+
+<style>
+    #timeLine {
+        font-family: arial, sans-serif;
+        font-size: 11pt;
+        padding:12px;
+    }
+
+    #timeLine textarea {
+        width: 85%;
+        height: 100px;
+    }
+
+    #timeLine .buttons {
+        margin: 20px 0;
+    }
+
+    #timeLine .buttons input {
+        padding: 10px;
+    }
+
+    .menu {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin: 10px;
+        z-index: 1000;
+    }
+
+
+    .btn {
+      background: #3498db;
+      background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+      background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+      background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+      background-image: -o-linear-gradient(top, #3498db, #2980b9);
+      background-image: linear-gradient(to bottom, #3498db, #2980b9);
+      -webkit-border-radius: 28;
+      -moz-border-radius: 28;
+      border-radius: 28px;
+      font-family: Arial;
+      color: #ffffff;
+      font-size: 20px;
+      padding: 10px 20px 10px 20px;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: #3cb0fd;
+      background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+      background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+      background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+      background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+      background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+      text-decoration: none;
+    }
+</style>
+
+</head>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-74842054-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<body>
+<div class="container" id="timeLine">
+
+<div class="row">
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+
+      <%= @content.name%>的时间轴
+
+
+      <% if @content?.class=="1" : %>
+          17班
+      <% else : %>
+          兄弟连
+      <% end %>
+          的故事
+
+
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">添加回忆<span class="sr-only">(添加回忆)</span></a></li>
+        <li><a href="/timeLine/?_id=<%=  @content._id %>">前往时间轴</a></li>
+        <li><a href="/profile?nameTxt=<%=@fromName%>&classNumber=<%=@fromClass%>">个人主页</a></li>
+        <li><a href="/blog/AllTimeLine">组织信息</a></li>
+
+      </ul>
+
+
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+</div>
+
+<div class="row">
+    <div id="visualization">
+        <div class="menu">
+            <input type="button" class="btn" id="zoomIn" value="放大"/>
+            <input type="button" class="btn" id="zoomOut" value="缩小"/>
+            <input type="button" class="btn" id="moveLeft" value="左移动"/>
+            <input type="button" class="btn" id="moveRight" value="右移动"/>
+        </div>
+    </div>
+</div>
+
+<hr/>
+
+
+<div class="row" style="display:none">
+        <textarea id="data">
+            <%= @content.timeLine%>
+        </textarea>
+
+        <div class="buttons">
+            <input type="button" id="load" value="&darr; Load" title="Load data from textarea into the Timeline">
+            <input type="button" id="save" value="&uarr; Save" title="Save data from the Timeline into the textarea">
+        </div>
+</div>
+
+
+
+<div class="row">
+  <div id="log"></div>
+</div>
+
+
+
+
+
+<div class="row" style="display:none">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="addNewImpression" data-whatever="@mdo">Open modal for @mdo</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2" id="editNewImpression" data-whatever="@fat">Open modal for @fat</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button>
+</div>
+
+
+
+<div class="row">
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">新的记忆  <span class="startTime"></span></h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">印象:</label>
+            <input type="text" class="form-control" id="newImpression">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">回忆:</label>
+            <textarea class="form-control" id="newRemember"></textarea>
+          </div>
+
+        隐藏自己身份
+         <div class="form-group" id="anonymity">
+            <label class="radio-inline"><input type="radio" name="anonymity" value="1" checked>公开</label>
+            <label class="radio-inline"><input type="radio" name="anonymity" value="2">匿名</label>
+        </div>
+
+        隐藏对方身份
+         <div class="form-group" id="display">
+            <label class="radio-inline"><input type="radio" name="display" value="1" checked>公开</label>
+            <label class="radio-inline"><input type="radio" name="display" value="2">匿名</label>
+        </div>
+
+        </form>
+
+        <div class="row">
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+             和<%= @content.name%>一起经历过这件事的成员
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <% for link in @allMembers : %>
+                      <li onclick="selectAtMembers('<%= link.name %>')"><a><%= link.name %></a></li>
+                    <% end %>
+          </ul>
+        </div>
+        </div>
+
+          <div class="row" id="memberLabels">
+
+          </div>
+
+
+       <form class="form-horizontal" id="fileupload-form" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="control-label">Select Files</label>
+                        <input type="file" name="files" id="fileupload">
+                   </div>
+       </form>
+
+      <div class="row">
+           <label class="col-sm-2 control-label" >封面图片</label>
+           <img id="thumb" class="col-sm-3 src="" alt="thumbnail" class="img-thumbnail">
+      </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="insertNewImpressionClose">关闭</button>
+        <button type="button" class="btn btn-primary" id="insertNewImpression">添加</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">这个记忆<span class="startTime"></span></h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">印象:</label>
+            <input type="text" class="form-control" id="myImpression">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">回忆:</label>
+            <textarea class="form-control" id="myRemember"></textarea>
+          </div>
+           隐藏自己身份
+           <div class="form-group" id="anonymityUpdate">
+              <label class="radio-inline"><input type="radio" name="anonymity" value="1">公开</label>
+              <label class="radio-inline"><input type="radio" name="anonymity" value="2">匿名</label>
+          </div>
+
+        隐藏对方身份
+         <div class="form-group" id="displayUpdate">
+            <label class="radio-inline"><input type="radio" name="display" value="1" checked>公开</label>
+            <label class="radio-inline"><input type="radio" name="display" value="2">匿名</label>
+        </div>
+        </form>
+
+                <div class="row">
+                <div class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                     和<%= @content.name%>一起经历过这件事的成员
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <% for link in @allMembers : %>
+                              <li onclick="selectAtMembers('<%= link.name %>',2)"><a><%= link.name %></a></li>
+                            <% end %>
+                  </ul>
+                </div>
+                </div>
+
+                  <div class="row" id="memberLabelsUpdate">
+
+                  </div>
+
+
+
+         <form class="form-horizontal" id="fileupload-form-update" enctype="multipart/form-data">
+                      <div class="form-group">
+                          <label class="control-label">Select Files</label>
+                          <input type="file" name="files" id="fileuploadUpdate">
+                     </div>
+         </form>
+
+        <div class="row">
+             <label class="col-sm-2 control-label" >封面图片</label>
+             <img id="thumbUpdate" class="col-sm-3  alt="thumbnailUpdate" class="img-thumbnail">
+        </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="updateNewImpressionClose">关闭</button>
+        <button type="button" class="btn btn-primary" id="updateNewImpression">修改</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<input type="hidden" id="fromName" value="<%= @fromName%>">
+<input type="hidden" id="fromClass" value="<%= @fromClass%>">
+
+</div>
+
+
+</div>
+
+    <script>
+
+        var txtData = document.getElementById('data');
+        var btnLoad = document.getElementById('load');
+        var btnSave = document.getElementById('save');
+
+
+        var min = new Date(2003, 3, 1); // 1 april
+        var max = new Date(2017, 3, 30, 23, 59, 59); // 30 april
+
+        // Create an empty DataSet.
+        // This DataSet is used for two way data binding with the Timeline.
+        var items = new vis.DataSet();
+
+        // create a timeline
+        var container = document.getElementById('visualization');
+
+  var options = {
+    editable: true,
+    height: '300px',
+    onAdd: function (_item, callback) {
+            $(".startTime").text(changeDate(Date.parse((new Date(_item.start)))))
+
+
+//      prettyPrompt('添加新的记忆', '印象:', item.content, function (value) {
+//        if (value) {
+//          item.content = value;
+//          callback(item); // send back adjusted new item
+//          saveData();
+//        }
+//        else {
+//          callback(null); // cancel item creation
+//        }
+//      });
+
+        lunch("exampleModal");
+
+        selfPrompt(_item,function(value1,value2,value3,value4,value5,value6){
+
+                if(value1){
+                    _item.content = value1;
+                }
+
+                if(value2){
+                    _item.contentDetail = value2;
+                }
+
+                if(value3){
+                    _item.anonymity = value3;
+                }
+
+                if(value4){
+                    _item.targetname = value4;
+                }
+
+                if(value6){
+                    _item.relatedMembers = value6
+                }
+
+
+                if(value5){
+                    _item.display = value5
+                }
+
+                historySaveData(_item,function(res){
+
+                    if(parseInt(res.err)==0){
+
+                                    _item.from = {name:$("#fromName").val(),class:$("#fromClass").val()};
+                                    _item.historyRandom = res.msg;
+
+                                    callback(_item);
+
+                                    saveData();
+
+                                    $("#insertNewImpressionClose").click();
+                                    $("#newImpression").val("");
+                                    $("#newRemember").val("");
+
+                    }else{
+                            alert(res.msg);
+                    }
+
+                })
+
+        })
+
+    },
+    onMove: function (item, callback) {
+      var title = 'Do you really want to move the item to\n' +
+          'start: ' + item.start + '\n' +
+          'end: ' + item.end + '?';
+
+      prettyConfirm('Move item', title, function (ok) {
+        if (ok) {
+          callback(item); // send back item as confirmation (can be changed)
+          saveData();
+        }
+        else {
+          callback(null); // cancel editing item
+        }
+      });
+    },
+
+    onMoving: function (item, callback) {
+      if (item.start < min) item.start = min;
+      if (item.start > max) item.start = max;
+      if (item.end   > max) item.end   = max;
+
+      callback(item); // send back the (possibly) changed item
+      saveData();
+    },
+
+    onUpdate: function (item, callback) {
+
+        _arrs = []
+        $(".startTime").text(changeDate(Date.parse((new Date(item.start)))))
+        if(!item.from){
+             alert("神秘人信息无法做出修改");
+             return false;
+        }
+
+        if(item.from.name !=$("#fromName").val() || item.from.class != $("#fromClass").val()){
+             alert("你不是这条回忆记录的所有者");
+             return false;
+        }
+
+
+
+        $("#thumbUpdate").attr("src","/timeLineupload/"+item.targetname);
+        $("#thumbUpdate").attr("targetName",item.targetname);
+
+        for(var i in item.relatedMembers){
+           selectAtMembers(item.relatedMembers[i],2)
+        }
+
+
+//      prettyPrompt('Update item', 'Edit items text:', item.content, function (value) {
+//        if (value) {
+//          item.content = value;
+//          callback(item); // send back adjusted item
+//          saveData();
+//        }
+//        else {
+//          callback(null); // cancel updating the item
+//        }
+//      });
+
+        lunch("exampleModal2");
+        selfPrompt2(item,function(value1,value2,value3,value4,value5,value6){
+
+          item.content = value1;
+          item.contentDetail = value2;
+          item.anonymity = value3;
+          item.targetname = value4;
+          item.display = value5;
+          item.relatedMembers = value6
+
+          updateHistorySaveData(item,function(res){
+
+              if(parseInt(res.err)==0){
+                  callback(item); // send back adjusted item
+                  saveData();
+
+                  $("#updateNewImpressionClose").click();
+                  //$("#myImpression").val("");
+                  //$("#myRemember").val("");
+              }else{
+                  alert(res.msg)
+              }
+
+          })
+
+
+
+        });
+
+    },
+
+    onRemove: function (item, callback) {
+      prettyConfirm('Remove item', 'Do you really want to remove item ' + item.content + '?', function (ok) {
+        if (ok) {
+
+
+            deleteHistorySaveData(item,function(res){
+                         //if(parseInt(res.err)==0){
+                            callback(item); // confirm deletion
+                            saveData();
+                         //}
+            })
+
+        }
+        else {
+          callback(null); // cancel deletion
+        }
+      });
+    }
+  };
+
+        var timeline = new vis.Timeline(container, items, options);
+
+        function loadData () {
+            // get and deserialize the data
+            var data = JSON.parse(txtData.value);
+
+            // update the data in the DataSet
+            //
+            // Note: when retrieving updated data from a server instead of a complete
+            // new set of data, one can simply update the existing data like:
+            //
+            //   items.update(data);
+            //
+            // Existing items will then be updated, and new items will be added.
+            items.clear();
+            items.add(data);
+
+            console.log("loaded data")
+            console.log(data)
+            // adjust the timeline window such that we see the loaded data
+            timeline.fit();
+        }
+        btnLoad.onclick = loadData;
+
+        function saveData() {
+            // get the data from the DataSet
+            // Note that we specify the output type of the fields start and end
+            // as ISODate, which is safely serializable. Other serializable types
+            // are Number (unix timestamp) or ASPDate.
+            //
+            // Alternatively, it is possible to configure the DataSet to convert
+            // the output automatically to ISODates like:
+            //
+            //   var options = {
+            //     type: {start: 'ISODate', end: 'ISODate'}
+            //   };
+            //   var items = new vis.DataSet(options);
+            //   // now items.get() will automatically convert start and end to ISO dates.
+            //
+            var data = items.get({
+                type: {
+                    start: 'ISODate',
+                    end: 'ISODate'
+                }
+            });
+
+            // serialize the data and put it in the textarea
+            txtData.value = JSON.stringify(data, null, 2);
+
+
+            saveTxtData(txtData.value);
+
+        }
+        btnSave.onclick = saveData;
+
+        // load the initial data
+        loadData();
+
+        <% if @_ids? : %>
+            timeline.setSelection("<%=@_ids%>",{focus: true})
+        <% end %>
+
+
+
+    /**
+     * Move the timeline a given percentage to left or right
+     * @param {Number} percentage   For example 0.1 (left) or -0.1 (right)
+     */
+    function move (percentage) {
+        var range = timeline.getWindow();
+        var interval = range.end - range.start;
+
+        timeline.setWindow({
+            start: range.start.valueOf() - interval * percentage,
+            end:   range.end.valueOf()   - interval * percentage
+        });
+    }
+
+    /**
+     * Zoom the timeline a given percentage in or out
+     * @param {Number} percentage   For example 0.1 (zoom out) or -0.1 (zoom in)
+     */
+    function zoom (percentage) {
+        var range = timeline.getWindow();
+        var interval = range.end - range.start;
+
+        timeline.setWindow({
+            start: range.start.valueOf() - interval * percentage,
+            end:   range.end.valueOf()   + interval * percentage
+        });
+    }
+
+    // attach events to the navigation buttons
+    document.getElementById('zoomIn').onclick    = function () { zoom(-0.2); };
+    document.getElementById('zoomOut').onclick   = function () { zoom( 0.2); };
+    document.getElementById('moveLeft').onclick  = function () { move( 0.2); };
+    document.getElementById('moveRight').onclick = function () { move(-0.2); };
+
+
+
+        function prettyPrompt(title, text, inputValue, callback) {
+            swal({
+              title: title,
+              text: text,
+              type: 'input',
+              showCancelButton: true,
+              inputValue: inputValue,
+            }, callback);
+          }
+
+
+          function selfPrompt(item,callback){
+                //点击以后再执行下面的回调函数
+
+                  $("#insertNewImpression").click(addEventListenerClick(callback));
+          }
+
+          function addEventListenerClick(callback){
+                return function(){
+                    $("#insertNewImpression").off("click")
+                    return callback($("#newImpression").val(),$("#newRemember").val(),$('#anonymity  input[name="anonymity"]:checked').val(),$("#thumb").attr('targetname'),$('#display  input[name="display"]:checked').val(),_arrs);
+                }
+          }
+
+          function selfPrompt2(item,callback){
+                $("#myImpression").val(item.content);
+                $("#myRemember").val(item.contentDetail);
+
+
+
+                if(item.anonymity){
+                    if(item.anonymity == "1"){
+                          $('#anonymityUpdate').find('input[name="anonymity"]').eq(0).prop("checked",true);
+                    }
+
+                    if(item.anonymity == "2"){
+                          $('#anonymityUpdate').find('input[name="anonymity"]').eq(1).prop("checked",true);
+                    }
+                }
+
+
+
+                if(item.display){
+                    if(item.display == "1"){
+                          $('#displayUpdate  input[name="display"]').eq(0).prop("checked",true);
+                    }
+
+                    if(item.display == "2"){
+                          $('#displayUpdate  input[name="display"]').eq(1).prop("checked",true);
+                    }
+                }
+
+
+
+
+
+
+               // document.getElementById("updateNewImpression").addEventListener("click", function(){
+               //     return callback($("#myImpression").val(),$("#myRemember").val());
+               // },false)
+
+                $( "#updateNewImpression" ).one( "click", function( event ) {
+                   return callback($("#myImpression").val(),$("#myRemember").val(),$('#anonymityUpdate input[name="anonymity"]:checked').val(),$("#thumbUpdate").attr('targetName'),$('#displayUpdate input[name="display"]:checked').val(),_arrs);
+                });
+
+          }
+
+
+        function prettyConfirm(title, text, callback) {
+          swal({
+            title: title,
+            text: text,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55"
+          }, callback);
+        }
+
+        function logEvent(event, properties) {
+          var log = document.getElementById('log');
+          var msg = document.createElement('div');
+          msg.innerHTML = 'event=' + JSON.stringify(event) + ', ' +
+              'properties=' + JSON.stringify(properties);
+          log.firstChild ? log.insertBefore(msg, log.firstChild) : log.appendChild(msg);
+        }
+
+
+    function lunch(id){
+            $('#'+id).modal({
+              keyboard: false
+            })
+
+    }
+
+</script>
+
+<script>
+
+function saveTxtData(data){
+
+        console.log(data);
+
+$.ajax({
+   type: "POST",
+   url: "/blog/saveTxtData",
+   data: {dataSet:data},
+   success: function(msg){
+        if(parseInt(msg.err)>0){
+              swal({
+                title: "有些问题",
+                text: msg.msg
+                });
+        }
+   }
+ });
+
+}
+
+
+// 绑定了`submit`事件。
+   $('#fileupload-form,#fileupload-form-update').on('submit',(function(e) {
+
+    var idSource = $(this).attr("id");
+
+    e.preventDefault();
+
+             if(idSource=="fileupload-form"){
+                var fd = new FormData($('#fileupload-form').get(0));
+             }else{
+                var fd = new FormData($('#fileupload-form-update').get(0));
+             }
+
+            $.ajax({
+               url: "/timeLine/upload",
+               type: "POST",
+               data: fd,
+               processData: false,
+               contentType: false,
+               success: function (res) {
+               var res = eval("("+res+")");
+
+                    if(idSource=="fileupload-form"){
+                            var targetId = "#thumb";
+                    }else{
+                            var targetId = "#thumbUpdate"
+                    }
+
+                         $(targetId).attr("src","/timeLineupload/"+res.targetName);
+                         $(targetId).attr("targetName",res.targetName);
+               }
+             });
+   }));
+
+
+
+
+$("#fileupload,#fileuploadUpdate").on("change", function(){
+   $(this).parents("form").submit();
+});
+
+
+
+function historySaveData(content,cb){
+                    $.ajax({
+                       url: "/blog/historySaveTxtData",
+                       type: "POST",
+                       data: content,
+                       success: function (res) {
+                            cb(eval('('+res+')'));
+                       }
+                     });
+}
+
+function updateHistorySaveData(content,cb){
+                    $.ajax({
+                       url: "/blog/updateHistorySaveTxtData",
+                       type: "POST",
+                       data: content,
+                       success: function (res) {
+                            cb(eval('('+res+')'));
+                       }
+                     });
+}
+
+
+function deleteHistorySaveData(content,cb){
+                        $.ajax({
+                           url: "/blog/deleteHistorySaveTxtData",
+                           type: "POST",
+                           data: content,
+                           success: function (res) {
+                                cb(eval('('+res+')'));
+                           }
+                         });
+}
+
+
+
+function changeDate(str){
+    var now_date, now_date_format;
+    now_date = new Date(parseInt(str));
+    now_date_format = now_date.getFullYear();
+
+    if (parseInt(now_date.getMonth()) < 9) {
+        now_date_format += "-" + "0" + (parseInt(now_date.getMonth()) + 1);
+    } else {
+        now_date_format += "-" + (parseInt(now_date.getMonth()) + 1);
+    }
+    if (parseInt(now_date.getDate()) <= 9) {
+        now_date_format += "-" + "0" + (parseInt(now_date.getDate()));
+    } else {
+        now_date_format += "-" + (parseInt(now_date.getDate()));
+    }
+
+    if (parseInt(now_date.getHours()) < 9) {
+        now_date_format += " " + "0" + (parseInt(now_date.getHours()));
+    } else {
+        now_date_format += " " + (parseInt(now_date.getHours()));
+    }
+
+
+    if (parseInt(now_date.getMinutes()) < 9) {
+        now_date_format += ":" + "0" + (parseInt(now_date.getMinutes()));
+    } else {
+        now_date_format += ":" + (parseInt(now_date.getMinutes()));
+    }
+
+    if (parseInt(now_date.getSeconds()) < 9) {
+        now_date_format += ":" + "0" + (parseInt(now_date.getSeconds()));
+    } else {
+        now_date_format += ":" + (parseInt(now_date.getSeconds()));
+    }
+
+    return now_date_format;
+
+}
+
+
+</script>
+
+
+<script>
+
+var _arrs = []
+function selectAtMembers(name,type=1){
+
+    if(_arrs.indexOf(name)>=0){
+        $("#memberLabels span").eq(_arrs.indexOf(name)).remove()
+        _arrs.splice(_arrs.indexOf(name),1);
+    }
+    var arrs = [
+              '<span class="label label-default">value&nbsp;</span>',
+              '<span class="label label-primary">value&nbsp;</span>',
+              '<span class="label label-success">value&nbsp;</span>',
+              '<span class="label label-info">value&nbsp;</span>'
+    ]
+
+    _arrs.push(name);
+
+    var _int = parseInt(Math.random()*3)
+    var _str = arrs[_int].replace('value',name);
+    if(type==2){
+            $("#memberLabelsUpdate").append(_str);
+    }else{
+            $("#memberLabels").append(_str);
+    }
+
+}
+
+</script>
+
+</body>
+</html>
