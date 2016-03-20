@@ -57,7 +57,7 @@
               <div class="row">
                    <label class="col-sm-2 control-label" >封面图片</label>
 
-                   <img id="thumb" class="col-sm-3" targetName="<%=@content.targetName%>" src='/FunckyUpload/<%= @.content.targetName%>' alt="thumbnail" class="img-thumbnail">
+                   <img id="thumb" class="col-sm-3" targetName="<%=@content.targetName%>" src='/FunckyFrontUpload/<%= @content.targetName%>' alt="thumbnail" class="img-thumbnail">
               </div>
         </form>
 
@@ -82,7 +82,7 @@
                     </header>
                     <div class="panel-body">
                         <div class="form">
-                            <form id="form"  action="funckyUpdate" method="post" class="form-horizontal">
+                            <form id="form"  action="funckyFrontUpdate" method="post" class="form-horizontal">
 
                             <div class="form-group">
                                   <label class="control-label col-lg-2" for="inputSuccess">种类</label>
@@ -194,7 +194,7 @@
                    contentType: false,
                    success: function (res) {
                    var res = eval("("+res+")");
-                        $("#thumb").attr("src","/FunckyUpload/"+res.targetName);
+                        $("#thumb").attr("src","/FunckyFrontUpload/"+res.targetName);
                         $("#thumb").attr("targetName",res.targetName);
                    }
                  });

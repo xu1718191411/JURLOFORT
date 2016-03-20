@@ -61,6 +61,15 @@ module.exports = {
     funckyFormController: function(req,res){
         res.render('admin/funckyForm', {});
     },
+    funckyFrontFormController: function(req,res){
+        steps(function(){
+            mongo.find("FunckyFronts",{},{},this.hold(function(doc){
+                return doc
+            }))
+        },function(_doc){
+            res.render('admin/funckyFrontForm', {contents:_doc});
+        })()
+    },
     postController: function(req,res){
         console.log(req.body)
         mongo.insert("Articles",req.body,function(doc){
@@ -74,6 +83,14 @@ module.exports = {
         mongo.insert("Funckies",req.body,function(doc){
             console.log(doc);
             res.redirect('/admin/list');
+        })
+
+    },
+    funckyFrontPostController:function(req,res){
+        console.log(req.body)
+        mongo.insert("FunckyFronts",req.body,function(doc){
+            console.log(doc);
+            res.redirect('/admin/funckyForm');
         })
 
     },
@@ -145,7 +162,7 @@ module.exports = {
         var _id = req.query._id;
         mongo.remove("Funckies",{_id:new mongodb.ObjectID(_id)},function(doc){
             console.log(doc);
-            res.redirect('/admin/list');
+            res.redirect('/admin/funckyList');
         })
     },
     editController:function(req,res){
@@ -162,6 +179,14 @@ module.exports = {
             var content = doc[0];
             console.log(content);
             res.render('admin/funckyEdit',{content:content})
+        })
+    },
+    funckyFrontEditController:function(req,res){
+        var _id = req.query._id;
+        mongo.find("FunckyFronts",{_id:new mongodb.ObjectID(_id)},{},function(doc){
+            var content = doc[0];
+            console.log(content);
+            res.render('admin/funckyFrontEdit',{content:content})
         })
     },
     updateController:function(req,res){
@@ -186,14 +211,32 @@ module.exports = {
         })
 
     },
+    funckyFrontUpdateController:function(req,res){
+        var _id = req.body._id;
+
+        //console.log(req.body);
+        mongo.update("FunckyFronts",{_id:new mongodb.ObjectID(_id)},{$set:{'title':req.body.title,'content':req.body.content,'targetName':req.body.targetName,'category':req.body.category}},function(doc){
+            console.log("updating")
+            console.log(doc);
+            res.redirect('/admin/list');
+        })
+
+    },
     uploadController:function(req,res){
 
         var file = req.files[0];
 
-        if(/\/([A-Za-z]+$)/.exec(req.headers['referer']) == "funckyForm"){
+        var _reg = /admin\/([A-Za-z]+)/.exec(req.headers['referer'])[1]
+        console.log(_reg)
+        if((_reg == "form") ||( _reg == "edit")){
             var target_path = path.join(__dirname, "../public/upload")
-        }else{
+        }else if((_reg == "funckyForm") || (_reg == "Funckyedit")){
             var target_path = path.join(__dirname, "../public/FunckyUpload")
+        }else if((_reg == "funckyFrontForm") || (_reg == "FunckyFrontedit")){
+            var target_path = path.join(__dirname, "../public/FunckyFrontUpload")
+        }else{
+            console.log("illegal Front");
+            res.redirect("/list")
         }
 
 
