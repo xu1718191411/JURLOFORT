@@ -29,9 +29,7 @@
 	<layer name="skin_logo" url="" scale="0.25" opened_onclick="openurl('...',_blank);" />
 
 	<action name="customize">
-		set(var1, 'hello');
-		set(var2, get(mouse.x));
-		 lookto(5,20,50);
+
 	</action>
 
 	<action name="startup">
@@ -93,12 +91,10 @@
 			</level>
 		</image>
 
-		<style name="spotstyle"  url="./extension/a.JPG" />
 		<!-- place your scene hotspots here -->
 		<hotspot name="spot1" style="skin_hotspotstyle" ath="0.425" atv="0.044" linkedscene="scene_img_2435" />
 		<hotspot name="spot2" style="skin_hotspotstyle" ath="0.203" atv="-0.003" linkedscene="scene_img_2439" />
 		<hotspot name="spot3" style="skin_hotspotstyle" ath="0.153" atv="0.013" linkedscene="scene_img_2440" />
-		<hotspot name="spot4" width="50" height="50" style="spotstyle" ath="0.153" atv="0.023" linkedscene="scene_img_2440" />
 
 
 	</scene>

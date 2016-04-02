@@ -58,6 +58,18 @@ module.exports = {
     formController: function(req,res){
         res.render('admin/form', {});
     },
+    funckyFormController: function(req,res){
+        res.render('admin/funckyForm', {});
+    },
+    funckyFrontFormController: function(req,res){
+        steps(function(){
+            mongo.find("FunckyFronts",{},{},this.hold(function(doc){
+                return doc
+            }))
+        },function(_doc){
+            res.render('admin/funckyFrontForm', {contents:_doc});
+        })()
+    },
     postController: function(req,res){
         console.log(req.body)
         mongo.insert("Articles",req.body,function(doc){
@@ -66,11 +78,35 @@ module.exports = {
         })
 
     },
+    funckyPostController:function(req,res){
+        console.log(req.body)
+        mongo.insert("Funckies",req.body,function(doc){
+            console.log(doc);
+            res.redirect('/admin/list');
+        })
+
+    },
+    funckyFrontPostController:function(req,res){
+        console.log(req.body)
+        mongo.insert("FunckyFronts",req.body,function(doc){
+            console.log(doc);
+            res.redirect('/admin/funckyForm');
+        })
+
+    },
     listController: function(req,res){
 
         mongo.find("Articles",{},{},function(doc){
             console.log(doc);
             res.render('admin/list', {links:doc});
+        })
+    },
+
+    funckyListController: function(req,res){
+
+        mongo.find("Funckies",{},{},function(doc){
+            console.log(doc);
+            res.render('admin/funckyList', {links:doc});
         })
     },
 
@@ -122,12 +158,35 @@ module.exports = {
             res.redirect('/admin/list');
         })
     },
+    funckyDelController:function(req,res){
+        var _id = req.query._id;
+        mongo.remove("Funckies",{_id:new mongodb.ObjectID(_id)},function(doc){
+            console.log(doc);
+            res.redirect('/admin/funckyList');
+        })
+    },
     editController:function(req,res){
         var _id = req.query._id;
         mongo.find("Articles",{_id:new mongodb.ObjectID(_id)},{},function(doc){
             var content = doc[0];
             console.log(content);
             res.render('admin/edit',{content:content})
+        })
+    },
+    funckyEditController:function(req,res){
+        var _id = req.query._id;
+        mongo.find("Funckies",{_id:new mongodb.ObjectID(_id)},{},function(doc){
+            var content = doc[0];
+            console.log(content);
+            res.render('admin/funckyEdit',{content:content})
+        })
+    },
+    funckyFrontEditController:function(req,res){
+        var _id = req.query._id;
+        mongo.find("FunckyFronts",{_id:new mongodb.ObjectID(_id)},{},function(doc){
+            var content = doc[0];
+            console.log(content);
+            res.render('admin/funckyFrontEdit',{content:content})
         })
     },
     updateController:function(req,res){
@@ -141,16 +200,49 @@ module.exports = {
         })
 
     },
+    funckyUpdateController:function(req,res){
+        var _id = req.body._id;
+
+        //console.log(req.body);
+        mongo.update("Funckies",{_id:new mongodb.ObjectID(_id)},{$set:{'title':req.body.title,'content':req.body.content,'targetName':req.body.targetName,'category':req.body.category}},function(doc){
+            console.log("updating")
+            console.log(doc);
+            res.redirect('/admin/list');
+        })
+
+    },
+    funckyFrontUpdateController:function(req,res){
+        var _id = req.body._id;
+
+        //console.log(req.body);
+        mongo.update("FunckyFronts",{_id:new mongodb.ObjectID(_id)},{$set:{'title':req.body.title,'content':req.body.content,'targetName':req.body.targetName,'category':req.body.category}},function(doc){
+            console.log("updating")
+            console.log(doc);
+            res.redirect('/admin/list');
+        })
+
+    },
     uploadController:function(req,res){
 
         var file = req.files[0];
 
-
+        var _reg = /admin\/([A-Za-z]+)/.exec(req.headers['referer'])[1]
+        console.log(_reg)
+        if((_reg == "form") ||( _reg == "edit")){
+            var target_path = path.join(__dirname, "../public/upload")
+        }else if((_reg == "funckyForm") || (_reg == "Funckyedit")){
+            var target_path = path.join(__dirname, "../public/FunckyUpload")
+        }else if((_reg == "funckyFrontForm") || (_reg == "FunckyFrontedit")){
+            var target_path = path.join(__dirname, "../public/FunckyFrontUpload")
+        }else{
+            console.log("illegal Front");
+            res.redirect("/list")
+        }
 
 
         var filename = file.filename;
 
-        var target_path = path.join(__dirname, "../public/upload")
+
         var originalPath = path.join(__dirname, "../uploads")
 
         console.log(file);
@@ -158,27 +250,43 @@ module.exports = {
         console.log(originalPath);
         var targetName = Math.random().toString(36).substring(2);
 
-        fs.rename(originalPath+"/"+filename,target_path+'/' +targetName+".jpg",function(err){
-            if(err) throw err;
+        steps(
+        function(){
+            fs.exists(target_path, this.hold(function(exists) {
+                return exists;
+            }));
+        },
+        function(_exists){
+            if(!_exists){
+                fs.mkdir(target_path,this.hold(function(_result){
+
+                }))
+            }
+        },
+        function(){
+            fs.rename(originalPath+"/"+filename,target_path+'/' +targetName+".jpg",this.hold(function(err){
+                if(err) throw err;
 
 
+
+        }))
+        },function(){
             im.resize({
                 srcPath: target_path+'/' +targetName+".jpg",
                 dstPath: target_path+'/' +targetName+"-thumb.jpg",
                 height:  450
 
-            }, function(err, stdout, stderr){
+            }, this.hold(function(err, stdout, stderr){
                 if (err) throw err;
                 console.log('resized kittens.jpg to fit within 256x256px');
                 res.end(JSON.stringify({targetName:targetName+"-thumb.jpg"}));
-            });
+            }));
 
 //            fs.unlink(originalPath+"/"+file.filename,function(err){
 //                if(err) throw err;
 //
 //            })
-
-        })
+        })()
     },
     timeLineController: function(req,res){
         var _class = req.query.class || "A1";

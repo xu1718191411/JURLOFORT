@@ -10,6 +10,36 @@ var steps = require("ocsteps");
 var tools = require('./tool.js')
 module.exports = {
     indexController: function (req, res) {
-        res.render("funcky/index",{loginSession:req.session.loginSession})
+        var VRArrs = []
+        var AIArrs = []
+        var IoTArrs = []
+        var frontArrs = []
+
+        steps(
+            function(){
+                mongo.find("FunckyFronts",{},{},this.hold(function(doc){
+                    for(var i=0;i<doc.length;i++){
+                        frontArrs.push({"title":doc[i].title,"targetName":doc[i].targetName.replace("-thumb","")})
+                    }
+                }))
+            },
+            function(){
+            mongo.find("Funckies",{},{},this.hold(function(doc){
+                    for(var i=0;i<doc.length;i++){
+                        if(doc[i].category=="1"){
+                            VRArrs.push(doc[i])
+                        }else if(doc[i].category=="2"){
+                            AIArrs.push(doc[i])
+                        }else if(doc[i].category=="3"){
+                            IoTArrs.push(doc[i])
+                        }else{
+
+                        }
+                    }
+            }))
+        },function(){
+            res.render("funcky/index",{loginSession:req.session.loginSession,VRArrs:VRArrs,AIArrs:AIArrs,IoTArrs:IoTArrs,frontArrs:frontArrs})
+        })()
+
     }
 }

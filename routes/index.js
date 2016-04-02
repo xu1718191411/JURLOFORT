@@ -4,7 +4,9 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res) {
 
-  res.redirect('/static/static/index.html')
+  //res.redirect('/static/static/index.html')
+    
+    res.redirect('/blog')
   //res.render('index', { title: 'Express' });
 });
 

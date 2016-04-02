@@ -20,6 +20,19 @@
 
     </style>
 </head>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-74842054-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
 <body>
 <div class="container-fluid">
    <% include 'blog/headerNavy.ect', { loginSession:@loginSession } %>
@@ -44,18 +57,22 @@
                 HTC VIVE
               </div>
             </div>
-            <div class="item">
-                  <img src="/images/funcky/htc.jpeg" alt="...">
-                 <div class="carousel-caption">
-                   HTC VIVE
-                 </div>
-            </div>
-            <div class="item">
-                  <img src="/images/funcky/htc.jpeg" alt="...">
-                 <div class="carousel-caption">
-                   HTC VIVE
-                 </div>
-            </div>
+
+                        <div class="item ">
+                          <img src="/images/funcky/htc.jpeg" alt="...">
+                          <div class="carousel-caption">
+                            HTC VIVE
+                          </div>
+                        </div>
+
+                                                <div class="item ">
+                                                  <img src="/images/funcky/htc.jpeg" alt="...">
+                                                  <div class="carousel-caption">
+                                                    HTC VIVE
+                                                  </div>
+                                                </div>
+
+
           </div>
 
           <!-- Controls -->
@@ -82,30 +99,26 @@
     </div>
 </div>
 
-
+<% for link in @VRArrs : %>
 
 <div class="row">
 
     <div class="col-md-4">
-    <img src="/images/funcky/htc.jpeg" alt="..." width="350" class="img-rounded">
+    <img src="/FunckyUpload/<%= link.targetName%>" alt="..." width="350" class="img-rounded">
     </div>
     <div class="col-md-8">
             <p class="lead">
-
-            腾讯数码讯（苏扬）过去一年虚拟现实领域的竞争集中在硬件领域，今年所有厂商共同面临的突破口是内容生态，而衡量这方面成绩好坏的标准，最直观的数据指标是应用的数量和质量。
-
-            GDC2016游戏开发者大会上，被认为是VR“三巨头”中的HTC和索尼都公布了各自在内容生态方面的规划，比较有意思的是，两家都宣称年内上线的应用会达到50款，不同的是，HTC还在数量和质量这两个维度之外，还公布了应用商店的中文本地化内容。
-
-            4月份上线Vive Port应用商店
-
-            MWC上公布的消费版就已经有了Vive Port的内容，这也是正式版和之前开发版有所不同的地方，并且将成为国行HTC Vive的虚拟现实用户直接获取应用等内容的官方渠道。
-
+                <%- link.content %>
             </p>
     </div>
 
 
 </div>
 
+<% end %>
+
+
+<hr/>
 
 <div class="row">
 
@@ -117,24 +130,16 @@
     </div>
 </div>
 
-
+<% for link in @IoTArrs : %>
 
 <div class="row">
 
     <div class="col-md-4">
-    <img src="/images/funcky/htc.jpeg" alt="..." width="350" class="img-rounded">
+    <img src="/FunckyUpload/<%= link.targetName%>" alt="..." width="350" class="img-rounded">
     </div>
     <div class="col-md-8">
             <p class="lead">
-
-            腾讯数码讯（苏扬）过去一年虚拟现实领域的竞争集中在硬件领域，今年所有厂商共同面临的突破口是内容生态，而衡量这方面成绩好坏的标准，最直观的数据指标是应用的数量和质量。
-
-            GDC2016游戏开发者大会上，被认为是VR“三巨头”中的HTC和索尼都公布了各自在内容生态方面的规划，比较有意思的是，两家都宣称年内上线的应用会达到50款，不同的是，HTC还在数量和质量这两个维度之外，还公布了应用商店的中文本地化内容。
-
-            4月份上线Vive Port应用商店
-
-            MWC上公布的消费版就已经有了Vive Port的内容，这也是正式版和之前开发版有所不同的地方，并且将成为国行HTC Vive的虚拟现实用户直接获取应用等内容的官方渠道。
-
+                <%- link.content %>
             </p>
     </div>
 
@@ -142,7 +147,9 @@
 </div>
 
 
+<% end %>
 
+<hr/>
 
 <div class="row">
 
@@ -154,29 +161,25 @@
     </div>
 </div>
 
-
+<% for link in @AIArrs : %>
 
 <div class="row">
 
     <div class="col-md-4">
-    <img src="/images/funcky/htc.jpeg" alt="..." width="350" class="img-rounded">
+    <img src="/FunckyUpload/<%= link.targetName%>" alt="..." width="350" class="img-rounded">
     </div>
     <div class="col-md-8">
             <p class="lead">
-
-            腾讯数码讯（苏扬）过去一年虚拟现实领域的竞争集中在硬件领域，今年所有厂商共同面临的突破口是内容生态，而衡量这方面成绩好坏的标准，最直观的数据指标是应用的数量和质量。
-
-            GDC2016游戏开发者大会上，被认为是VR“三巨头”中的HTC和索尼都公布了各自在内容生态方面的规划，比较有意思的是，两家都宣称年内上线的应用会达到50款，不同的是，HTC还在数量和质量这两个维度之外，还公布了应用商店的中文本地化内容。
-
-            4月份上线Vive Port应用商店
-
-            MWC上公布的消费版就已经有了Vive Port的内容，这也是正式版和之前开发版有所不同的地方，并且将成为国行HTC Vive的虚拟现实用户直接获取应用等内容的官方渠道。
-
+                <%- link.content %>
             </p>
     </div>
 
 
 </div>
+
+
+<% end %>
+
 
 
 </div>

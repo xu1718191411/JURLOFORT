@@ -22,13 +22,23 @@ router.get('/',adminController.indexController);
 router.get('/login',adminController.loginController);
 router.post('/login',adminController.loginPostController);
 router.get('/form',adminController.formController);
+router.get('/funckyForm',adminController.funckyFormController);
+router.get('/funckyFrontForm',adminController.funckyFrontFormController)
 router.post('/post',adminController.postController);
+router.post('/funckyPost',adminController.funckyPostController);
+router.post('/funckyFrontPost',adminController.funckyFrontPostController);
 router.get('/list',adminController.listController);
+router.get('/funckyList',adminController.funckyListController);
 router.get('/history',adminController.historyController);
 
 router.get('/del',adminController.delController);
+router.get('/funckyDel',adminController.funckyDelController);
 router.get('/edit',adminController.editController);
+router.get('/funckyEdit',adminController.funckyEditController);
+router.get('/funckyFrontEdit',adminController.funckyFrontEditController);
 router.post('/update',adminController.updateController);
+router.post('/funckyUpdate',adminController.funckyUpdateController);
+router.post('/funckyFrontUpdate',adminController.funckyFrontUpdateController);
 router.post('/upload',upload.array('files', 1),adminController.uploadController);
 router.get('/timeLine',adminController.timeLineController);
 router.post('/postClassMate',adminController.postClassMateController);
