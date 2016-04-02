@@ -15,6 +15,16 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<style>
+    .remove{
+        display:none;
+    }
+
+    #claimSample .row div{
+        border:1px solid black;
+        margin:2px;
+    }
+</style>
 
 <style>
     .dmcc{
@@ -32,7 +42,7 @@
         margin: 0 auto;
         position: absolute;
         top: 40px;
-        left: 45px;
+        left: 60px;
         background-color: #d7e4ed;
     }
 
@@ -42,15 +52,44 @@
         margin: 0 auto;
         position: absolute;
         top: 40px;
-        left: -15px;
+        left: -25px;
         background-color: #d7e4ed;
+    }
+    #l1{
+        position: absolute;
+        width:60px;
+        height: 1840px;
+        left:60px;
+        top:45px;
+    }
+
+    #r1{
+        position: absolute;
+        width:60px;
+        height: 1840px;
+        left:-15px;
+        top:45px;
+    }
+
+    #left{
+        height:340px;
+        overflow: auto;
+    }
+
+    #right{
+        height:550px;
+        overflow: auto;
+    }
+
+    #left,#right .alert{
+        cursor: pointer;
     }
 </style>
 
 
 </head>
 
-<body>
+<body onload="startCanvas()">
 
 <div class="container">
     <div class="row">
@@ -94,48 +133,64 @@
     </div>
 
     <div class="row">
-
-        <div class="col-md-6">
-            <div class="alert alert-info" role="alert">
-                <span class="alert-link">
+        <div  class="col-md-6">
+            <div id="left">
+                    <div class="alert alert-info proState" role="alert">
+                    <span class="alert-link">
                     私は学生さんが成人になった後経済を独立するべきだと思います．なぜかというと，そのときの経済の独立することができると思います．コンビニやレストランではいろいろアルバイトが学生さんに提供されています．そのようなアルバイトをすれば，生活料を独自で稼げると思います．
-                </span>
-            </div>
+                    </span>
+                    </div>
 
 
-            <div class="alert alert-success" role="alert">
-                <span class="alert-link">
+                    <div class="alert alert-success conState" role="alert">
+                    <span class="alert-link">
                     私はアルバイトで生活料を稼げるとは思わないです．たくさんの国ではアルバイトの時給は一つのハンバグさえ買えないし，その時給で生活料を支えてあげたかったら，単にアルバイトをすることで支えられないと思って，全職で頑張らないといけないです，だから全世界をみれば，アルバイトで生活料を稼ぐことなんで理想的すぎるのないでしょうか．
-また，アルバイトをすることは勉強に悪い影響を及ぼすことがあります．人間の精力は無限のものではないから，あまりアルバイトに占められたら，勉強に投入する精力が短縮される恐れがあるので，勉強の効果も減っていくはずです．
-                </span>
-            </div>
+                    また，アルバイトをすることは勉強に悪い影響を及ぼすことがあります．人間の精力は無限のものではないから，あまりアルバイトに占められたら，勉強に投入する精力が短縮される恐れがあるので，勉強の効果も減っていくはずです．
+                    </span>
+                    </div>
 
 
-            <div class="alert alert-info" role="alert">
-                <span class="alert-link">
+                    <div class="alert alert-info proState" role="alert">
+                    <span class="alert-link">
                     私はアルバイトをすることは勉強には悪い影響はないと思います．勉強に投入できる精力が限られていれば，大切にするから，効率的に使えるように頑張ります．効率が上がれば，学習効果もかえて上がれます．
-また，アルバイトによっていろいろ勉強できます．そうちで勉強したものを学校の勉強に役に立ちます．
-アルバイトで周りのものを見たり，考えたり，経験が蓄積できます．経験の蓄積することも勉強です．その経験はある程度力です，例えば，観察力，考え力，そのような力は学校での勉強も役に立つのではないでしょうか？
-                </span>
+                    また，アルバイトによっていろいろ勉強できます．そうちで勉強したものを学校の勉強に役に立ちます．
+                    アルバイトで周りのものを見たり，考えたり，経験が蓄積できます．経験の蓄積することも勉強です．その経験はある程度力です，例えば，観察力，考え力，そのような力は学校での勉強も役に立つのではないでしょうか？
+                    </span>
+                    </div>
+
+                    </div>
+
+            <div id="currentTitle">
+                <div class="panel panel-default">
+                    <div class="panel-heading">相手の意見</div>
+                    <div class="panel-body">
+                        私はアルバイトをすることは勉強には悪い影響はないと思います．勉強に投入できる精力が限られていれば，大切にするから，効率的に使えるように頑張ります．効率が上がれば，学習効果もかえて上がれます．
+                        また，アルバイトによっていろいろ勉強できます．そうちで勉強したものを学校の勉強に役に立ちます．
+                        アルバイトで周りのものを見たり，考えたり，経験が蓄積できます．経験の蓄積することも勉強です．その経験はある程度力です，例えば，観察力，考え力，そのような力は学校での勉強も役に立つのではないでしょうか？
+                    </div>
+                </div>
             </div>
 
         </div>
 
-        <div class="col-md-6">
+        <div id="right" class="col-md-6">
+        <div >
 
             <div class="row">
                 <div class="col-md-2">
                     <p style="font-size: 13px;">参加者Pro</p>
                     <div class="dmcc"></div>
-                    <canvas id="l1" width="400" height="300"></canvas>
+                    <canvas id="l1" width="40" height="300"></canvas>
                 </div>
                 <div class="col-md-8"></div>
                 <div class="col-md-2 text-right">
                     <p style="font-size: 13px;">参加者Con</p>
                     <div class="dmcc"></div>
+                    <canvas id="r1" width="40" height="300"></canvas>
                 </div>
             </div>
 
+            <div class="row resultPro">
             <div class="row">
 
                 <div class="col-md-2">
@@ -144,7 +199,7 @@
 
                 <div style="margin-top: 20px;" class="col-md-8">
 
-                        <div class="panel panel-default">
+                        <div class="panel panel-default ">
                             <div class="panel-heading">オリジナル意見</div>
                             <div class="panel-body">
                                 <div class="row">
@@ -183,7 +238,9 @@
                 </div>
 
             </div>
+            </div>
 
+            <div class="row resultCon">
             <div class="row">
 
                 <div class="col-md-2">
@@ -240,7 +297,7 @@
 
                 <div style="margin-top: 20px;" class="col-md-8">
 
-                    <div class="panel panel-default">
+                    <div class="panel panel-default ">
 
                         <div class="panel-heading">オリジナル意見</div>
                         <div class="panel-body">
@@ -280,7 +337,10 @@
                 </div>
 
             </div>
+            </div>
 
+
+            <div class="row resultPro">
             <div class="row">
 
                 <div class="col-md-2">
@@ -289,7 +349,7 @@
 
                 <div style="margin-top: 20px;" class="col-md-8">
 
-                    <div class="panel panel-default">
+                    <div class="panel panel-default ">
 
                         <div class="panel-heading">異議説明</div>
                         <div class="panel-body">
@@ -376,20 +436,288 @@
                 </div>
 
             </div>
+            </div>
+
 
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">.col-md-4</div>
-        <div class="col-md-4">.col-md-4</div>
-        <div class="col-md-4">.col-md-4</div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">.col-md-6</div>
-        <div class="col-md-6">.col-md-6</div>
+        </div>
+
     </div>
 
+    <div class="row">
+
+        <form class="form-group">
+            <hr>
+
+            <div class="claim">
+
+                <div class="row">
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">主張: </span>
+                            <input type="text" class="form-control claimTxt" placeholder="">
+                            <span class="input-group-addon"><input type="checkbox"> 異議つけ</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-1 col-sm-offset-0 remove">
+                        <button class="btn btn-default btn-xm glyphicon glyphicon-ban-circle" onclick="return _remove(this)"></button>
+                    </div>
+                </div>
+
+                <div class="warrant">
+
+                    <div class="row">
+                        <div class="col-sm-offset-0 col-sm-1">
+                            <button class="btn btn-default btn-xs addClaim" onclick="return addClaim(this)"><i class="fa fa-plus-square"></i> 主張</button>
+                        </div>
+
+                        <div class="col-sm-9 col-sm-offset-0">
+                            <div class="input-group">
+                                <span class="input-group-addon">論拠: </span>
+                                <input type="text" class="form-control warrantTxt" placeholder="">
+                                <span class="input-group-addon"><input type="checkbox"> 異議つけ</span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-1 col-sm-offset-0 remove">
+                            <button class="btn btn-default btn-xm glyphicon glyphicon-ban-circle" onclick="return _remove(this)"></button>
+                        </div>
+
+                    </div>
+
+
+                    <div class="evidence">
+                        <div class="row">
+                            <div class="col-sm-offset-1 col-sm-1">
+                                <button class="btn btn-default btn-xs addWarrant" onclick="return addWarrant(this)"><i class="fa fa-plus-square"></i> 論拠</button>
+                            </div>
+                            <div class="col-sm-8 col-sm-offset-0">
+                                <div class="input-group">
+                                    <span class="input-group-addon">根拠:</span>
+                                    <input type="text" class="form-control evidenceTxt" placeholder="">
+                                    <span class="input-group-addon"><input type="checkbox"> 異議つけ</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-1 col-sm-offset-0 remove">
+                                <button class="btn btn-default btn-xm glyphicon glyphicon-ban-circle" onclick="return _remove(this)"></button>
+                            </div>
+                        </div>
+                    </div><!-- end of evidence-->
+
+
+
+
+                    <div class="row">
+                        <div class="col-sm-offset-2 col-sm-1">
+                            <button class="btn btn-default btn-xs addEvidence" onclick="return addEvidence(this)"><span class="fa fa-plus-square"></span> 根拠</button>
+                        </div>
+                    </div>
+
+                </div><!-- end of warrant-->
+
+            </div><!-- end of claim-->
+
+
+
+
+            <div class="row">
+                <div class="col-sm-offset-4 col-sm-1">
+                    <button type="button" class="btn btn-default" onclick="return _submit()" style="width:250px;">登録</button>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
 </div>
 
 </body>
+
+
+<script>
+    function startCanvas(){
+      var l1 = document.getElementById('l1');
+      var ctx = l1.getContext('2d');
+
+      ctx.beginPath();
+      ctx.moveTo(40, 105);
+      ctx.lineTo(10, 105);
+      ctx.lineTo(10, 140);
+      ctx.lineTo(40, 140);
+      ctx.stroke();
+
+      var r1 = document.getElementById('r1');
+      var ctx2 = r1.getContext('2d');
+
+      ctx2.beginPath();
+      ctx2.moveTo(0, 20);
+      ctx2.lineTo(30, 20);
+      ctx2.lineTo(30, 55);
+      ctx2.lineTo(0, 55);
+      ctx2.stroke();
+
+    }
+
+
+    $(".proState").click(function(){
+        var i = $(".proState").index(this)
+        var top = $(".resultPro")[i].offsetTop
+        $("#right").animate({scrollTop:top},1000)
+    })
+
+    $(".conState").click(function(){
+        var i = $(".conState").index(this)
+        var top = $(".resultCon")[i].offsetTop
+        $("#right").animate({scrollTop:top},1000)
+    })
+
+
+    function addEvidence(that){
+        var _html = ($(that).parents(".warrant").find(".evidence:last").prop('outerHTML'));
+        $(that).parents(".warrant").find(".evidence:last").after(_html);
+        $(that).parents(".warrant").find(".evidence:last").after().find(".remove:hidden").show();
+        $(that).parents(".warrant").find(".evidence:last").find(".addWarrant:first").remove();
+        window.scrollTo(0,document.body.scrollHeight)
+        return false;
+    }
+
+    function addWarrant(that){
+        var _html = ($(that).parents(".claim").find(".warrant:last").prop('outerHTML'));
+        $(that).parents(".claim").find(".warrant:last").after(_html);
+        $(that).parents(".claim").find(".warrant:last").after().find(".remove").eq(0).show()
+        $(that).parents(".claim").find(".warrant:last").after().find(".evidence").not(":eq(0)").remove()
+        //$(that).parents(".claim").find(".warrant:last").find(".addClaim").remove();
+        $(that).parents(".claim").find(".warrant:last").find(".addClaim").hide();
+        $(that).hide();
+        window.scrollTo(0,document.body.scrollHeight)
+        return false;
+    }
+
+    function addClaim(that){
+        var _html = ($(that).parents(".claim:last").prop('outerHTML'));
+        $(that).parents(".claim:last").after(_html);
+        $(".claim:last").find(".warrant").not(":last").remove();
+        $(".claim:last").find(".warrant:last").find(".addClaim:hidden").show();
+        $(".claim:last").find(".remove").eq(0).show();
+        $(that).hide();
+        window.scrollTo(0,document.body.scrollHeight)
+        return false;
+    }
+
+    function _remove(that){
+        var identity;
+        if($(that).parents('.evidence').length>0){
+            identity = 1
+        }else if($(that).parents('.warrant').length>0){
+            identity = 2
+        }else{
+            identity = 3
+        }
+
+
+        switch(identity){
+            case 1:
+                $(that).parents('.evidence').remove();
+                break;
+            case 2:
+                $(that).parents('.claim').find(".warrant:eq(-2)").find('.addWarrant:hidden').show();
+                $(that).parents('.warrant').remove();
+                break;
+            case 3:
+                $(that).parents('.claim').remove();
+                $(".claim:last").find(".addClaim:hidden").show();
+                break;
+            default:
+
+                break;
+        }
+
+        return false;
+    }
+
+
+    function _submit(){
+
+        var _obj = []
+
+        var _claim = $(".claim");
+
+        for(var i=0;i<_claim.length;i++){
+            var __obj = {"claimTxt":"","warrant":[]}
+            __obj.claimTxt = $(_claim[i]).find(".claimTxt").val();
+
+            var _warrant = $(_claim[i]).find(".warrant");
+
+            for(var j=0;j<_warrant.length;j++){
+                var ___obj = {"warrantTxt":"","evidence":[]}
+                ___obj.warrantTxt = $(_warrant[j]).find(".warrantTxt").val();
+
+
+                var _evidence = $(_warrant[j]).find(".evidence");
+
+                for(var k=0;k<_evidence.length;k++){
+                    ___obj.evidence.push({"evidenceTxt":$(_evidence[k]).find(".evidenceTxt").val()});
+                }
+
+                __obj.warrant.push(___obj);
+
+            }
+
+            _obj.push(__obj);
+
+
+            console.log(_obj);
+        }
+
+
+        var _str = '';
+        for(var i=0;i<_obj.length;i++){
+            _str += '<div id="claimSample">'+
+                    '<div class="row">'+
+                    '<div class="col-sm-3">'+
+                    '主張'+
+                    '</div>'+
+                    '<div class="col-sm-7">'+ _obj[i].claimTxt+
+                    '</div>'+
+                    '</div>'
+
+            for(var j=0;j<_obj[i]['warrant'].length;j++){
+                _str += '<div id="warrantSample">'+
+                        '<div class="row">'+
+                        '<div class="col-sm-3 col-sm-offset-1">'+
+                        '論拠'+
+                        '</div>'+
+                        '<div class="col-sm-6">'+_obj[i]['warrant'][j]['warrantTxt']+
+                        '</div>'+
+                        '</div>'
+
+
+                for(var k=0;k<_obj[i]['warrant'][j]['evidence'].length;k++){
+                    _str +=   '<div id="evidenceSample">'+
+                            '<div class="row">'+
+                            '<div class="col-sm-3 col-sm-offset-2">'+
+                            '根拠'+
+                            '</div>'+
+                            '<div class="col-sm-5">'+_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt']+
+                            '</div>'+
+                            '</div>'+
+                            '</div><!-- evidenceSample -->'
+                }
+
+                _str += '</div><!-- warrantSample  -->'
+            }
+
+            _str += '</div><!-- claimSample -->'
+        }
+
+
+        $("#proAnalysis").html(_str);
+
+
+        return false;
+    }
+
+
+
+</script>
 </html>
