@@ -145,6 +145,7 @@
         <div  class="col-md-6">
             <div id="left">
                     <div class="alert alert-info proState" role="alert">
+                      <p>オリジナル意見</p>
                     <span class="alert-link">
                     私は学生さんが成人したら経済的に独立するべきだと思います.なぜかというと，コンビニやレストランなどいろいろなアルバイトが学生さんに提供されています．
                     そのようなアルバイトをすれば生活費を自分で稼げると思います．
@@ -152,7 +153,8 @@
                     </div>
 
 
-                    <div class="alert alert-success conState" role="alert">
+                    <div class="alert alert-success conDState" role="alert">
+                        <p>異議説明</p>
                     <span class="alert-link">
                     私はアルバイトで生活費を稼げるとは思わないです．たくさんの国ではアルバイトの時給は一つのハンバーガーさえ買えないし，その時給で生活費を支えたければ，社会人と同じように頑張らないといけないです，だから全世界を見れば，アルバイトで生活費を
                     稼ぐことなんて理想的すぎるのではないでしょうか
@@ -160,18 +162,21 @@
                     </div>
 
                     <div class="alert alert-success conState" role="alert">
+                        <p>オリジナル意見</p>
                     <span class="alert-link">
                     またアルバイトすることは勉強に悪い影響を及ぼすことがあります．時間は無限ではないので，学生はアルバイトばかりしていると，勉強時間を確保できず，学業が疎かになる恐れがあります．
                     </span>
                     </div>
 
-                    <div class="alert alert-info proState" role="alert">
+                    <div class="alert alert-info proDState" role="alert">
+                        <p>異議説明</p>
                     <span class="alert-link">
                         私はアルバイトをすることは勉強に悪い影響はないと思う．勉強に使える時間が限られていれば，効率的に使えるように頑張る．効率が上がれば，学習効果もかえって上がる
                         </span>
                     </div>
 
                     <div class="alert alert-info proState" role="alert">
+                        <p>オリジナル意見</p>
                     <span class="alert-link">
                         またアルバイトによっていろいろ勉強できる．それらは学校の勉強にも役に立つ．アルバイトで周りのものを見たり考えたりすることができる．アルバイトで得られる観察力，考え力のような力は学校での勉強にも役に立つのではないでしょうか．
                     </span>
@@ -260,7 +265,7 @@
             </div>
             </div>
 
-            <div class="row resultCon">
+            <div class="row resultDCon">
             <div class="row">
 
                 <div class="col-md-2">
@@ -308,7 +313,9 @@
                 </div>
 
             </div>
+            </div>
 
+            <div class="row resultCon">
             <div class="row">
 
                 <div class="col-md-2">
@@ -360,7 +367,7 @@
             </div>
 
 
-            <div class="row resultPro">
+            <div class="row resultDPro">
             <div class="row">
 
                 <div class="col-md-2">
@@ -408,7 +415,9 @@
                 </div>
 
             </div>
+            </div>
 
+            <div class="row resultPro">
             <div class="row">
 
                 <div class="col-md-2">
@@ -481,7 +490,7 @@
                         <div class="input-group">
                             <span class="input-group-addon">主張: </span>
                             <input type="text" class="form-control claimTxt" placeholder="">
-                            <span class="input-group-addon"><input type="checkbox"> 異議つけ</span>
+                            <span class="input-group-addon"><input value="1" type="checkbox"> 異議つけ</span>
                         </div>
                     </div>
                     <div class="col-sm-1 col-sm-offset-0 remove">
@@ -500,7 +509,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon">論拠: </span>
                                 <input type="text" class="form-control warrantTxt" placeholder="">
-                                <span class="input-group-addon"><input type="checkbox"> 異議つけ</span>
+                                <span class="input-group-addon"><input value="1" type="checkbox"> 異議つけ</span>
                             </div>
                         </div>
 
@@ -520,7 +529,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon">根拠:</span>
                                     <input type="text" class="form-control evidenceTxt" placeholder="">
-                                    <span class="input-group-addon"><input type="checkbox"> 異議つけ</span>
+                                    <span class="input-group-addon"><input value="1" type="checkbox"> 異議つけ</span>
                                 </div>
                             </div>
                             <div class="col-sm-1 col-sm-offset-0 remove">
@@ -597,6 +606,18 @@
         $("#right").animate({scrollTop:top},1000)
     })
 
+    $(".proDState").click(function(){
+        var i = $(".proDState").index(this)
+        var top = $(".resultDPro")[i].offsetTop
+        $("#right").animate({scrollTop:top},1000)
+    })
+
+    $(".conDState").click(function(){
+        var i = $(".conDState").index(this)
+        var top = $(".resultDCon")[i].offsetTop
+        $("#right").animate({scrollTop:top},1000)
+    })
+
 
     function addEvidence(that){
         var _html = ($(that).parents(".warrant").find(".evidence:last").prop('outerHTML'));
@@ -665,6 +686,8 @@
     function _submit(){
 
         var _obj = []
+        //var dissentObj = [{"claimDissent":1,"warrant":[{"warrantDissent":1,"evidence":[{"evidenceDissent":1}]}]}]
+        dissentObj = []
 
         var _claim = $(".claim");
 
@@ -672,60 +695,79 @@
             var __obj = {"claimTxt":"","warrant":[]}
             __obj.claimTxt = $(_claim[i]).find(".claimTxt").val();
 
+            var __dissentObj = {"claimDissnet":"","warrant":[]}
+            __dissentObj.claimDissent = $(_claim[i]).find(".claimTxt").next().find("input:checked").val()
+
             var _warrant = $(_claim[i]).find(".warrant");
 
             for(var j=0;j<_warrant.length;j++){
                 var ___obj = {"warrantTxt":"","evidence":[]}
                 ___obj.warrantTxt = $(_warrant[j]).find(".warrantTxt").val();
 
+                var ___dissentObj = {"warrantDissent":"","evidenceDissent":[]}
+                ___dissentObj.warrantDissent = $(_warrant[j]).find(".warrantTxt").next().find("input:checked").val()
+
+
 
                 var _evidence = $(_warrant[j]).find(".evidence");
 
                 for(var k=0;k<_evidence.length;k++){
                     ___obj.evidence.push({"evidenceTxt":$(_evidence[k]).find(".evidenceTxt").val()});
+                    ___dissentObj.evidenceDissent.push($(_evidence[k]).find(".evidenceTxt").next().find("input:checked").val())
+
                 }
 
                 __obj.warrant.push(___obj);
+                __dissentObj.warrant.push(___dissentObj)
 
             }
 
             _obj.push(__obj);
+            dissentObj.push(__dissentObj)
+
 
 
             console.log(_obj);
+            console.log("--------")
+            console.log(dissentObj)
         }
 
 
         var _str = '';
         for(var i=0;i<_obj.length;i++){
+            var claimDissentStr = parseInt(dissentObj[i]['claimDissent'])==1?"異議":"&nbsp;"
+
+
             _str += '<div id="claimSample">'+
                     '<div class="row">'+
-                    '<div class="col-sm-3">'+
+                    '<div class="col-sm-1">'+
                     '主張'+
                     '</div>'+
-                    '<div class="col-sm-7">'+ _obj[i].claimTxt+
-                    '</div>'+
+                    '<div class="col-sm-8">'+ _obj[i].claimTxt+
+                    '</div><div class="col-sm-2">'+claimDissentStr+'</div>'+
                     '</div>'
 
             for(var j=0;j<_obj[i]['warrant'].length;j++){
+                var warrantDissentStr = parseInt(dissentObj[i]['warrant'][j]['warrantDissent'])==1?"異議":"&nbsp;"
                 _str += '<div id="warrantSample">'+
                         '<div class="row">'+
-                        '<div class="col-sm-3 col-sm-offset-1">'+
+                        '<div class="col-sm-1">'+
                         '論拠'+
                         '</div>'+
-                        '<div class="col-sm-6">'+_obj[i]['warrant'][j]['warrantTxt']+
-                        '</div>'+
+                        '<div class="col-sm-7">'+_obj[i]['warrant'][j]['warrantTxt']+
+                        '</div><div class="col-sm-3">'+warrantDissentStr+'</div>'+
                         '</div>'
 
 
                 for(var k=0;k<_obj[i]['warrant'][j]['evidence'].length;k++){
+                    var evidenceDissentStr = parseInt(dissentObj[i]['warrant'][j]['evidenceDissent'][k])==1?"異議":"&nbsp;"
                     _str +=   '<div id="evidenceSample">'+
                             '<div class="row">'+
-                            '<div class="col-sm-3 col-sm-offset-2">'+
+                            '<div class="col-sm-1">'+
                             '根拠'+
                             '</div>'+
-                            '<div class="col-sm-5">'+_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt']+
-                            '</div>'+
+                            '<div class="col-sm-6">'+_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt']+
+                            '</div><div class="col-sm-4">'+evidenceDissentStr+'</div>'+
                             '</div>'+
                             '</div><!-- evidenceSample -->'
                 }
@@ -742,7 +784,6 @@
 
         return false;
     }
-
 
 
 </script>
