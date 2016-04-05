@@ -3119,7 +3119,7 @@
 
         <form class="form-group" id="form1">
             <hr>
-            <div>
+            <div id="g0">
                 <button class="btn btn-success" type="button">
                     異議説明 <span class="badge">1</span>
                 </button>
@@ -3193,8 +3193,8 @@
                 </div><!-- end of warrant-->
 
             </div><!-- end of claim-->
-            <div>
-            <button class="btn btn-success" type="button">
+            <div id="c0">
+            <button  class="btn btn-success" type="button">
                 オリジナル意見 <span class="badge">1</span>
             </button>
             </div>
@@ -3721,7 +3721,7 @@
 
 
                 //这个分界线还需要考量一下
-                if(i<boundaryN){
+                if(i<$("#g"+(boundaryN-1)).nextAll(".claim").length-($("#c0").nextAll(".claim").length)){
 
                     //好他妈复杂啊
 
