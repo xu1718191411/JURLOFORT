@@ -340,8 +340,8 @@ function addResultToRightMapBox(){
     }else{
 
     for(var i=0;i<boundaryN;i++){
-    if(i==boundaryN-1){
 
+    if(i==boundaryN-1){
     test1($("#g"+i).prevAll(".claim").length,$("#c0").prevAll(".claim").length)
     }else{
     test1($("#g"+i).prevAll(".claim").length,$("#g"+(i+1)).prevAll(".claim").length)
@@ -349,10 +349,9 @@ function addResultToRightMapBox(){
     }
 
     test2($("#c0").prevAll(".claim").length,_obj.length)
-
     }
 
-    }
+}
 
 
 function test1(_start,_end){
@@ -368,7 +367,7 @@ function test1(_start,_end){
     claimKJ.children("div").eq(1).text(_obj[i]['claimTxt'])
     }
 
-    //然后把copy容器里已经拼装好的claimdiv段拿过来放到相应的为治理
+    //然后把copy容器里已经拼装好的claimdiv段拿过来放到相应的位置里面
     $("#right").find(".resultDPro").eq(-1).find(".resultDProA1").eq(0).append(claimKJ.prop("outerHTML"))
     //这里添加異議説明的ロジックマップ
 
@@ -377,9 +376,9 @@ function test1(_start,_end){
     var warrantKJ = $("#copy").find(".resultDPro").eq(0).find(".resultDProA2").eq(0).children(".row").eq(1)
 
     if(parseInt(dissentObj[i]['warrant'][j]['warrantDissent'])==1){
-    warrantKJ.children("div").eq(1).html("<span class='glyphicon glyphicon-question-sign'></span>"+_obj[i]['warrant'][j]['warrantTxt'])
+    warrantKJ.children("div").eq(2).html("<span class='glyphicon glyphicon-question-sign'></span>"+_obj[i]['warrant'][j]['warrantTxt'])
     }else{
-    warrantKJ.children("div").eq(1).text(_obj[i]['warrant'][j]['warrantTxt'])
+    warrantKJ.children("div").eq(2).text(_obj[i]['warrant'][j]['warrantTxt'])
     }
 
     $("#right").find(".resultDPro").eq(-1).find(".resultDProA1").eq(0).append(warrantKJ.prop("outerHTML"))
@@ -388,9 +387,9 @@ function test1(_start,_end){
     var evidenceKJ = $("#copy").find(".resultDPro").eq(0).find(".resultDProA2").eq(0).children(".row").eq(2)
 
     if(parseInt(dissentObj[i]['warrant'][j]['evidenceDissent'][k])==1){
-    evidenceKJ.children("div").eq(1).html("<span class='glyphicon glyphicon-question-sign'></span>"+_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt'])
+    evidenceKJ.children("div").eq(2).html("<span class='glyphicon glyphicon-question-sign'></span>"+_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt'])
     }else{
-    evidenceKJ.children("div").eq(1).text(_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt'])
+    evidenceKJ.children("div").eq(2).text(_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt'])
     }
 
 
@@ -427,9 +426,9 @@ function test2(_start,_end){
 
 
     if(parseInt(dissentObj[i]['warrant'][j]['warrantDissent'])==1){
-    warrantKJ.children("div").eq(1).html("<span class='glyphicon glyphicon-question-sign'></span>"+_obj[i]['warrant'][j]['warrantTxt'])
+    warrantKJ.children("div").eq(2).html("<span class='glyphicon glyphicon-question-sign'></span>"+_obj[i]['warrant'][j]['warrantTxt'])
     }else{
-    warrantKJ.children("div").eq(1).text(_obj[i]['warrant'][j]['warrantTxt'])
+    warrantKJ.children("div").eq(2).text(_obj[i]['warrant'][j]['warrantTxt'])
     }
     $("#right").find(".resultPro").eq(-1).find(".resultProA1").eq(0).append(warrantKJ.prop("outerHTML"))
 
@@ -439,9 +438,9 @@ function test2(_start,_end){
 
 
     if(parseInt(dissentObj[i]['warrant'][j]['evidenceDissent'][k])){
-    evidenceKJ.children("div").eq(1).html("<span class='glyphicon glyphicon-question-sign'></span>"+_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt'])
+    evidenceKJ.children("div").eq(2).html("<span class='glyphicon glyphicon-question-sign'></span>"+_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt'])
     }else{
-    evidenceKJ.children("div").eq(1).text(_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt'])
+    evidenceKJ.children("div").eq(2).text(_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt'])
     }
 
     $("#right").find(".resultPro").eq(-1).find(".resultProA1").eq(0).append(evidenceKJ.prop("outerHTML"))
