@@ -92,8 +92,6 @@ function createIfNotExists(collection,callback){
                 console.log("collection is"+collection)
                 callback(1);
                 return;
-
-
             }
         }
 

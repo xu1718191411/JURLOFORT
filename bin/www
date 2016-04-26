@@ -4,16 +4,16 @@ var app = require('../app');
 var fs = require("fs");
 var SessionSockets = require('session.socket.io');
 var Steps = require("ocsteps") ;
-var claimFile = require("./claimFile.js");
-var analysisFile = require("./analysisFile.js");
 var wwwConfig = require("../config/www.js")
 
 app.set('port', process.env.PORT || wwwConfig.wwwPort);
 console.log("server is listening on port "+wwwConfig.wwwConfig);
 
-var server = app.listen(app.get('port'), function() {
-  debug('Express server listening on port ' + server.address().port);
-});
+//var server = app.listen(app.get('port'), function() {
+//  debug('Express server listening on port ' + server.address().port);
+//});
+
+var server = require("./server.js").server;
 
 
 var io = require('socket.io')(server);
@@ -25,37 +25,18 @@ sessionSockets.on('connection', function (err, socket, session) {
     //your regular socket.io code goes here
     //and you can still use your io object
 
+    var positionArrs = [1,2]
 
-
-    socket.on('testEvent',function(msg){
-
-
-        var a = session.user.support+"claim";
-
-        session[a] = session[a] || 0;
-
-        session[a] = session[a] + 1;
-
-        session.save();
-
-        console.log(a+" is");
-        console.log(session[a]);
-
-        claimFile.write(msg,session.user.support,session[a]);
-        console.log('testEvent'+msg);
-        //io.emit('testEvent',msg);
-        session.nowStatus = session.user.support+"SendClaim";
-        session.save();
-
-        socket.broadcast.emit('testEvent',msg);
-        socket.emit('_testEvent',msg);
-
-        if(msg.dissentContentsArr.length>0){
-            socket.broadcast.emit('buildDissentInput',msg.dissentContentsArr);
+    socket.on('position',function(msg){
+        for(var i=0;i<positionArrs.length;i++){
+            if(positionArrs[i] != parseInt(msg.position)){
+                positionArrs.splice(i,1)
+            }
         }
-        io.sockets.emit("checkStatus",session.nowStatus);
 
+        io.emit("adjustPosition",{positionArrs:positionArrs})
 
+        console.log(positionArrs)
     })
 
     socket.on('disconnect', function(){
@@ -64,33 +45,8 @@ sessionSockets.on('connection', function (err, socket, session) {
 
     socket.on('writeJson',function(jsonData){
 
-        analysisFile.write(session,jsonData,io,socket);
-
     })
 
-    socket.on('concatLines',function(concatLinesData){
-        console.log(concatLinesData);
-
-        var b = session.user.support+"analysis";
-        var cnum = session[b] || 0;
-        cnum--;
-        console.log(cnum);
-
-
-        var a = session.user.support+"concatLines";
-
-        session[a] = session[a] || [];
-        session[a][cnum] = session[a][cnum] || [];
-        session[a][cnum].push(concatLinesData);
-        session.save();
-
-        console.log("session concatLines is");
-        console.log(session[a]);
-
-        io.emit('concatLines', session[a]);
-
-
-    })
 });
 
 

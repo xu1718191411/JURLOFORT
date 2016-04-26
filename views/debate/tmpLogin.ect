@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>討論中</title>
+
+
+    <script   src="https://code.jquery.com/jquery-2.2.2.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./style2.css">
+
+
+</head>
+
+<body>
+
+<div class="container">
+
+
+        <div class="row">
+
+        <form action="/debate/tmpLoginPost" method="post" id="form">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Name">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="password">
+          </div>
+
+        <div class="form-group">
+          <select class="form-control" id="position" name="position">
+            <option value="1">肯定</option>
+            <option value="2">否定</option>
+          </select>
+          </div>
+
+
+          <button id="submit" type="submit" class="btn btn-default">Submit</button>
+        </form>
+
+
+
+        </div>
+</div>
+</body>
+
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+   var socket = io();
+
+
+   socket.on("adjustPosition",function(data){
+
+
+        for(var i=0;i<data.positionArrs.length;i++){
+
+
+            $("#position").children().eq((parseInt(data.positionArrs[i])-1)).attr("disabled","disabled")
+        }
+
+   })
+</script>
+
+
+
+<script>
+    $("#submit").click(function(){
+        $.ajax({
+           type: "POST",
+           url: "/debate/tmpLoginPost",
+           data: $("#form").serialize(),
+           success: function(res){
+                var result = eval("("+res+")")
+                if(result.error==0){
+                    socket.emit("position",{username:$("#username").val(),password:$("#password").val(),position:$("#position").val()})
+                }
+
+                location = "/debate"
+           }
+         });
+
+        return false;
+    })
+</script>
+</html>
