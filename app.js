@@ -8,7 +8,7 @@ var session = require('express-session');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var chat = require('./routes/chat');
+var debate = require('./routes/debate');
 var d3 = require('./routes/d3');
 var admin = require('./routes/admin');
 var blog = require('./routes/blog');
@@ -57,7 +57,7 @@ app.sessionStore = sessionStore;
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/chat',chat);
+app.use('/debate',debate);
 app.use('/d3',d3);
 app.use('/admin',admin);
 app.use('/blog',blog);
@@ -65,6 +65,7 @@ app.use('/timeLine',timeLine);
 app.use('/profile',profile);
 app.use('/life',life);
 app.use('/funcky',funcky);
+app.use('/debate',debate);
 
 
 
