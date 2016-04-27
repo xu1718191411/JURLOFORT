@@ -3,28 +3,6 @@
  * Created by xuzhongwei on 4/6/16.
  */
 
-function startCanvas(){
-    var l1 = document.getElementById('l1');
-    var ctx = l1.getContext('2d');
-
-    ctx.beginPath();
-    ctx.moveTo(40, 95);
-    ctx.lineTo(10, 95);
-    ctx.lineTo(10, 130);
-    ctx.lineTo(40, 130);
-    ctx.stroke();
-
-    var r1 = document.getElementById('r1');
-    var ctx2 = r1.getContext('2d');
-
-    ctx2.beginPath();
-    ctx2.moveTo(0, 20);
-    ctx2.lineTo(30, 20);
-    ctx2.lineTo(30, 55);
-    ctx2.lineTo(0, 55);
-    ctx2.stroke();
-
-    }
 
 
 $(".proState").click(function(){
