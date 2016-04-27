@@ -27,7 +27,7 @@ module.exports = {
 
         var _username = req.body.username;
         var _password = req.body.password;
-        var _position = req.body.position;
+        var _position = parseInt(req.body.position);
 
         var _isLogin = 0;
         for(var i=0;i<users.length;i++){
@@ -45,6 +45,15 @@ module.exports = {
                     }))
                 }
             }))
+        },function(){
+            mongo.find("debateStatus",{num:1},{},this.hold(function(result){
+                    if(result.length<=0){
+                        mongo.insert("debateStatus",{num:1},{},this.hold(function(res){
+
+                        }))
+                    }
+            }))
+
         },function(){
             if(parseInt(_position) == 1){
                 mongo.update("debateStatus",{num:1},{$set:{pro:_username}},function(res){
@@ -68,6 +77,23 @@ module.exports = {
 
 
 
+    },
+    preparePostController:function(req,res){
+        if(tool.isEmpty(req.session.debateLogin)){
+           res.end(JSON.stringify({error:1,msg:"illegal session"}))
+        }
+
+        var _position = req.session.debateLogin.position
+        var _update = parseInt(_position)==1?{proPrepare:1}:{conPrepare:1}
+
+
+        steps(function(){
+            mongo.update("debateStatus",{num:1},{$set:_update},{},function(result){
+                    res.end(JSON.stringify({error:0,msg:_position+" has prepared"}))
+            })
+        })()
+
     }
+
 
 }

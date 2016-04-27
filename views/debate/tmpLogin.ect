@@ -66,9 +66,7 @@
 
    socket.on("adjustPosition",function(data){
 
-
         for(var i=0;i<data.positionArrs.length;i++){
-
 
             $("#position").children().eq((parseInt(data.positionArrs[i])-1)).attr("disabled","disabled")
         }

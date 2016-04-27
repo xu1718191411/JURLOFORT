@@ -70,14 +70,28 @@
 
        <div class="jumbotron">
            <h2>テーマ:学生が成人したら経済的に独立するべきである</h2>
-           <p>あなたの立場:<span class="label label-success" style="font-size: 20px;">Con</span></p>
+
+
+           <% if @userInformation.position==1 : %>
+           <p>あなたの立場:<span id="tachiba" tachiba="1" class="label label-info" style="font-size: 20px;">肯定</span></p>
+           <% else : %>
+           <p>あなたの立場:<span id="tachiba" tachiba="2" class="label label-success" style="font-size: 20px;">否定</span></p>
+           <% end %>
+
+
+
            <p>今の段階:相手に意見の分析</p>
+           <p>肯定:<span id="proUsername"></span><span id="proUserStatus">入室</span></p>
+           <p>否定:<span id="conUsername"></span><span id="conUserStatus">入室</span></p>
+
+           <p><button id="prepare" class="btn-default">準備</button></p>
        </div>
    </div>
 
     <div class="row">
         <div  class="col-md-6">
             <div id="left">
+<!--
                     <div class="alert alert-info proState" role="alert">
                       <p>オリジナル意見</p>
                     <span class="alert-link">
@@ -85,7 +99,6 @@
                     そのようなアルバイトをすれば生活費を自分で稼げると思います．
                     </span>
                     </div>
-
 
                     <div class="alert alert-success conDState" role="alert">
                         <p>異議説明</p>
@@ -115,10 +128,11 @@
                         またアルバイトによっていろいろ勉強できる．それらは学校の勉強にも役に立つ．アルバイトで周りのものを見たり考えたりすることができる．アルバイトで得られる観察力，考え力のような力は学校での勉強にも役に立つのではないでしょうか．
                     </span>
                     </div>
-
-                    </div>
+-->
+            </div>
 
             <div id="currentTitle">
+<!--
                 <div class="panel panel-default">
                     <div class="panel-heading">相手の意見</div>
                     <div class="panel-body">
@@ -128,12 +142,13 @@
 
                     </div>
                 </div>
+-->
             </div>
 
         </div>
 
         <div id="right" class="col-md-6">
-        <div >
+        <div>
 
             <div class="row">
                 <div class="col-md-2">
@@ -147,6 +162,8 @@
                 </div>
             </div>
 
+
+<!--
             <div class="row resultPro">
             <div class="row">
 
@@ -304,7 +321,7 @@
             </div>
             </div>
 
-
+-->
 
 
         </div>
@@ -319,7 +336,7 @@
 
     <div class="row">
 
-        <form class="form-group" id="form1">
+        <form class="form-group" id="form1" style="display:none">
             <hr>
             <div id="g0">
                 <button class="btn btn-success" type="button">
@@ -474,7 +491,6 @@
             </div>
 
         </form>
-
 
     </div>
 
@@ -679,6 +695,85 @@
 
 </div>
 </body>
+<script src="/socket.io/socket.io.js"></script>
 
 <script src="./global.js"></script>
+
+<script>
+var socket = io();
+
+
+
+socket.on("enterRoom",function(msg){
+
+    if(msg.loginInfo.position == 1){
+        $("#proUsername").text(msg.loginInfo.username)
+    }else{
+        $("#conUsername").text(msg.loginInfo.username)
+    }
+
+
+})
+
+socket.on("prepare",function(msg){
+    console.log(msg.prepareInfo);
+
+
+
+
+
+        if(msg.prepareInfo.position == 1){
+            $("#proUserStatus").text("準備中")
+        }else{
+            $("#conUserStatus").text("準備中")
+        }
+})
+
+
+socket.on("allPrepare",function(msg){
+        var status = msg.status
+
+        console.log("all prepared")
+        console.log(msg)
+        if(status == 0){
+
+
+                    //pro 做陈述
+                    if($("#tachiba").attr("tachiba") == 1){
+
+                            showNextStep()
+
+                    }
+
+        }
+})
+
+</script>
+
+
+<script>
+
+
+socket.emit("enterRoom",{})
+
+
+$("#prepare").click(function(){
+
+    $(this).attr("disabled","disabled");
+
+        $.ajax({
+           type: "POST",
+           url: "/debate/preparePost",
+           data: {},
+           success: function(res){
+                var result = eval("("+res+")")
+                if(result.error==0){
+                    socket.emit("prepare",{})
+                }
+           }
+         });
+
+})
+
+</script>
 </html>

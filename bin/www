@@ -6,6 +6,11 @@ var SessionSockets = require('session.socket.io');
 var Steps = require("ocsteps") ;
 var wwwConfig = require("../config/www.js")
 
+var mongo = require("../model/mongo.js");
+var tool = require("../controller/tool.js");
+var steps = require('ocsteps');
+
+
 app.set('port', process.env.PORT || wwwConfig.wwwPort);
 console.log("server is listening on port "+wwwConfig.wwwConfig);
 
@@ -37,6 +42,44 @@ sessionSockets.on('connection', function (err, socket, session) {
         io.emit("adjustPosition",{positionArrs:positionArrs})
 
         console.log(positionArrs)
+    })
+
+
+    socket.on("enterRoom",function(msg){
+        console.log("enter room session is the following...")
+        console.log(session.debateLogin)
+
+        var loginInfo = session.debateLogin
+        delete loginInfo['password']
+        io.emit("enterRoom",{loginInfo:loginInfo})
+    })
+
+
+    socket.on("prepare",function(msg){
+        var prepareInfo = session.debateLogin
+        delete prepareInfo['password']
+        io.emit("prepare",{prepareInfo:prepareInfo})
+
+
+        steps(function(){
+
+            mongo.find("debateStatus",{num:1},{},function(result){
+                var proPrepare = result[0].proPrepare
+                var conPrepare = result[0].conPrepare
+
+                if(parseInt(proPrepare) == 1  && parseInt(conPrepare) == 1){
+
+                    // 0 pro 做陈述
+                    // 1 con 做分析
+                    // 2 con 做陈述
+                    // 3 pro 做分析
+
+                    io.emit("allPrepare",{status:0})
+                }
+            })
+
+
+        })()
     })
 
     socket.on('disconnect', function(){
