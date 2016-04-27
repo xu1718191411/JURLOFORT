@@ -45,7 +45,6 @@ $("#resultConfirm").click(function(){
         }
     }
 
-
 })
 
 function addEvidence(that){

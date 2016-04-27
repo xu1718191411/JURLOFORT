@@ -80,7 +80,7 @@
 
 
 
-           <p>今の段階:相手に意見の分析</p>
+           <p>今の段階:<span id="nowStatus">相手に意見の分析</span></p>
            <p>肯定:<span id="proUsername"></span><span id="proUserStatus">入室</span></p>
            <p>否定:<span id="conUsername"></span><span id="conUserStatus">入室</span></p>
 
@@ -91,8 +91,9 @@
     <div class="row">
         <div  class="col-md-6">
             <div id="left">
-<!--
-                    <div class="alert alert-info proState" role="alert">
+
+                    <div class="top" style="display:none">
+                    <div class="alert alert-info proState" role="alert" >
                       <p>オリジナル意見</p>
                     <span class="alert-link">
                     私は学生さんが成人したら経済的に独立するべきだと思います.なぜかというと，コンビニやレストランなどいろいろなアルバイトが学生さんに提供されています．
@@ -122,13 +123,22 @@
                         </span>
                     </div>
 
+                    </div>
+
+                    <div class="bottom">
+
+                    </div>
+
+
+                    <!--
                     <div class="alert alert-info proState" role="alert">
                         <p>オリジナル意見</p>
                     <span class="alert-link">
                         またアルバイトによっていろいろ勉強できる．それらは学校の勉強にも役に立つ．アルバイトで周りのものを見たり考えたりすることができる．アルバイトで得られる観察力，考え力のような力は学校での勉強にも役に立つのではないでしょうか．
                     </span>
                     </div>
--->
+                    -->
+
             </div>
 
             <div id="currentTitle">
@@ -501,7 +511,7 @@
 
             </div>
             <div class="row pull-right">
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button type="submit" onclick="return __submit()" class="btn btn-default">Submit</button>
             </div>
 
         </form>
@@ -718,10 +728,6 @@ socket.on("enterRoom",function(msg){
 socket.on("prepare",function(msg){
     console.log(msg.prepareInfo);
 
-
-
-
-
         if(msg.prepareInfo.position == 1){
             $("#proUserStatus").text("準備中")
         }else{
@@ -732,20 +738,56 @@ socket.on("prepare",function(msg){
 
 socket.on("allPrepare",function(msg){
         var status = msg.status
+        window.status = parseInt(status);
 
         console.log("all prepared")
         console.log(msg)
         if(status == 0){
 
-
+                $("#nowStatus").text("肯定側意見を述べる")
                     //pro 做陈述
                     if($("#tachiba").attr("tachiba") == 1){
-
                             showNextStep()
-
                     }
 
         }
+})
+
+socket.on("receiveStatement",function(msg){
+
+    // 0 pro 做陈述
+    // 1 con 做分析
+    // 2 con 做陈述
+    // 3 pro 做分析
+    if(window.status == 0){
+        var sampleProState = $("#left").find(".top").eq(0).find(".proState").eq(0).prop('outerHTML');
+        var sampleProDState = $("#left").find(".top").eq(0).find(".proDState").eq(0).prop('outerHTML');
+        //$("#left").find(".bottom").eq(0).append(sampleProDState)
+        $("#left").find(".bottom").eq(0).append(sampleProState)
+
+        $("#left").find(".bottom").eq(0).find(".proState").eq(0).find(".alert-link").eq(0).text(msg.submitContentArr[msg.submitContentArr.length-1].content)
+    }
+
+})
+
+socket.on("conDoAnalysis",function(msg){
+    // 0 pro 做陈述
+    // 1 con 做分析
+    // 2 con 做陈述
+    // 3 pro 做分析
+
+    window.status = 1
+
+    var tachiba = $("#tachiba").attr("tachiba")
+
+    if(tachiba == 1){
+
+        // pro 方显示等待对方做完分析
+        $("#wait").find("h2").eq(0).text("否定側の分析をお待ちください")
+        $("#wait").show()
+    }else{
+
+    }
 })
 
 </script>
@@ -774,6 +816,24 @@ $("#prepare").click(function(){
          });
 
 })
+
+
+
+function __submit(){
+    var obj = $("#form2").find("#area").find("textarea");
+
+    var submitContentArr = []
+
+    for(var i=0;i<obj.length;i++){
+           submitContentArr.push({content:obj.eq(i).val()})
+    }
+
+    socket.emit("makeStatement",{submitContentArr:submitContentArr})
+
+    //隐藏陈述文本输入框
+    $("#form2").hide()
+    return false;
+}
 
 </script>
 </html>

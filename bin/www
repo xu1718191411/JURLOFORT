@@ -82,6 +82,12 @@ sessionSockets.on('connection', function (err, socket, session) {
         })()
     })
 
+
+    socket.on("makeStatement",function(msg){
+        io.emit("receiveStatement",msg)
+        io.emit("conDoAnalysis",msg)
+    })
+
     socket.on('disconnect', function(){
         console.log('user disconnected');
     });
