@@ -63,7 +63,7 @@ sessionSockets.on('connection', function (err, socket, session) {
 
         steps(function(){
 
-            mongo.find("debateStatus",{num:1},{},function(result){
+            mongo.find("debateStatus",{num:1},{},this.hold(function(result){
                 var proPrepare = result[0].proPrepare
                 var conPrepare = result[0].conPrepare
 
@@ -76,17 +76,60 @@ sessionSockets.on('connection', function (err, socket, session) {
 
                     io.emit("allPrepare",{status:0})
                 }
-            })
+            }))
 
+
+        },function(){
+            mongo.update("debateStatus",{num:1},{$set:{status:0}},{},this.hold(function(res){
+
+            }))
 
         })()
     })
 
 
     socket.on("makeStatement",function(msg){
-        io.emit("receiveStatement",msg)
-        io.emit("conDoAnalysis",msg)
+
+        // 0 pro 做陈述
+        // 1 con 做分析
+        // 2 con 做陈述
+        // 3 pro 做分析
+        steps(function(){
+            mongo.find("debateStatus",{num:1},{},this.hold(function(result){
+                msg.status = result[0].status
+                io.emit("receiveStatement",msg)
+                var status = result[0].status
+                msg.status = (status + 1)%4
+                io.emit("DoAnalysis",msg)
+                return status;
+            }))
+        },function(status){
+            status = (status + 1)%4
+            mongo.update("debateStatus",{num:1},{$set:{status:status}},{},this.hold(function(result){
+                console.log(result)
+            }))
+        })()
+
     })
+
+    socket.on("makeAnalysis",function(msg){
+        steps(function(){
+            mongo.find("debateStatus",{num:1},{},this.hold(function(result){
+                var status = result[0].status
+                msg.status = (status + 1)%4
+                io.emit("receiveAnalysis",msg)
+                return status;
+            }))
+
+        },function(status){
+            status = (status + 1)%4
+            mongo.update("debateStatus",{num:1},{$set:{status:status}},{},this.hold(function(result){
+                console.log(result)
+            }))
+        })()
+
+    })
+
 
     socket.on('disconnect', function(){
         console.log('user disconnected');

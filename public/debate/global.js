@@ -182,7 +182,7 @@ analysisResultComesFromOpposiote()
 
 function _submit(){
 
-    boundaryN = 1
+    //boundaryN = 1
     //这是一个全局变量
     //boundaryN代表.claim的前多少位是異議説明,这里的boundaryN要从后端取数据所以在此以1为例子
 
@@ -191,7 +191,7 @@ function _submit(){
     //var dissentObj = [{"claimDissent":1,"warrant":[{"warrantDissent":1,"evidenceDissent":[1]}]}]
     dissentObj = []
 
-    var _claim = $(".claim");
+    var _claim = $("#form1").find(".down").eq(0).find(".claim");
 
     for(var i=0;i<_claim.length;i++){
     var __obj = {"claimTxt":"","warrant":[]}
@@ -234,75 +234,9 @@ function _submit(){
     console.log(dissentObj)
     }
 
-
-    var _str = '';
-    for(var i=0;i<_obj.length;i++){
-
-    if(i<boundaryN){
-    //如果是对前几位異議説明的分析的话
-    _str += "<div class='row'>異議説明分"+(i+1)+"分析結果</div>"
-    }else{
-    //如果是对后几位オリジナル意見的分析的话
-    _str += "<div class='row'>オリジナル意見分析結果</div>"
-    }
-
-    var claimDissentStr = parseInt(dissentObj[i]['claimDissent'])==1?"異議":"&nbsp;"
+    socket.emit("makeAnalysis",{_obj:_obj,dissentObj:dissentObj})
 
 
-    _str += '<div id="claimSample">'+
-    '<div class="row">'+
-    '<div class="col-sm-1">'+
-    '主張'+
-    '</div>'+
-    '<div class="col-sm-8">'+ _obj[i].claimTxt+
-    '</div><div class="col-sm-2">'+claimDissentStr+'</div>'+
-    '</div>'
-
-    for(var j=0;j<_obj[i]['warrant'].length;j++){
-    var warrantDissentStr = parseInt(dissentObj[i]['warrant'][j]['warrantDissent'])==1?"異議":"&nbsp;"
-    _str += '<div id="warrantSample">'+
-    '<div class="row">'+
-    '<div class="col-sm-1">'+
-    '論拠'+
-    '</div>'+
-    '<div class="col-sm-7">'+_obj[i]['warrant'][j]['warrantTxt']+
-    '</div><div class="col-sm-3">'+warrantDissentStr+'</div>'+
-    '</div>'
-
-
-    for(var k=0;k<_obj[i]['warrant'][j]['evidence'].length;k++){
-    var evidenceDissentStr = parseInt(dissentObj[i]['warrant'][j]['evidenceDissent'][k])==1?"異議":"&nbsp;"
-    _str +=   '<div id="evidenceSample">'+
-    '<div class="row">'+
-    '<div class="col-sm-1">'+
-    '根拠'+
-    '</div>'+
-    '<div class="col-sm-6">'+_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt']+
-    '</div><div class="col-sm-4">'+evidenceDissentStr+'</div>'+
-    '</div>'+
-    '</div><!-- evidenceSample -->'
-    }
-
-    _str += '</div><!-- warrantSample  -->'
-    }
-
-    _str += '</div><!-- claimSample -->'
-    }
-
-
-    $("#proAnalysis").html(_str);
-
-    $("#wait").show()
-    $("#form1").hide()
-
-
-    //在此模拟自己的意见经由对方审核同意
-    setTimeout(function(){
-    addResultToRightMapBox()
-    showNextStep();
-    },3000)
-
-    return false;
     }
 
 //把分析的结果，包括对異議説明分的分析和对オリジナル意見的分心放到右上方的討論ロジックマップ里面去
@@ -434,6 +368,8 @@ function showNextStep(){
 
     $("#form2").show()
 
+    $("#form2 #area").html("")
+
     var dissentStatement = $(".dissentStatement").prop('outerHTML');
     var originalStatement = $(".originalStatement").prop('outerHTML');
 
@@ -450,6 +386,7 @@ function showNextStep(){
     }
 
     addDissentTextToEachBox(dissentTxtArr)
+
 
     $("#form2 #area").append(originalStatement)
 
