@@ -5,7 +5,7 @@
     <title>討論中</title>
 
 
-    <script   src="/AllTimeLine/js/jquery.js"></script>
+<script   src="https://code.jquery.com/jquery-2.2.3.js"   integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4="   crossorigin="anonymous"></script>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -723,7 +723,6 @@ socket.on("receiveStatement",function(msg){
 
     if(window.status == 1){
 
-    alert(window.status)
          // 0 pro 做陈述
         var sampleProState = $("#left").find(".top").eq(0).find(".proState").eq(0).prop('outerHTML');
         var sampleProDState = $("#left").find(".top").eq(0).find(".proDState").eq(0).prop('outerHTML');
@@ -731,13 +730,12 @@ socket.on("receiveStatement",function(msg){
         $("#left").find(".bottom").eq(0).append(sampleProState)
         $("#left").find(".bottom").eq(0).find(".proState").eq(-1).find(".alert-link").eq(0).text(msg.submitContentArr[msg.submitContentArr.length-1].content)
 
-                if(msg.submitContentArr>1){
+                if(msg.submitContentArr.length>1){
                         for(var i=0;i<msg.submitContentArr.length-1;i++){
-                                $("#left").find(".bottom").eq(0).append(sampleProDState)
+                                $("#left").find(".bottom").eq(0).find(".proState").eq(-1).before(sampleProDState)
                                 $("#left").find(".bottom").eq(0).find(".proDState").eq(-1).find(".alert-link").eq(0).text(msg.submitContentArr[i].content)
                         }
                 }
-
 
     }else{
         // 2 con 做陈述
@@ -748,7 +746,7 @@ socket.on("receiveStatement",function(msg){
 
         if(msg.submitContentArr.length>1){
                 for(var i=0;i<msg.submitContentArr.length-1;i++){
-                        $("#left").find(".bottom").eq(0).append(sampleConDState)
+                        $("#left").find(".bottom").eq(0).find(".conState").eq(-1).before(sampleConDState)
                         $("#left").find(".bottom").eq(0).find(".conDState").eq(-1).find(".alert-link").eq(0).text(msg.submitContentArr[i].content)
                 }
         }
@@ -769,6 +767,7 @@ socket.on("DoAnalysis",function(msg){
 
 
     window.status = msg.status
+    boundaryN = msg.submitContentArr.length>1?msg.submitContentArr.length-1:0
 
     var tachiba = $("#tachiba").attr("tachiba")
 
@@ -822,19 +821,27 @@ function generateStatementInput(msg){
 
     if(msg.submitContentArr.length>1){
 
-        boundaryN = msg.submitContentArr.length-1
 
             //说明对方还有意義説明
                 for(var i=0;i<msg.submitContentArr.length-1;i++){
                    //绑带告诉你现在是第几个意義説明
                     var obj = $("#form1").find(".top").eq(0).find("div").eq(0)
+
+                    //先编号
                     obj.attr("id","g"+i)
+
                     obj.find(".badge").eq(0).text(i+1)
                     $("#form1").find(".down").eq(0).append(obj.prop('outerHTML'))
+
+                    //再把编号里的id删掉，不然会有重复
+                    obj.removeAttr("id")
+
 
                     //对每一个意義説明挂一个分析模型
                     var obj = $("#form1").find(".top").eq(0).find(".claim").eq(0)
                     $("#form1").find(".down").eq(0).append(obj.prop('outerHTML'))
+
+
                 }
 
 
@@ -852,7 +859,6 @@ function generateStatementInput(msg){
 
             //这是一个全局变量
             //boundaryN代表.claim的前多少位是異議説明,这里的boundaryN为0,因为只有originalstatment没有意義説明
-            boundaryN = 0
             //说明对方只有original陈述
 
                 //绑带告诉你现在是original陈述

@@ -234,6 +234,30 @@ function _submit(){
     console.log(dissentObj)
     }
 
+
+    var i = 0;
+    //这个数组里面放了分段数据，比如说有g0 .claim .claim ,g1 .claim ,g2 .claim ,c0 .claim .claim
+    //那么fenduanArr的值为 [2,1,1,2]
+    //或者比如说 g0 .claim .claim c0 .claim
+    //那么fenduanArr的值为 [2,1]
+    //或者比如说 c0 .claim
+    //那么fenduanArr的值为 [1]
+    var fenduanArr = [];
+    while($("#g"+i).length>0){
+        var j = i + 1
+        if($("#g"+j).length>0){
+            fenduanArr.push($("#g"+j).prevAll(".claim").length - $("#g"+i).prevAll(".claim").length)
+        }else{
+            fenduanArr.push($("#c0").prevAll(".claim").length - $("#g"+i).prevAll(".claim").length)
+        }
+        i++;
+    }
+
+    fenduanArr.push(_obj.length - $("#c0").prevAll(".claim").length)
+
+    console.log("fenduanArr is")
+    console.log(fenduanArr)
+
     socket.emit("makeAnalysis",{_obj:_obj,dissentObj:dissentObj})
 
 
@@ -244,9 +268,10 @@ function addResultToRightMapBox(){
 
     //boundaryN这个变量是从服务器段取得，代表对方有多少个異議説明
 
-    if(boundaryN<=1){
+    alert("boundaryN is " + boundaryN)
+    if(boundaryN<1){
 
-    test1(0,$("#c0").prevAll(".claim").length)
+    //test1(0,$("#c0").prevAll(".claim").length)
     test2($("#c0").prevAll(".claim").length,_obj.length)
 
     }else{
@@ -258,6 +283,7 @@ function addResultToRightMapBox(){
     }else{
     test1($("#g"+i).prevAll(".claim").length,$("#g"+(i+1)).prevAll(".claim").length)
     }
+
     }
 
     test2($("#c0").prevAll(".claim").length,_obj.length)
@@ -385,6 +411,7 @@ function showNextStep(){
     }
     }
 
+    //在非最后一个每一个textarea盒子上面标明这里要解释的文字是针对哪个異議的解释
     addDissentTextToEachBox(dissentTxtArr)
 
 
