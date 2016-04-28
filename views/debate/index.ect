@@ -721,7 +721,9 @@ socket.on("receiveStatement",function(msg){
     window.status = msg.status
 
 
-    if(window.status == 0){
+    if(window.status == 1){
+
+    alert(window.status)
          // 0 pro 做陈述
         var sampleProState = $("#left").find(".top").eq(0).find(".proState").eq(0).prop('outerHTML');
         var sampleProDState = $("#left").find(".top").eq(0).find(".proDState").eq(0).prop('outerHTML');
@@ -729,7 +731,6 @@ socket.on("receiveStatement",function(msg){
         $("#left").find(".bottom").eq(0).append(sampleProState)
         $("#left").find(".bottom").eq(0).find(".proState").eq(-1).find(".alert-link").eq(0).text(msg.submitContentArr[msg.submitContentArr.length-1].content)
 
-alert(msg.submitContentArr.length)
                 if(msg.submitContentArr>1){
                         for(var i=0;i<msg.submitContentArr.length-1;i++){
                                 $("#left").find(".bottom").eq(0).append(sampleProDState)
@@ -740,13 +741,12 @@ alert(msg.submitContentArr.length)
 
     }else{
         // 2 con 做陈述
-
         var sampleConState = $("#left").find(".top").eq(0).find(".conState").eq(0).prop('outerHTML');
         var sampleConDState = $("#left").find(".top").eq(0).find(".conDState").eq(0).prop('outerHTML');
         $("#left").find(".bottom").eq(0).append(sampleConState)
         $("#left").find(".bottom").eq(0).find(".conState").eq(-1).find(".alert-link").eq(0).text(msg.submitContentArr[msg.submitContentArr.length-1].content)
 
-        if(msg.submitContentArr>1){
+        if(msg.submitContentArr.length>1){
                 for(var i=0;i<msg.submitContentArr.length-1;i++){
                         $("#left").find(".bottom").eq(0).append(sampleConDState)
                         $("#left").find(".bottom").eq(0).find(".conDState").eq(-1).find(".alert-link").eq(0).text(msg.submitContentArr[i].content)

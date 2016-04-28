@@ -96,10 +96,9 @@ sessionSockets.on('connection', function (err, socket, session) {
         // 3 pro 做分析
         steps(function(){
             mongo.find("debateStatus",{num:1},{},this.hold(function(result){
-                msg.status = result[0].status
-                io.emit("receiveStatement",msg)
                 var status = result[0].status
                 msg.status = (status + 1)%4
+                io.emit("receiveStatement",msg)
                 io.emit("DoAnalysis",msg)
                 return status;
             }))
