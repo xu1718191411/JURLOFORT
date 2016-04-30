@@ -258,17 +258,22 @@ function _submit(){
     console.log("fenduanArr is")
     console.log(fenduanArr)
 
-    socket.emit("makeAnalysis",{_obj:_obj,dissentObj:dissentObj})
+    socket.emit("makeAnalysis",{_obj:_obj,dissentObj:dissentObj,fenduanArr:fenduanArr})
 
 
     }
 
 //把分析的结果，包括对異議説明分的分析和对オリジナル意見的分心放到右上方的討論ロジックマップ里面去
-function addResultToRightMapBox(){
+function addResultToRightMapBox(fenduanArr){
 
     //boundaryN这个变量是从服务器段取得，代表对方有多少个異議説明
 
-    alert("boundaryN is " + boundaryN)
+    alert("status is " + status)
+
+    console.log("fenduanArr is the following ")
+    console.log(fenduanArr)
+
+
     if(boundaryN<1){
 
     //test1(0,$("#c0").prevAll(".claim").length)
@@ -278,25 +283,56 @@ function addResultToRightMapBox(){
 
     for(var i=0;i<boundaryN;i++){
 
+
+    var a = 0;
+    var b = 0;
+    for(var s =0;s<i;s++){
+        a += fenduanArr[s]
+    }
+
+    for(var s =0;s<i+1;s++){
+        b += fenduanArr[s]
+    }
+
+        console.log("a is " + a)
+        console.log("b is " + b)
+
     if(i==boundaryN-1){
-    test1($("#g"+i).prevAll(".claim").length,$("#c0").prevAll(".claim").length)
+        test1(a,fenduanArr.length-1)
+    //test1($("#g"+i).prevAll(".claim").length,$("#c0").prevAll(".claim").length)
+
     }else{
-    test1($("#g"+i).prevAll(".claim").length,$("#g"+(i+1)).prevAll(".claim").length)
+        test1(a,b)
+        //test1($("#g"+i).prevAll(".claim").length,$("#g"+(i+1)).prevAll(".claim").length)
     }
 
     }
 
-    test2($("#c0").prevAll(".claim").length,_obj.length)
+    var c = 0;
+
+    for(var s=0;s<fenduanArr.length-1;s++){
+        c += fenduanArr[s]
+    }
+        console.log("c is "+c)
+    //test2($("#c0").prevAll(".claim").length,_obj.length)
+    test2(c,_obj.length)
     }
 
 }
 
 
 function test1(_start,_end){
-    $($("#right").children("div")[0]).append($($("#copy").find(".resultDPro")[0]).prop("outerHTML"))
+
+    if(window.status==0){
+        var keyword = "Con"
+    }else{
+        var keyword = "Pro"
+    }
+
+    $($("#right").children("div")[0]).append($($("#copy").find(".resultD"+keyword)[0]).prop("outerHTML"))
     for(var i=_start;i<_end;i++){
     //再从copy的盒子里面取出放入claim的框架
-    var claimKJ = $("#copy").find(".resultDPro").eq(0).find(".resultDProA2").eq(0).children(".row").eq(0)
+    var claimKJ = $("#copy").find(".resultD"+keyword).eq(0).find(".resultD"+keyword+"A2").eq(0).children(".row").eq(0)
     //然后再copy容器存放claim的盒子里放入需要放入的claim文字
 
     if(parseInt(dissentObj[i]['claimDissent'])==1){
@@ -306,12 +342,12 @@ function test1(_start,_end){
     }
 
     //然后把copy容器里已经拼装好的claimdiv段拿过来放到相应的位置里面
-    $("#right").find(".resultDPro").eq(-1).find(".resultDProA1").eq(0).append(claimKJ.prop("outerHTML"))
+    $("#right").find(".resultD"+keyword).eq(-1).find(".resultD"+keyword+"A1").eq(0).append(claimKJ.prop("outerHTML"))
     //这里添加異議説明的ロジックマップ
 
 
     for(var j=0;j<_obj[i]['warrant'].length;j++){
-    var warrantKJ = $("#copy").find(".resultDPro").eq(0).find(".resultDProA2").eq(0).children(".row").eq(1)
+    var warrantKJ = $("#copy").find(".resultD"+keyword).eq(0).find(".resultD"+keyword+"A2").eq(0).children(".row").eq(1)
 
     if(parseInt(dissentObj[i]['warrant'][j]['warrantDissent'])==1){
     warrantKJ.children("div").eq(2).html("<span class='glyphicon glyphicon-question-sign'></span>"+_obj[i]['warrant'][j]['warrantTxt'])
@@ -319,10 +355,10 @@ function test1(_start,_end){
     warrantKJ.children("div").eq(2).text(_obj[i]['warrant'][j]['warrantTxt'])
     }
 
-    $("#right").find(".resultDPro").eq(-1).find(".resultDProA1").eq(0).append(warrantKJ.prop("outerHTML"))
+    $("#right").find(".resultD"+keyword).eq(-1).find(".resultD"+keyword+"A1").eq(0).append(warrantKJ.prop("outerHTML"))
 
     for(var k=0;k<_obj[i]['warrant'][j]['evidence'].length;k++){
-    var evidenceKJ = $("#copy").find(".resultDPro").eq(0).find(".resultDProA2").eq(0).children(".row").eq(2)
+    var evidenceKJ = $("#copy").find(".resultD"+keyword).eq(0).find(".resultD"+keyword+"A2").eq(0).children(".row").eq(2)
 
     if(parseInt(dissentObj[i]['warrant'][j]['evidenceDissent'][k])==1){
     evidenceKJ.children("div").eq(2).html("<span class='glyphicon glyphicon-question-sign'></span>"+_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt'])
@@ -331,19 +367,26 @@ function test1(_start,_end){
     }
 
 
-    $("#right").find(".resultDPro").eq(-1).find(".resultDProA1").eq(0).append(evidenceKJ.prop("outerHTML"))
+    $("#right").find(".resultD"+keyword).eq(-1).find(".resultD"+keyword+"A1").eq(0).append(evidenceKJ.prop("outerHTML"))
     }
     }
     }
     }
 
 function test2(_start,_end){
-    $($("#right").children("div")[0]).append($($("#copy").find(".resultPro")[0]).prop("outerHTML"))
+
+    if(window.status==0){
+        var keyword = "Con"
+    }else{
+        var keyword = "Pro"
+    }
+
+    $($("#right").children("div")[0]).append($($("#copy").find(".result"+keyword)[0]).prop("outerHTML"))
 
     for(var i=_start;i<_end;i++){
 
     //再从copy的盒子里面取出放入claim的框架
-    var claimKJ = $("#copy").find(".resultPro").eq(0).find(".resultProA2").eq(0).children(".row").eq(0)
+    var claimKJ = $("#copy").find(".result"+keyword).eq(0).find(".result"+keyword+"A2").eq(0).children(".row").eq(0)
     //然后再copy容器存放claim的盒子里放入需要放入的claim文字
 
     if(parseInt(dissentObj[i]['claimDissent']) == 1){
@@ -354,12 +397,12 @@ function test2(_start,_end){
 
 
     //然后把copy容器里已经拼装好的claimdiv段拿过来放到相应的为治理
-    $("#right").find(".resultPro").eq(-1).find(".resultProA1").eq(0).append(claimKJ.prop("outerHTML"))
+    $("#right").find(".result"+keyword).eq(-1).find(".result"+keyword+"A1").eq(0).append(claimKJ.prop("outerHTML"))
     //这里添加異議説明的ロジックマップ
 
 
     for(var j=0;j<_obj[i]['warrant'].length;j++){
-    var warrantKJ = $("#copy").find(".resultPro").eq(0).find(".resultProA2").eq(0).children(".row").eq(1)
+    var warrantKJ = $("#copy").find(".result"+keyword).eq(0).find(".result"+keyword+"A2").eq(0).children(".row").eq(1)
 
 
 
@@ -368,10 +411,10 @@ function test2(_start,_end){
     }else{
     warrantKJ.children("div").eq(2).text(_obj[i]['warrant'][j]['warrantTxt'])
     }
-    $("#right").find(".resultPro").eq(-1).find(".resultProA1").eq(0).append(warrantKJ.prop("outerHTML"))
+    $("#right").find(".result"+keyword).eq(-1).find(".result"+keyword+"A1").eq(0).append(warrantKJ.prop("outerHTML"))
 
     for(var k=0;k<_obj[i]['warrant'][j]['evidence'].length;k++){
-    var evidenceKJ = $("#copy").find(".resultPro").eq(0).find(".resultProA2").eq(0).children(".row").eq(2)
+    var evidenceKJ = $("#copy").find(".result"+keyword).eq(0).find(".result"+keyword+"A2").eq(0).children(".row").eq(2)
 
 
 
@@ -381,7 +424,7 @@ function test2(_start,_end){
     evidenceKJ.children("div").eq(2).text(_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt'])
     }
 
-    $("#right").find(".resultPro").eq(-1).find(".resultProA1").eq(0).append(evidenceKJ.prop("outerHTML"))
+    $("#right").find(".result"+keyword).eq(-1).find(".result"+keyword+"A1").eq(0).append(evidenceKJ.prop("outerHTML"))
     }
     }
     }
