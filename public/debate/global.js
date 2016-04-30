@@ -341,10 +341,12 @@ function test1(_start,_end){
     claimKJ.children("div").eq(1).text(_obj[i]['claimTxt'])
     }
 
+        console.log(claimKJ.prop("outerHTML"))
+
     //然后把copy容器里已经拼装好的claimdiv段拿过来放到相应的位置里面
     $("#right").find(".resultD"+keyword).eq(-1).find(".resultD"+keyword+"A1").eq(0).append(claimKJ.prop("outerHTML"))
     //这里添加異議説明的ロジックマップ
-
+        console.log($("#right").find(".resultD"+keyword).eq(-1).find(".resultD"+keyword+"A1").eq(0))
 
     for(var j=0;j<_obj[i]['warrant'].length;j++){
     var warrantKJ = $("#copy").find(".resultD"+keyword).eq(0).find(".resultD"+keyword+"A2").eq(0).children(".row").eq(1)
