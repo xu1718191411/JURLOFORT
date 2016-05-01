@@ -268,7 +268,6 @@ function addResultToRightMapBox(fenduanArr){
 
     //boundaryN这个变量是从服务器段取得，代表对方有多少个異議説明
 
-    alert("status is " + status)
 
     console.log("fenduanArr is the following ")
     console.log(fenduanArr)
@@ -277,8 +276,8 @@ function addResultToRightMapBox(fenduanArr){
     if(boundaryN<1){
 
     //test1(0,$("#c0").prevAll(".claim").length)
-    test2($("#c0").prevAll(".claim").length,_obj.length)
-
+    //test2($("#c0").prevAll(".claim").length,_obj.length)
+    test2(0,fenduanArr[0])
     }else{
 
     for(var i=0;i<boundaryN;i++){

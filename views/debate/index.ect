@@ -350,30 +350,38 @@
             <hr>
 
             <div class="top" style="display:none">
-            <div>
+
+            <div class="proDB">
+                <div>
                 <button class="btn btn-info" type="button">
                     異議説明 <span class="badge"></span>
                 </button>
+                </div>
             </div>
 
-            <div>
-            <button  class="btn btn-info" type="button">
-                オリジナル意見 <span class="badge"></span>
-            </button>
+            <div class="proB">
+                <div>
+                <button  class="btn btn-info" type="button">
+                    オリジナル意見 <span class="badge"></span>
+                </button>
+                </div>
             </div>
 
-            <div>
-            <button class="btn btn-success" type="button">
+            <div class="conDB">
+                <div>
+                <button class="btn btn-success" type="button">
                     異議説明 <span class="badge"></span>
                 </button>
+                </div>
             </div>
 
-            <div>
-            <button  class="btn btn-success" type="button">
-                オリジナル意見 <span class="badge"></span>
-            </button>
+            <div class="conB">
+                <div>
+                <button  class="btn btn-success" type="button">
+                    オリジナル意見 <span class="badge"></span>
+                </button>
+                </div>
             </div>
-
 
             <div class="claim">
 
@@ -733,7 +741,7 @@
                             <div class="panel panel-success">
 
                                 <div class="panel-heading">意義説明</div>
-                                <div class="panel-body">
+                             div class="panel-body">
 
                                     <div class="resultDConA1"></div>
                                     <div class="resultDConA2" style="display:none">
@@ -944,7 +952,12 @@ function generateStatementInput(msg){
             //说明对方还有意義説明
                 for(var i=0;i<msg.submitContentArr.length-1;i++){
                    //绑带告诉你现在是第几个意義説明
-                    var obj = $("#form1").find(".top").eq(0).find("div").eq(0)
+                   if(window.status==3){
+                            var obj = $("#form1").find(".top").eq(0).find(".conDB").eq(0).children("div").eq(0)
+                   }else{
+                            var obj = $("#form1").find(".top").eq(0).find(".proDB").eq(0).children("div").eq(0)
+                   }
+
 
                     //先编号
                     obj.attr("id","g"+i)
@@ -955,19 +968,23 @@ function generateStatementInput(msg){
                     //再把编号里的id删掉，不然会有重复
                     obj.removeAttr("id")
 
-
                     //对每一个意義説明挂一个分析模型
                     var obj = $("#form1").find(".top").eq(0).find(".claim").eq(0)
                     $("#form1").find(".down").eq(0).append(obj.prop('outerHTML'))
-
 
                 }
 
 
                     //绑带告诉你现在是original陈述
-                    var obj = $("#form1").find(".top").eq(0).find("div").eq(1)
+
+                    if(window.status == 1){
+                            var obj = $("#form1").find(".top").eq(0).find(".proB").eq(0).children("div").eq(0)
+                    }else{
+                            var obj = $("#form1").find(".top").eq(0).find(".conB").eq(0).children("div").eq(0)
+                    }
+
                     obj.attr("id","c0")
-                    $("#form1").find(".down").eq(0).append(obj)
+                    $("#form1").find(".down").eq(0).append(obj.prop('outerHTML'))
 
                     //对每一个original陈述挂一个分析模型
                     var obj = $("#form1").find(".top").eq(0).find(".claim").eq(0)
@@ -981,9 +998,14 @@ function generateStatementInput(msg){
             //说明对方只有original陈述
 
                 //绑带告诉你现在是original陈述
-                    var obj = $("#form1").find(".top").eq(0).find("div").eq(1)
+                    if(window.status == 1){
+                        var obj = $("#form1").find(".top").eq(0).find(".proB").eq(0).children("div").eq(0)
+                    }else{
+                        var obj = $("#form1").find(".top").eq(0).find(".conB").eq(0).children("div").eq(0)
+                    }
+
                     obj.attr("id","c0")
-                    $("#form1").find(".down").eq(0).append(obj)
+                    $("#form1").find(".down").eq(0).append(obj.prop('outerHTML'))
 
                     //对每一个original陈述挂一个分析模型
                     var obj = $("#form1").find(".top").eq(0).find(".claim").eq(0)
@@ -1014,6 +1036,7 @@ socket.on("receiveAnalysis",function(msg){
     var claimDissentStr = parseInt(dissentObj[i]['claimDissent'])==1?"異議":"&nbsp;"
 
 
+    //这里拼接的字符串是再提交完分析表单后呈现在分析表单上面的分析结果
     _str += '<div id="claimSample">'+
     '<div class="row">'+
     '<div class="col-sm-1">'+
