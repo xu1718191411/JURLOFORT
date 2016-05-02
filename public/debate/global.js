@@ -246,14 +246,14 @@ function _submit(){
     while($("#g"+i).length>0){
         var j = i + 1
         if($("#g"+j).length>0){
-            fenduanArr.push($("#g"+j).prevAll(".claim").length - $("#g"+i).prevAll(".claim").length)
+            fenduanArr.push($(".down").find("#g"+j).eq(0).prevAll(".claim").length - $(".down").find("#g"+i).eq(0).prevAll(".claim").length)
         }else{
-            fenduanArr.push($("#c0").prevAll(".claim").length - $("#g"+i).prevAll(".claim").length)
+            fenduanArr.push($(".down").find("#c0").eq(0).prevAll(".claim").length - $(".down").find("#g"+i).eq(0).prevAll(".claim").length)
         }
         i++;
     }
 
-    fenduanArr.push(_obj.length - $("#c0").prevAll(".claim").length)
+    fenduanArr.push(_obj.length - $(".down").find("#c0").eq(0).prevAll(".claim").length)
 
     console.log("fenduanArr is")
     console.log(fenduanArr)

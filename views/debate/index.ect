@@ -89,6 +89,14 @@
    </div>
 
     <div class="row">
+
+            <div class="alert alert-info" role="alert" id="kakusu">
+             表示
+            </div>
+
+    </div>
+
+    <div class="row" id="middle" style="display:none">
         <div  class="col-md-6">
             <div id="left">
 
@@ -741,7 +749,7 @@
                             <div class="panel panel-success">
 
                                 <div class="panel-heading">意義説明</div>
-                             div class="panel-body">
+                             <div class="panel-body">
 
                                     <div class="resultDConA1"></div>
                                     <div class="resultDConA2" style="display:none">
@@ -986,6 +994,7 @@ function generateStatementInput(msg){
                     obj.attr("id","c0")
                     $("#form1").find(".down").eq(0).append(obj.prop('outerHTML'))
 
+                    obj.removeAttr("id")
                     //对每一个original陈述挂一个分析模型
                     var obj = $("#form1").find(".top").eq(0).find(".claim").eq(0)
                     $("#form1").find(".down").eq(0).append(obj.prop('outerHTML'))
@@ -1006,7 +1015,7 @@ function generateStatementInput(msg){
 
                     obj.attr("id","c0")
                     $("#form1").find(".down").eq(0).append(obj.prop('outerHTML'))
-
+                    obj.removeAttr("id")
                     //对每一个original陈述挂一个分析模型
                     var obj = $("#form1").find(".top").eq(0).find(".claim").eq(0)
                     $("#form1").find(".down").eq(0).append(obj.prop('outerHTML'))
@@ -1185,6 +1194,14 @@ $("#prepare").click(function(){
          });
 })
 
+$("#kakusu").click(function(){
+
+    $(this).text(function(i, text){
+          return text === "隠す" ? "表示" : "隠す";
+      })
+
+    $("#middle").toggle()
+})
 
 
 function __submit(){

@@ -16,18 +16,27 @@ module.exports = {
 
         res.render('debate/index', { userInformation:  req.session.debateLogin });
     },
+    groupController: function(req,res){
+        res.render("debate/group",{})
+    },
     tmpLoginController:function(req,res){
         res.render('debate/tmpLogin', { title: 'Express' });
     },
     tmpLoginPostController:function(req,res){
 
-        var users = [{username:"syoui",password:"syoui"},{username:"villa",password:"villa"}]
+        var members = [{username:"syoui",password:"syoui"},{username:"villa",password:"villa"}]
+        var groups = [{groupname:"miyoshi",members:members},{groupname:"okamoto"},{groupname:"nakagomi"}]
+
+
 
         console.log(req.body)
 
         var _username = req.body.username;
         var _password = req.body.password;
         var _position = parseInt(req.body.position);
+        var _group = parseInt(req.body.group)
+
+        var users = groups[_group]["members"] || []
 
         var _isLogin = 0;
         for(var i=0;i<users.length;i++){
@@ -35,6 +44,11 @@ module.exports = {
                 _isLogin = 1;
                 req.session.debateLogin = {username:_username,password:_password,position:_position}
             }
+        }
+
+        if(_isLogin == 0){
+            res.end(JSON.stringify({error:1,msg:"username or password not correct"}))
+            return;
         }
 
         steps(function(){

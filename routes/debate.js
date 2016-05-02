@@ -9,6 +9,7 @@ var debateController = require('../controller/debate.js');
 
 router.get('/',debateController.indexController);
 router.get('/tmpLogin',debateController.tmpLoginController);
+router.get('/group',debateController.groupController);
 
 router.post('/tmpLoginPost',debateController.tmpLoginPostController);
 
