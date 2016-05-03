@@ -131,10 +131,50 @@ sessionSockets.on('connection', function (err, socket, session) {
 
 
     socket.on('disconnect', function(){
-        console.log('user disconnected');
+        //if(!session){
+        //    return;
+        //}
+        //if(!session.debateLogin){
+        //    return;
+        //}
+        //var num = session.debateLogin.num;
+        //var position = session.debateLogin.position
+        //
+        //if(position == 1){
+        //        var update = {$unset:{pro:1}}
+        //}else{
+        //        var update = {$unset:{con:1}}
+        //}
+        //
+        //mongo.update("debateStatus",{num:num},update,{},function(result){
+        //
+        //})
+        //console.log('user disconnected');
     });
 
-    socket.on('writeJson',function(jsonData){
+    socket.on('join',function(jsonData){
+        var position = jsonData.position
+        var num = jsonData.num
+
+        if(position == 1){
+            var update = {$set:{pro:session.debateLogin.username}}
+        }else{
+            var update = {$set:{con:session.debateLogin.username}}
+        }
+
+        steps(function(){
+            mongo.update("debateStatus",{num:jsonData.num},update,this.hold(function(result){
+
+            }))
+        },function(){
+            mongo.find("debateStatus",{num:jsonData.num},{},function(result){
+                //在session中写入num
+                session.debateLogin.num = num
+                session.debateLogin.position = position
+                session.save()
+                socket.broadcast.emit("joined",result[0])
+            })
+        })()
 
     })
 

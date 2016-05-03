@@ -89,14 +89,36 @@
                             <span class="previous"></span>
                             <div class="wrapper">
                                 <ul>
-                                    <li>
-                                        <div class="row">
-                                            <div class="thumbnail">
-                                                <h4>テーマ:学生が成人したら経済的に独立するべきである</h4>
-                                                <p><a href="#" class="btn btn-info" role="button">参加</a> <a href="#" class="btn btn-success" role="button">参加</a></p>
-                                            </div>
-                                        </div>
-                                    </li>
+
+                                    <% for theme in @themes : %>
+                                       <li>
+                                           <div class="row">
+                                               <div class="thumbnail">
+                                                   <h4>テーマ:<%=theme.theme%></h4>
+                                                   <p class="themes" num="<%=theme.num%>">
+
+                                                    <% if theme?.pro : %>
+
+                                                        <a href="#" disabled onclick="return join(1,this)" class="btn btn-info" num="<%=theme.num%>" role="button">参加</a>
+                                                    <% else: %>
+                                                        <a href="#"  onclick="return join(1,this)" class="btn btn-info" num="<%=theme.num%>" role="button">参加</a>
+                                                    <% end %>
+
+                                                     <% if theme?.con : %>
+                                                        <a href="#" disabled  onclick="join(2,this)" num="<%=theme.num%>" class="btn btn-success" role="button">参加</a>
+                                                    <% else: %>
+                                                        <a href="#" onclick="join(2,this)" num="<%=theme.num%>" class="btn btn-success" role="button">参加</a>
+                                                    <% end %>
+
+
+
+
+
+                                                   </p>
+                                               </div>
+                                           </div>
+                                       </li>
+                                    <% end %>
 
                                 </ul>
                             </div>
@@ -182,6 +204,41 @@ $(document).ready(function() {
 		hidearrows: false	//hide arrows if all of the list items are visible
 	});
 });
+
+//点击参加然后进入辩论页面
+function join(n,that){
+    socket.emit("join",{num:parseInt($(that).attr("num")),position:n})
+            location = "/debate"
+    return false;
+}
+
+socket.on("joined",function(result){
+    console.log("joined result is the following....")
+    forbidJointButton(result)
+})
+
+function forbidJointButton(obj){
+    var _pro = obj.pro
+    var _con = obj.con
+
+    var themes = $(".themes")
+
+    for(var i=0;i<themes.length;i++){
+
+
+        if(parseInt($(themes[i]).attr("num")) == obj.num){
+                if(_pro){
+                    $(themes[i]).find("a").eq(0).attr("disabled","disabled");
+                }
+
+                if(_con){
+                    $(themes[i]).find("a").eq(1).attr("disabled","disabled");
+                }
+        }
+
+
+    }
+}
 </script>
 
 </html>

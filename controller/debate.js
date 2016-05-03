@@ -14,10 +14,57 @@ module.exports = {
             return;
         }
 
-        res.render('debate/index', { userInformation:  req.session.debateLogin });
+        if(!req.session.debateLogin.num){
+            res.end("num has not been writen in session")
+            return;
+        }
+
+        steps(function(){
+            mongo.find("themes",{group:parseInt(req.session.debateLogin.group)},{},this.hold(function(list){
+                var theme = list[0];
+
+                mongo.find("debateStatus",{num:theme.num},{},this.hold(function(result){
+                    theme.pro = result[0].pro
+                    theme.con = result[0].con
+                    return theme
+                }))
+
+            }))
+        },function(theme){
+            res.render('debate/index', { userInformation:  req.session.debateLogin, theme : theme });
+        })()
+
+
     },
     groupController: function(req,res){
-        res.render("debate/group",{})
+
+        var themes;
+        if(tool.isEmpty(req.session.debateLogin)){
+            res.redirect("tmpLogin")
+            return;
+        }
+
+        steps(function(){
+            mongo.find("themes",{group:parseInt(req.session.debateLogin.group)},{},this.hold(function(list){
+                themes = list;
+
+                for(var i=0;i<themes.length;i++){
+                    (function(j,that){
+                        mongo.find("debateStatus",{num:themes[j].num},{},that.hold(function(result){
+                            themes[j].pro = result[0].pro
+                            themes[j].con = result[0].con
+                        }))
+                    })(i,this)
+
+                }
+
+
+            }))
+        },function(){
+            res.render("debate/group",{userInformation:  req.session.debateLogin,themes:themes,})
+        })()
+
+
     },
     tmpLoginController:function(req,res){
         res.render('debate/tmpLogin', { title: 'Express' });
@@ -33,7 +80,6 @@ module.exports = {
 
         var _username = req.body.username;
         var _password = req.body.password;
-        var _position = parseInt(req.body.position);
         var _group = parseInt(req.body.group)
 
         var users = groups[_group]["members"] || []
@@ -42,7 +88,7 @@ module.exports = {
         for(var i=0;i<users.length;i++){
             if(_username == users[i].username && _password == users[i].password){
                 _isLogin = 1;
-                req.session.debateLogin = {username:_username,password:_password,position:_position}
+                req.session.debateLogin = {username:_username,password:_password,group:_group}
             }
         }
 
@@ -67,17 +113,6 @@ module.exports = {
                         }))
                     }
             }))
-
-        },function(){
-            if(parseInt(_position) == 1){
-                mongo.update("debateStatus",{num:1},{$set:{pro:_username}},function(res){
-
-                })
-            }else{
-                mongo.update("debateStatus",{num:1},{$set:{con:_username}},function(res){
-
-                })
-            }
 
         })()
 
