@@ -72,6 +72,10 @@
                             </li>
                         </ul>
 
+                          <ul class="nav navbar-nav navbar-right">
+                                <li><a href="#">ようこそ:<%= @userInformation.username%></a></li>
+                              </ul>
+
 
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
@@ -195,7 +199,12 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-   var socket = io();
+   var socket = io("127.0.0.1:8000/group");
+
+   socket.emit("heihei",{})
+   socket.on("haha",function(msg){
+    alert("hahahah")
+   })
 
 $(document).ready(function() {
 	$('#liquid').liquidcarousel({

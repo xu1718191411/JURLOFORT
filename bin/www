@@ -26,9 +26,11 @@ var sessionSockets = new SessionSockets(io, app.sessionStore, app.cookieParser);
 
 
 
-sessionSockets.on('connection', function (err, socket, session) {
+sessionSockets.of("/debate").on('connection', function (err, socket, session) {
     //your regular socket.io code goes here
     //and you can still use your io object
+
+
 
     var positionArrs = [1,2]
 
@@ -39,7 +41,8 @@ sessionSockets.on('connection', function (err, socket, session) {
             }
         }
 
-        io.emit("adjustPosition",{positionArrs:positionArrs})
+        socket.emit("adjustPosition",{positionArrs:positionArrs})
+        socket.broadcast.emit("adjustPosition",{positionArrs:positionArrs})
 
         console.log(positionArrs)
     })
@@ -51,19 +54,21 @@ sessionSockets.on('connection', function (err, socket, session) {
 
         var loginInfo = session.debateLogin
         delete loginInfo['password']
-        io.emit("enterRoom",{loginInfo:loginInfo})
+        socket.emit("enterRoom",{loginInfo:loginInfo})
+        socket.broadcast.emit("enterRoom",{loginInfo:loginInfo})
     })
 
 
     socket.on("prepare",function(msg){
         var prepareInfo = session.debateLogin
         delete prepareInfo['password']
-        io.emit("prepare",{prepareInfo:prepareInfo})
+        socket.emit("prepare",{prepareInfo:prepareInfo})
+        socket.broadcast.emit("prepare",{prepareInfo:prepareInfo})
 
 
         steps(function(){
 
-            mongo.find("debateStatus",{num:1},{},this.hold(function(result){
+            mongo.find("debateStatus",{num:session.debateLogin.num},{},this.hold(function(result){
                 var proPrepare = result[0].proPrepare
                 var conPrepare = result[0].conPrepare
 
@@ -74,7 +79,8 @@ sessionSockets.on('connection', function (err, socket, session) {
                     // 2 con 做陈述
                     // 3 pro 做分析
 
-                    io.emit("allPrepare",{status:0})
+                    socket.emit("allPrepare",{status:0})
+                    socket.broadcast.emit("allPrepare",{status:0})
                 }
             }))
 
@@ -98,8 +104,10 @@ sessionSockets.on('connection', function (err, socket, session) {
             mongo.find("debateStatus",{num:1},{},this.hold(function(result){
                 var status = result[0].status
                 msg.status = (status + 1)%4
-                io.emit("receiveStatement",msg)
-                io.emit("DoAnalysis",msg)
+                socket.emit("receiveStatement",msg)
+                socket.broadcast.emit("receiveStatement",msg)
+                socket.emit("DoAnalysis",msg)
+                socket.broadcast.emit("DoAnalysis",msg)
                 return status;
             }))
         },function(status){
@@ -116,7 +124,8 @@ sessionSockets.on('connection', function (err, socket, session) {
             mongo.find("debateStatus",{num:1},{},this.hold(function(result){
                 var status = result[0].status
                 msg.status = (status + 1)%4
-                io.emit("receiveAnalysis",msg)
+                socket.emit("receiveAnalysis",msg)
+                socket.broadcast.emit("receiveAnalysis",msg)
                 return status;
             }))
 
@@ -131,6 +140,8 @@ sessionSockets.on('connection', function (err, socket, session) {
 
 
     socket.on('disconnect', function(){
+        console.log("the following has been out of connection")
+
         //if(!session){
         //    return;
         //}
@@ -151,6 +162,11 @@ sessionSockets.on('connection', function (err, socket, session) {
         //})
         //console.log('user disconnected');
     });
+
+});
+
+
+sessionSockets.of("/group").on('connection', function (err, socket, session) {
 
     socket.on('join',function(jsonData){
         var position = jsonData.position
@@ -178,9 +194,7 @@ sessionSockets.on('connection', function (err, socket, session) {
 
     })
 
-});
-
-
+})
 
 //
 //io.on('connection',function(socket){
