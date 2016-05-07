@@ -26,27 +26,11 @@ var sessionSockets = new SessionSockets(io, app.sessionStore, app.cookieParser);
 
 
 
+
+
 sessionSockets.of("/debate").on('connection', function (err, socket, session) {
     //your regular socket.io code goes here
     //and you can still use your io object
-
-
-
-    var positionArrs = [1,2]
-
-    socket.on('position',function(msg){
-        for(var i=0;i<positionArrs.length;i++){
-            if(positionArrs[i] != parseInt(msg.position)){
-                positionArrs.splice(i,1)
-            }
-        }
-
-        socket.emit("adjustPosition",{positionArrs:positionArrs})
-        socket.broadcast.emit("adjustPosition",{positionArrs:positionArrs})
-
-        console.log(positionArrs)
-    })
-
 
     socket.on("enterRoom",function(msg){
         console.log("enter room session is the following...")
@@ -54,8 +38,38 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
 
         var loginInfo = session.debateLogin
         delete loginInfo['password']
-        socket.emit("enterRoom",{loginInfo:loginInfo})
-        socket.broadcast.emit("enterRoom",{loginInfo:loginInfo})
+        var lastest = {}
+        steps(
+            function(){
+            mongo.find("statementLog",{lastest:1},{},this.hold(function(result){
+                    lastest.statement = result[0]
+            }))
+            },
+            function(){
+             mongo.find("analysisLog",{lastest:1},{},this.hold(function(result){
+                    lastest.analysis = result[0]
+             }))
+            },
+            function(){
+            // 传给刚进入房间或者是再次进入房间的用户status
+           mongo.find("debateStatus",{num:loginInfo.num},{},this.hold(function(result){
+                   return result[0].status
+           }))
+        },function(status){
+            socket.emit("enterRoom",{loginInfo:loginInfo,status:status,lastest:lastest})
+            socket.broadcast.emit("enterRoom",{loginInfo:loginInfo})
+        })()
+
+    })
+
+    socket.on("getLastest",function(msg){
+            steps(function(){
+
+                mongo.find("statementLog",{},{},this.hold(function(result){
+
+                }))
+
+            })()
     })
 
 
@@ -74,21 +88,36 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
 
                 if(parseInt(proPrepare) == 1  && parseInt(conPrepare) == 1){
 
+                    //debateStatus status
                     // 0 pro 做陈述
                     // 1 con 做分析
                     // 2 con 做陈述
                     // 3 pro 做分析
 
-                    socket.emit("allPrepare",{status:0})
-                    socket.broadcast.emit("allPrepare",{status:0})
+                    //userStatus status
+                    //   -1 logout
+                    //    0 login
+                    //    1 entering
+                    //    2 debating
+
+                    mongo.update("userStatus",{username:result[0].pro,num:result[0].num},{$set:{status:2}},{},function(result){
+
+                    })
+
+                    mongo.update("userStatus",{username:result[0].con,num:result[0].num},{$set:{status:2}},{},function(result){
+
+                    })
+
+                    mongo.update("debateStatus",{num:session.debateLogin.num},{$set:{status:0}},{},this.hold(function(res){
+                        socket.emit("allPrepare",{status:0})
+                        socket.broadcast.emit("allPrepare",{status:0})
+                    }))
                 }
             }))
 
 
         },function(){
-            mongo.update("debateStatus",{num:1},{$set:{status:0}},{},this.hold(function(res){
 
-            }))
 
         })()
     })
@@ -100,8 +129,22 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
         // 1 con 做分析
         // 2 con 做陈述
         // 3 pro 做分析
+
+        //把陈述内容计入数据库
         steps(function(){
-            mongo.find("debateStatus",{num:1},{},this.hold(function(result){
+            mongo.createIfNotExists("statementLog",this.hold(function(result){
+
+            }))
+        },function(){
+            mongo.update("statementLog",{num:session.debateLogin.num},{$unset:{lastest:1}},{multi:true},this.hold(function(result){
+
+            }))
+        },function(){
+            mongo.insert("statementLog",{num:session.debateLogin.num,position:session.debateLogin.position,lastest:1,submitContentArr:msg.submitContentArr,time:Date.parse(new Date())},{},this.hold(function(result){
+
+            }))
+        },function(){
+            mongo.find("debateStatus",{num:session.debateLogin.num},{},this.hold(function(result){
                 var status = result[0].status
                 msg.status = (status + 1)%4
                 socket.emit("receiveStatement",msg)
@@ -112,7 +155,7 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
             }))
         },function(status){
             status = (status + 1)%4
-            mongo.update("debateStatus",{num:1},{$set:{status:status}},{},this.hold(function(result){
+            mongo.update("debateStatus",{num:session.debateLogin.num},{$set:{status:status}},{},this.hold(function(result){
                 console.log(result)
             }))
         })()
@@ -121,6 +164,18 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
 
     socket.on("makeAnalysis",function(msg){
         steps(function(){
+               mongo.createIfNotExists("analysisLog",this.hold(function(result){
+
+               }))
+        },function(){
+                mongo.update("analysisLog",{num:session.debateLogin.num},{$unset:{lastest:1}},{multi:true},this.hold(function(result){
+
+                }))
+        },function(){
+                mongo.insert("analysisLog",{num:session.debateLogin.num,position:session.debateLogin.position,lastest:1,obj:msg._obj,dissentObj:msg.dissentObj,fenduanArr:msg.fenduanArr,time:Date.parse(new Date())},{},this.hold(function(result){
+
+                }))
+        },function(){
             mongo.find("debateStatus",{num:1},{},this.hold(function(result){
                 var status = result[0].status
                 msg.status = (status + 1)%4
@@ -139,8 +194,48 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
     })
 
 
-    socket.on('disconnect', function(){
-        console.log("the following has been out of connection")
+    socket.on('disconnect', function(msg){
+
+        console.log("room debate has been out of connection")
+        console.log(msg)
+        if(!session){
+            return
+        }
+        console.log(session.debateLogin)
+
+        var username = session.debateLogin.username
+        var group = session.debateLogin.group
+        var num = session.debateLogin.num
+        var position = session.debateLogin.position
+
+
+        //userStatus status
+        //   -1 logout
+        //    0 login
+        //    1 entering
+        //    2 debating
+
+        steps(function(){
+            mongo.find("userStatus",{username:username,num:num},{},this.hold(function(result){
+                    if(result[0].status<2){
+                        mongo.update("userStatus",{username:username,num:num},{$set:{status:0},$unset:{num:1}},this.hold(function(result){
+
+                        }))
+
+                        if(position==1){
+                            var update = {$unset:{pro:1,proPrepare:1}}
+                        }else{
+                            var update = {$unset:{con:1,conPrepare:1}}
+                        }
+
+                        mongo.update("debateStatus",{num:num},update,{},this.hold(function(result){
+                                delete session.debateLogin.num
+                                delete session.debateLogin.position
+                                session.save()
+                        }))
+                    }
+            }))
+        })()
 
         //if(!session){
         //    return;
@@ -192,6 +287,11 @@ sessionSockets.of("/group").on('connection', function (err, socket, session) {
             })
         })()
 
+    })
+
+
+    socket.on('disconnect', function(){
+        console.log("room group is out of connection")
     })
 
 })

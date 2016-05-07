@@ -9,6 +9,11 @@ var steps = require('ocsteps');
 module.exports = {
     indexController: function(req,res){
 
+        var proPrepare
+        var conPrepare
+        var pro
+        var con
+
         if(tool.isEmpty(req.session.debateLogin)){
             res.redirect("tmpLogin")
             return;
@@ -19,7 +24,56 @@ module.exports = {
             return;
         }
 
-        steps(function(){
+        // user status
+        //   -1 logout
+        //    0 login
+        //    1 entering
+        //    2 debating
+
+        steps(
+            function(){
+
+            mongo.createIfNotExists("userStatus",this.hold(function(result){
+
+            }))
+        },function(){
+
+            mongo.find("userStatus",{username:req.session.debateLogin.username,group:req.session.debateLogin.group},{},this.hold(function(result){
+                    if(result.length>0){
+                        mongo.update("userStatus",{username:req.session.debateLogin.username,group:req.session.debateLogin.group},{$set:{status:1,num:req.session.debateLogin.num}},this.hold(function(result){
+
+                        }))
+                    }else{
+                        mongo.insert("userStatus",{username:req.session.debateLogin.username,group:req.session.debateLogin.group,status:1,num:req.session.debateLogin.num},{},this.hold(function(result){
+
+                        }))
+                    }
+            }))
+
+
+        },function(){
+            mongo.createIfNotExists("debateStatus",this.hold(function(res){
+                if(res==0){
+                    mongo.insert("debateStatus",{num:req.session.debateLogin.num},{},this.hold(function(res){
+
+                    }))
+                }
+            }))
+        },function(){
+            mongo.find("debateStatus",{num:req.session.debateLogin.num},{},this.hold(function(result){
+                if(result.length<=0){
+                    mongo.insert("debateStatus",{num:req.session.debateLogin.num},{},this.hold(function(res){
+
+                    }))
+                }
+
+                proPrepare = result[0].proPrepare
+                conPrepare = result[0].conPrepare
+                pro = result[0].pro
+                con = result[0].con
+            }))
+
+        },function(){
             mongo.find("themes",{group:parseInt(req.session.debateLogin.group)},{},this.hold(function(list){
                 var theme = list[0];
 
@@ -31,40 +85,58 @@ module.exports = {
 
             }))
         },function(theme){
-            res.render('debate/index', { userInformation:  req.session.debateLogin, theme : theme });
+            res.render('debate/index', { userInformation:  req.session.debateLogin, theme : theme ,proPrepare:proPrepare, conPrepare:conPrepare,pro:pro,con:con});
         })()
 
 
     },
     groupController: function(req,res){
 
-        var themes;
+        var themes = []
+        var debatingList = []
         if(tool.isEmpty(req.session.debateLogin)){
             res.redirect("tmpLogin")
             return;
         }
 
-        steps(function(){
-            mongo.find("themes",{group:parseInt(req.session.debateLogin.group)},{},this.hold(function(list){
-                themes = list;
+        console.log(req.session.debateLogin)
 
-                for(var i=0;i<themes.length;i++){
-                    (function(j,that){
-                        mongo.find("debateStatus",{num:themes[j].num},{},that.hold(function(result){
-                            themes[j].pro = result[0].pro
-                            themes[j].con = result[0].con
+        steps(function(){
+
+            mongo.find("themes",{group:req.session.debateLogin.group},{},this.hold(function(result){
+
+                for(var i=0;i<result.length;i++){
+
+                    (function(k,that){
+                        mongo.find("debateStatus",{num:result[k].num,status:{$gte:0}},{},that.hold(function(_result){
+                            if(_result.length>0){
+                                debatingList.push({num:result[k].num,theme:result[k].theme,con:_result[0].con,pro:_result[0].pro,status:_result[0].status})
+                            }
                         }))
                     })(i,this)
 
                 }
+            }))
+
+        },function(){
+
+            mongo.find("themes",{group:parseInt(req.session.debateLogin.group)},{},this.hold(function(list){
 
 
+                for(var i=0;i<list.length;i++){
+                    (function(j,that){
+                        mongo.find("debateStatus",{num:list[j].num,status:{$exists:false}},{},that.hold(function(result){
+                            if(result.length>0){
+                                themes.push({pro:result[0].pro,con:result[0].con,theme:list[j].theme,num:list[j].num})
+                            }
+                        }))
+                    })(i,this)
+
+                }
             }))
         },function(){
-            res.render("debate/group",{userInformation:  req.session.debateLogin,themes:themes,})
+            res.render("debate/group",{userInformation:req.session.debateLogin,themes:themes,debatingList:debatingList})
         })()
-
-
     },
     tmpLoginController:function(req,res){
         res.render('debate/tmpLogin', { title: 'Express' });
@@ -98,22 +170,27 @@ module.exports = {
         }
 
         steps(function(){
-            mongo.createIfNotExists("debateStatus",this.hold(function(res){
-                if(res==0){
-                    mongo.insert("debateStatus",{num:1},{},this.hold(function(res){
+            mongo.createIfNotExists("userStatus",this.hold(function(result){
 
-                    }))
-                }
             }))
         },function(){
-            mongo.find("debateStatus",{num:1},{},this.hold(function(result){
-                    if(result.length<=0){
-                        mongo.insert("debateStatus",{num:1},{},this.hold(function(res){
+            mongo.find("userStatus",{username:req.session.debateLogin.username,group:req.session.debateLogin.group},{},this.hold(function(result){
+                    // user status
+                    //   -1 logout
+                    //    0 login
+                    //    1 entering
+                    //    2 debating
 
-                        }))
+                    if(result.length>0){
+                            mongo.update("userStatus",{username:req.session.debateLogin.username,group:req.session.debateLogin.group},{$set:{status:0}},{},this.hold(function(){
+
+                            }))
+                    }else{
+                            mongo.insert("userStatus",{username:req.session.debateLogin.username,group:req.session.debateLogin.group,status:0},{},this.hold(function(){
+
+                            }))
                     }
             }))
-
         })()
 
 
@@ -123,9 +200,6 @@ module.exports = {
             res.end(JSON.stringify({error:0,msg:"successful"}))
 
         }
-
-
-
     },
     preparePostController:function(req,res){
         if(tool.isEmpty(req.session.debateLogin)){

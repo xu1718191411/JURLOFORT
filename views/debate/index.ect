@@ -81,8 +81,27 @@
 
 
            <p>今の段階:<span id="nowStatus">相手に意見の分析</span></p>
-           <p>肯定:<span id="proUsername"></span><span id="proUserStatus">入室</span></p>
-           <p>否定:<span id="conUsername"></span><span id="conUserStatus">入室</span></p>
+           <p>肯定:<span id="proUsername"></span>
+
+           <span id="proUserStatus">
+            <% if @proPrepare==1 : %>
+            <%=@pro %>準備中
+           <% else : %>
+           <%=@pro %>入室
+           <% end %>
+
+           </span>
+           </p>
+           <p>否定:<span id="conUsername"></span>
+
+           <span id="conUserStatus">
+           <% if @conPrepare==1 : %>
+           <%=@con %>準備中
+           <% else : %>
+           <%=@con %>入室
+           <% end %>
+
+           </span></p>
 
            <p><button id="prepare" class="btn-default">準備</button></p>
        </div>
@@ -807,6 +826,13 @@ var socket = io("127.0.0.1:8000/debate");
 
 
 socket.on("enterRoom",function(msg){
+        // 0 pro 做陈述
+        // 1 con 做分析
+        // 2 con 做陈述
+        // 3 pro 做分析
+
+    window.status = parseInt(msg.status)
+
 
     if(msg.loginInfo.position == 1){
         $("#proUsername").text(msg.loginInfo.username)
@@ -1220,6 +1246,8 @@ function __submit(){
     $("#form2").hide()
     return false;
 }
+
+
 
 </script>
 

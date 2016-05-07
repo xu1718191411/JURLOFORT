@@ -114,10 +114,6 @@
                                                         <a href="#" onclick="join(2,this)" num="<%=theme.num%>" class="btn btn-success" role="button">参加</a>
                                                     <% end %>
 
-
-
-
-
                                                    </p>
                                                </div>
                                            </div>
@@ -128,6 +124,36 @@
                             </div>
                             <span class="next"></span>
                         </div>
+                </div>
+
+                <div class="row" style="margin-top:10px">
+                <div id="liquid2" class="liquid">
+                        <span class="previous"></span>
+                            <div class="wrapper">
+                                <ul>
+
+                                    <% for theme in @debatingList : %>
+                                       <li>
+                                           <div class="row">
+                                               <div class="thumbnail">
+                                                   <h4>テーマ:<%=theme.theme%></h4>
+                                                   <p class="themes" num="<%=theme.num%>">
+
+                                                        <span class="btn btn-info" role="btn"><%= theme.pro %></span>
+
+                                                        <span class="btn btn-success" role="btn"><%= theme.con %></span>
+
+
+                                                   </p>
+                                               </div>
+                                           </div>
+                                       </li>
+                                    <% end %>
+
+                                </ul>
+                            </div>
+                        <span class="next"></span>
+                </div>
                 </div>
 
               </div>
@@ -207,7 +233,7 @@
    })
 
 $(document).ready(function() {
-	$('#liquid').liquidcarousel({
+	$('#liquid,#liquid2').liquidcarousel({
 		height: 150,		//the height of the list
 		duration: 100,		//the duration of the animation
 		hidearrows: false	//hide arrows if all of the list items are visible
