@@ -88,7 +88,10 @@
             <div class="row">
               <div class="col-xs-12 col-md-8">
 
+
+
                 <div class="row">
+                <div class="alert alert-info" role="alert" style="margin-bottom: 8px;">現在空いているルーム</div>
                         <div id="liquid" class="liquid">
                             <span class="previous"></span>
                             <div class="wrapper">
@@ -98,7 +101,7 @@
                                        <li>
                                            <div class="row">
                                                <div class="thumbnail">
-                                                   <h4>テーマ:<%=theme.theme%></h4>
+                                                   <h4 style="height:85px;">テーマ:<%=theme.theme%></h4>
                                                    <p class="themes" num="<%=theme.num%>">
 
                                                     <% if theme?.pro : %>
@@ -126,35 +129,75 @@
                         </div>
                 </div>
 
-                <div class="row" style="margin-top:10px">
-                <div id="liquid2" class="liquid">
-                        <span class="previous"></span>
-                            <div class="wrapper">
-                                <ul>
-
-                                    <% for theme in @debatingList : %>
-                                       <li>
-                                           <div class="row">
-                                               <div class="thumbnail">
-                                                   <h4>テーマ:<%=theme.theme%></h4>
-                                                   <p class="themes" num="<%=theme.num%>">
-
-                                                        <span class="btn btn-info" role="btn"><%= theme.pro %></span>
-
-                                                        <span class="btn btn-success" role="btn"><%= theme.con %></span>
 
 
-                                                   </p>
+
+                <div class="row" style="margin-top:6px">
+                    <div class="alert alert-info" style="margin-bottom: 8px;" role="alert">討論中のルーム</div>
+
+                    <div id="liquid2" class="liquid">
+                            <span class="previous"></span>
+                                <div class="wrapper">
+                                    <ul>
+
+                                        <% for theme in @debatingList : %>
+                                           <li>
+                                               <div class="row">
+                                                   <div class="thumbnail">
+                                                       <h4>テーマ:<%=theme.theme%></h4>
+                                                       <p class="themes" num="<%=theme.num%>">
+
+                                                            <span class="btn btn-info" role="btn"><%= theme.pro %></span>
+
+                                                            <span class="btn btn-success" role="btn"><%= theme.con %></span>
+
+
+                                                       </p>
+                                                   </div>
                                                </div>
-                                           </div>
-                                       </li>
-                                    <% end %>
+                                           </li>
+                                        <% end %>
 
-                                </ul>
-                            </div>
-                        <span class="next"></span>
+                                    </ul>
+                                </div>
+                            <span class="next"></span>
+                    </div>
                 </div>
+
+
+
+                    <div class="row" style="margin-top:6px">
+                    <div class="alert alert-info" style="margin-bottom: 8px;" role="alert">討論終了のルーム</div>
+
+                    <div id="liquid3" class="liquid">
+                            <span class="previous"></span>
+                                <div class="wrapper">
+                                    <ul>
+
+                                        <% for theme in @debatingList : %>
+                                           <li>
+                                               <div class="row">
+                                                   <div class="thumbnail">
+                                                       <h4>テーマ:<%=theme.theme%></h4>
+                                                       <p class="themes" num="<%=theme.num%>">
+
+                                                            <span class="btn btn-info" role="btn"><%= theme.pro %></span>
+
+                                                            <span class="btn btn-success" role="btn"><%= theme.con %></span>
+
+
+                                                       </p>
+                                                   </div>
+                                               </div>
+                                           </li>
+                                        <% end %>
+
+                                    </ul>
+                                </div>
+                            <span class="next"></span>
+                    </div>
                 </div>
+
 
               </div>
               <div class="col-xs-6 col-md-4">
@@ -227,13 +270,10 @@
 <script>
    var socket = io("127.0.0.1:8000/group");
 
-   socket.emit("heihei",{})
-   socket.on("haha",function(msg){
-    alert("hahahah")
-   })
+
 
 $(document).ready(function() {
-	$('#liquid,#liquid2').liquidcarousel({
+	$('#liquid,#liquid2,#liquid3').liquidcarousel({
 		height: 150,		//the height of the list
 		duration: 100,		//the duration of the animation
 		hidearrows: false	//hide arrows if all of the list items are visible

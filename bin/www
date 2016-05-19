@@ -130,6 +130,7 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
         // 2 con 做陈述
         // 3 pro 做分析
 
+
         //把陈述内容计入数据库
         steps(function(){
             mongo.createIfNotExists("statementLog",this.hold(function(result){
@@ -144,13 +145,40 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
 
             }))
         },function(){
+            //如果是pro方做陈述的话，修改当前处于第几轮
+            if(session.debateLogin.position == 1){
+                mongo.update("debateStatus",{num:session.debateLogin.num},{$inc:{numberOrder:1}},{},this.hold(function(result){
+
+                }))
+            }
+        },function(){
             mongo.find("debateStatus",{num:session.debateLogin.num},{},this.hold(function(result){
                 var status = result[0].status
-                msg.status = (status + 1)%4
-                socket.emit("receiveStatement",msg)
-                socket.broadcast.emit("receiveStatement",msg)
-                socket.emit("DoAnalysis",msg)
-                socket.broadcast.emit("DoAnalysis",msg)
+                msg.numberOrder = result[0].numberOrder
+
+                if(msg.violate == 1){
+                        if(msg.status==0){
+                            status = 2
+                            socket.broadcast.emit("restartFromCon",{})
+                            socket.emit("restartFromCon",{})
+                        }else{
+                            status = 0
+                            socket.broadcast.emit("restartFromPro",{})
+                            socket.emit("restartFromPro",{})
+                        }
+
+
+
+                }else{
+                    msg.status = (status + 1)%4
+                    socket.emit("receiveStatement",msg)
+                    socket.broadcast.emit("receiveStatement",msg)
+                    socket.emit("DoAnalysis",msg)
+                    socket.broadcast.emit("DoAnalysis",msg)
+                }
+
+
+
                 return status;
             }))
         },function(status){
@@ -159,6 +187,7 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
                 console.log(result)
             }))
         })()
+
 
     })
 
@@ -176,23 +205,52 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
 
                 }))
         },function(){
-            mongo.find("debateStatus",{num:1},{},this.hold(function(result){
+            mongo.find("debateStatus",{num:session.debateLogin.num},{},this.hold(function(result){
                 var status = result[0].status
+                msg.numberOrder = result[0].numberOrder
                 msg.status = (status + 1)%4
                 socket.emit("receiveAnalysis",msg)
+                console.log(111111111111111)
+                console.log(msg)
+                // msg is the following...
+                // { _obj: [ { claimTxt: '勉強用の時間が減少しても，学業が疎かにならない', warrant: [Object] } ],
+                //     dissentObj: [ { claimDissnet: '', warrant: [Object] } ],
+                //     fenduanArr: [ 1 ],
+                //     numberOrder: 1,
+                //     status: 2 }
+                //var dissentObj = [{"claimDissent":1,"warrant":[{"warrantDissent":1,"evidenceDissent":[1]}]}]
+                //var _obj =  [{"claimTxt":"勉強用の時間が減少しても，学業が疎かにならない","warrant":[{"warrantTxt":"大切にするから，時間の効率がよくなって，勉強の効果も上がる","evidence":[{"evidenceTxt":"勉強用の時間が少なければ，その時間を大切することになる"}]}]}]
+
                 socket.broadcast.emit("receiveAnalysis",msg)
                 return status;
             }))
 
         },function(status){
             status = (status + 1)%4
-            mongo.update("debateStatus",{num:1},{$set:{status:status}},{},this.hold(function(result){
+            mongo.update("debateStatus",{num:session.debateLogin.num},{$set:{status:status}},{},this.hold(function(result){
                 console.log(result)
             }))
         })()
 
     })
 
+    socket.on("timeLimitViolate",function(){
+                //console.log("session debateLogin is the following....")
+                //console.log(session.debateLogin)
+                //{ username: 'villa', group: 'miyoshi', num: 1, position: 2 }
+        steps(function(){
+            mongo.find("debateStatus",{num:session.debateLogin.num},{},this.hold(function(result){
+                var status = result[0].status
+
+                console.log("the status is the following....")
+                console.log(status)
+
+                socket.emit("disposal",{status:status})
+                //socket.broadcast.emit("disposal",{status:status})
+            }))
+        })()
+
+    })
 
     socket.on('disconnect', function(msg){
 

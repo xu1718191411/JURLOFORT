@@ -182,6 +182,9 @@ analysisResultComesFromOpposiote()
 
 function _submit(){
 
+    //重新规划制限時間
+    initialTimeCount()
+
     //boundaryN = 1
     //这是一个全局变量
     //boundaryN代表.claim的前多少位是異議説明,这里的boundaryN要从后端取数据所以在此以1为例子
@@ -259,6 +262,7 @@ function _submit(){
     console.log(fenduanArr)
 
     socket.emit("makeAnalysis",{_obj:_obj,dissentObj:dissentObj,fenduanArr:fenduanArr})
+
 
 
     }

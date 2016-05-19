@@ -74,7 +74,7 @@ module.exports = {
             }))
 
         },function(){
-            mongo.find("themes",{group:parseInt(req.session.debateLogin.group)},{},this.hold(function(list){
+            mongo.find("themes",{group:req.session.debateLogin.group},{},this.hold(function(list){
                 var theme = list[0];
 
                 mongo.find("debateStatus",{num:theme.num},{},this.hold(function(result){
@@ -120,7 +120,7 @@ module.exports = {
 
         },function(){
 
-            mongo.find("themes",{group:parseInt(req.session.debateLogin.group)},{},this.hold(function(list){
+            mongo.find("themes",{group:req.session.debateLogin.group},{},this.hold(function(list){
 
 
                 for(var i=0;i<list.length;i++){
@@ -131,7 +131,6 @@ module.exports = {
                             }
                         }))
                     })(i,this)
-
                 }
             }))
         },function(){
@@ -143,24 +142,22 @@ module.exports = {
     },
     tmpLoginPostController:function(req,res){
 
-        var members = [{username:"syoui",password:"syoui"},{username:"villa",password:"villa"}]
-        var groups = [{groupname:"miyoshi",members:members},{groupname:"okamoto"},{groupname:"nakagomi"}]
+        var members = [
+            {username:"syoui",password:"syoui",group:"miyoshi"},
+            {username:"villa",password:"villa",group:"miyoshi"}
+            ]
 
+       //var groups = [{groupname:"miyoshi",detail:{name:"三好研究室"}},{groupname:"okamoto",detail:{}},{groupname:"nakagomi",detail:{}}]
 
-
-        console.log(req.body)
 
         var _username = req.body.username;
         var _password = req.body.password;
-        var _group = parseInt(req.body.group)
-
-        var users = groups[_group]["members"] || []
 
         var _isLogin = 0;
-        for(var i=0;i<users.length;i++){
-            if(_username == users[i].username && _password == users[i].password){
+        for(var i=0;i<members.length;i++){
+            if(_username == members[i].username && _password == members[i].password){
                 _isLogin = 1;
-                req.session.debateLogin = {username:_username,password:_password,group:_group}
+                req.session.debateLogin = {username:members[i].username,password:members[i].password,group:members[i].group}
             }
         }
 
