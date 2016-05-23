@@ -857,15 +857,19 @@ socket.on("prepare",function(msg){
         }
 })
 
-
+//开始倒计时
 function startTimeCount(){
 
     // myTimer 全局变量
     myTimer = setInterval(function(){
         var leftTimeSeconds =  parseInt($("#leftTimeSeconds").text()) - 1
 
+
+        //如果时间到了的话
         if(leftTimeSeconds == 0){
+                //执行时间违反函数
                 timeLimitViolate()
+                //初始化倒计时
                 initialTimeCount()
                 return false;
         }
@@ -874,12 +878,13 @@ function startTimeCount(){
     },1000)
 }
 
+//初始化倒计时函数
 function initialTimeCount(){
         clearInterval(myTimer)
         $("#leftTimeSeconds").text(10)
 }
 
-
+//时间违反函数
 function timeLimitViolate(){
     socket.emit("timeLimitViolate",{})
 }
@@ -1314,12 +1319,13 @@ socket.on("disposal",function(msg){
 
 })
 
-
+//Conからただ主張する
 socket.on("restartFromCon",function(msg){
-        
+window.status = msg.status
+showNextStep();
 })
 
-
+//Proからただ主張する
 socket.on("restartFromPro",function(msg){
 
 })

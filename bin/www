@@ -156,15 +156,18 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
                 var status = result[0].status
                 msg.numberOrder = result[0].numberOrder
 
+
+                console.log(111111)
+                console.log(msg)
                 if(msg.violate == 1){
                         if(msg.status==0){
                             status = 2
-                            socket.broadcast.emit("restartFromCon",{})
-                            socket.emit("restartFromCon",{})
+                            socket.broadcast.emit("restartFromCon",{status:status})
+                            socket.emit("restartFromCon",{status:status})
                         }else{
                             status = 0
-                            socket.broadcast.emit("restartFromPro",{})
-                            socket.emit("restartFromPro",{})
+                            socket.broadcast.emit("restartFromPro",{status:status})
+                            socket.emit("restartFromPro",{status:status})
                         }
 
 
@@ -234,10 +237,13 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
 
     })
 
+    //监测到客户端的时间违规时间
     socket.on("timeLimitViolate",function(){
                 //console.log("session debateLogin is the following....")
                 //console.log(session.debateLogin)
                 //{ username: 'villa', group: 'miyoshi', num: 1, position: 2 }
+
+        //查看当前debate的状态从而得知是谁在哪个状态里时间违规的
         steps(function(){
             mongo.find("debateStatus",{num:session.debateLogin.num},{},this.hold(function(result){
                 var status = result[0].status
@@ -245,6 +251,7 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
                 console.log("the status is the following....")
                 console.log(status)
 
+                //再把违规事件发送给客户端并且告诉客户端在debate的哪个状态下产生的时间违规的
                 socket.emit("disposal",{status:status})
                 //socket.broadcast.emit("disposal",{status:status})
             }))
