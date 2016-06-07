@@ -859,11 +859,9 @@ socket.on("prepare",function(msg){
 
 //开始倒计时
 function startTimeCount(){
-
     // myTimer 全局变量
     myTimer = setInterval(function(){
         var leftTimeSeconds =  parseInt($("#leftTimeSeconds").text()) - 1
-
 
         //如果时间到了的话
         if(leftTimeSeconds == 0){
@@ -878,6 +876,10 @@ function startTimeCount(){
     },1000)
 }
 
+function stopTimeCount(){
+    clearInterval(myTimer)
+}
+
 //初始化倒计时函数
 function initialTimeCount(){
         clearInterval(myTimer)
@@ -886,7 +888,23 @@ function initialTimeCount(){
 
 //时间违反函数
 function timeLimitViolate(){
-    socket.emit("timeLimitViolate",{})
+    var position = parseInt($("#tachiba").attr("tachiba"))
+
+    switch(parseInt(window.status)){
+        case 0:
+            position==1?socket.emit("timeLimitViolate",{}):"";
+        break;
+        case 1:
+            position==2?socket.emit("timeLimitViolate",{}):"";
+        break;
+        case 2:
+            position==2?socket.emit("timeLimitViolate",{}):"";
+        break;
+        case 3:
+             position==1?socket.emit("timeLimitViolate",{}):"";
+        break;
+    }
+
 }
 
 
@@ -894,7 +912,11 @@ socket.on("allPrepare",function(msg){
         var status = msg.status
         window.status = parseInt(status);
 
-        startTimeCount()
+        setTimeout(function(){
+            startTimeCount()
+        },2000)
+
+
         if(status == 0){
 
                 $("#nowStatus").text("肯定側意見を述べる")
@@ -922,9 +944,15 @@ socket.on("receiveStatement",function(msg){
     //重新规划制限時間
     initialTimeCount()
     //制限時間スタート
-    startTimeCount()
+    setTimeout(function(){
+        startTimeCount()
+    },2000)
+
 
     window.status = msg.status
+
+    console.log("-------------------")
+    console.log(msg)
 
     if(window.status == 1){
 
@@ -1179,12 +1207,11 @@ socket.on("receiveAnalysis",function(msg){
                 setTimeout(function(){
                 addResultToRightMapBox(msg.fenduanArr)
                 showNextStep();
-
-
                     initialTimeCount()
                     //制限時間スタート
-                    startTimeCount()
-
+                    setTimeout(function(){
+                        startTimeCount()
+                    },2000)
 
                 },3000)
 
@@ -1197,23 +1224,17 @@ socket.on("receiveAnalysis",function(msg){
                 //在此模拟自己的意见经由对方审核同意
                 setTimeout(function(){
                 addResultToRightMapBox(msg.fenduanArr)
-
-
                     initialTimeCount()
                     //制限時間スタート
-                    startTimeCount()
-
+                    setTimeout(function(){
+                        startTimeCount()
+                    },2000)
 
                 },3000)
 
             $("#wait").find("h2").eq(0).text("否定側の意見述べまた意義説明をおまちください")
             $("#wait").show()
-
-
         }
-
-
-
     }
 
     if(window.status == 3){
@@ -1239,7 +1260,10 @@ socket.on("receiveAnalysis",function(msg){
 
                     initialTimeCount()
                     //制限時間スタート
-                    startTimeCount()
+                    setTimeout(function(){
+                        startTimeCount()
+                    },2000)
+
 
                 },3000)
 
@@ -1264,29 +1288,24 @@ socket.on("receiveAnalysis",function(msg){
 
                 initialTimeCount()
                 //制限時間スタート
+                setTimeout(function(){
                 startTimeCount()
+                },2000)
 
                 },3000)
          }
 
     }
 
-
     $("#form1").hide()
-
-
     window.status = msg.status
-
-
-
     return false;
 
 })
 
-
 socket.on("disposal",function(msg){
     var position = parseInt($("#tachiba").attr("tachiba"))
-    var status = msg.status
+    var status = parseInt(msg.status)
 
     //debateStatus status
     // 0 pro 做陈述
@@ -1311,24 +1330,69 @@ socket.on("disposal",function(msg){
             $("#form2").hide()
         break;
         case 3:
-            position==1?swal("時間が切れてしましました"):swal("相手時間違反でした")
-
+            position==1?swal("相手時間違反でした"):swal("時間が切れてしましました")
         break;
     }
-
 
 })
 
 //Conからただ主張する
 socket.on("restartFromCon",function(msg){
 window.status = msg.status
-showNextStep();
+var position = parseInt($("#tachiba").attr("tachiba"))
+
+if(position == 2){
+    showNextStep();
+}
+
+
+addViolateMessageToLeftTop(1);
+
+//重新规划制限時間
+initialTimeCount()
+//制限時間スタート
+setTimeout(function(){
+    startTimeCount()
+},2000)
+
+
 })
 
 //Proからただ主張する
 socket.on("restartFromPro",function(msg){
+window.status = msg.status
+var position = parseInt($("#tachiba").attr("tachiba"))
+
+if(position == 1){
+    showNextStep();
+}
+
+
+addViolateMessageToLeftTop(2);
+
+//重新规划制限時間
+initialTimeCount()
+//制限時間スタート
+startTimeCount()
 
 })
+
+
+
+function addViolateMessageToLeftTop(tachiba){
+     if(tachiba == 1){
+             // 0 pro 做陈述
+            var sampleProState = $("#left").find(".top").eq(0).find(".proState").eq(0).prop('outerHTML');
+            //先在左上角放入異議説明的说明文字
+            $("#left").find(".bottom").eq(0).append(sampleProState)
+            $("#left").find(".bottom").eq(0).find(".proState").eq(-1).find(".alert-link").eq(0).text("肯定側が時間を違反しました")
+        }else{
+            // 2 con 做陈述
+            var sampleConState = $("#left").find(".top").eq(0).find(".conState").eq(0).prop('outerHTML');
+            $("#left").find(".bottom").eq(0).append(sampleConState)
+            $("#left").find(".bottom").eq(0).find(".conState").eq(-1).find(".alert-link").eq(0).text("否定側が時間を違反しました")
+        }
+}
 
 
 </script>
@@ -1368,7 +1432,7 @@ $("#kakusu").click(function(){
 function __submit(){
 
 
-
+    stopTimeCount()
 
 
     var obj = $("#form2").find("#area").find("textarea");
