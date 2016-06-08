@@ -1321,7 +1321,9 @@ socket.on("disposal",function(msg){
             $("#form2").hide()
         break;
         case 1:
-            position==2?swal("時間が切れてしましました"):swal("相手時間違反でした")
+            position==2?swal("あなたが主張分析の時間が切れてしましました"):swal("相手が主張分析の相手時間違反でした");$("#wait").hide()
+            position==2?socket.emit("makeAnalysis",{violate:1}):"";
+            $("#form1").hide()
         break;
         case 2:
             position==2?swal("時間が切れてしましました"):swal("相手時間違反でした")
@@ -1330,7 +1332,9 @@ socket.on("disposal",function(msg){
             $("#form2").hide()
         break;
         case 3:
-            position==1?swal("相手時間違反でした"):swal("時間が切れてしましました")
+            position==1?swal("あなたが主張分析の時間が切れてしましました"):swal("相手が主張分析の相手時間違反でした");$("#wait").hide()
+            position==1?socket.emit("makeAnalysis",{violate:1}):"";
+            $("#form1").hide()
         break;
     }
 

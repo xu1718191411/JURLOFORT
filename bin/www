@@ -189,6 +189,36 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
     })
 
     socket.on("makeAnalysis",function(msg){
+
+        if(msg.violate == 1){
+            steps(function(){
+                mongo.find("debateStatus",{num:session.debateLogin.num},{},this.hold(function(result){
+                    var status = result[0].status
+
+                    if(status == 1){
+                        status = 2
+                        socket.broadcast.emit("restartFromCon",{status:status})
+                        socket.emit("restartFromCon",{status:status})
+                    }
+
+                    if(status == 3){
+                        status = 0
+                        socket.broadcast.emit("restartFromPro",{status:status})
+                        socket.emit("restartFromPro",{status:status})
+                    }
+
+                    return status;
+                }))
+            },function(status){
+                mongo.update("debateStatus",{num:session.debateLogin.num},{$set:{status:status}},{},this.hold(function(result){
+                    console.log(result)
+                }))
+            })()
+
+
+            return false;
+        }
+
         steps(function(){
                mongo.createIfNotExists("analysisLog",this.hold(function(result){
 
