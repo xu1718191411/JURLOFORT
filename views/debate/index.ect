@@ -50,6 +50,8 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">設定<span class="caret"></span></a>
                             <ul class="dropdown-menu">
+                                <li><a href="#">テーマ管理</a></li>
+                                <li role="separator" class="divider"></li>
                                 <li><a href="#">中断申請</a></li>
                                 <li><a href="#"></a></li>
                                 <li><a href="#">システム設定</a></li>
@@ -84,7 +86,7 @@
            <p>今の段階:<span id="nowStatus">相手に意見の分析</span></p>
 
            <p>ルール:5回終了.第<span id="numberOrder">0</span>回.あと<span id="leftNum">3</span>回</p>
-           <p>制限時間<span id="leftTimeSeconds">10</span>秒</p>
+           <p>制限時間<span id="leftTimeSeconds">30</span>秒</p>
            <p>肯定:<span id="proUsername"></span>
 
            <span id="proUserStatus">
@@ -189,7 +191,7 @@
         </div>
 
         <div id="right" class="col-md-6">
-        <div>
+        <div id="rightContainer">
 
             <div class="row">
                 <div class="col-md-2">
@@ -578,6 +580,59 @@
 
 <div id="copy" style="display:none">
 
+    <div class="row resultVPro">
+        <div class="row">
+
+            <div class="col-md-2">
+                <div class="dmcl"></div>
+            </div>
+
+            <div style="margin-top: 20px;" class="col-md-8">
+
+                <div class="panel panel-info ">
+
+                    <div class="panel-heading">肯定側が分析の時間を違反しました</div>
+                    <div class="panel-body">
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-2" >
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="row resultVCon">
+        <div class="row">
+
+            <div class="col-md-2">
+                <div class="dmcl"></div>
+            </div>
+
+            <div style="margin-top: 20px;" class="col-md-8">
+
+                <div class="panel panel-success ">
+
+                    <div class="panel-heading">反対側が分析の時間を違反しました</div>
+                    <div class="panel-body">
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-2" >
+
+            </div>
+
+        </div>
+    </div>
+
     <div class="row resultDPro">
         <div class="row">
 
@@ -883,7 +938,7 @@ function stopTimeCount(){
 //初始化倒计时函数
 function initialTimeCount(){
         clearInterval(myTimer)
-        $("#leftTimeSeconds").text(10)
+        $("#leftTimeSeconds").text(30)
 }
 
 //时间违反函数
@@ -1313,6 +1368,7 @@ socket.on("disposal",function(msg){
     // 2 con 做陈述
     // 3 pro 做分析
 
+
     switch(status){
         case 0:
             position==1?swal("時間が切れてしましました"):swal("相手時間違反でした")
@@ -1342,6 +1398,8 @@ socket.on("disposal",function(msg){
 
 //Conからただ主張する
 socket.on("restartFromCon",function(msg){
+//清除之前分析时提交的质疑
+dissentObj = []
 window.status = msg.status
 var position = parseInt($("#tachiba").attr("tachiba"))
 
@@ -1349,8 +1407,15 @@ if(position == 2){
     showNextStep();
 }
 
+if(msg.preStatus == 0){
+    addViolateMessageToLeftTop(1);
+}else if(msg.preStatus == 1){
+    addViolateMessageToRightTop(2)
+}else{
 
-addViolateMessageToLeftTop(1);
+}
+
+
 
 //重新规划制限時間
 initialTimeCount()
@@ -1364,6 +1429,9 @@ setTimeout(function(){
 
 //Proからただ主張する
 socket.on("restartFromPro",function(msg){
+
+//清除之前分析时提交的质疑
+dissentObj = []
 window.status = msg.status
 var position = parseInt($("#tachiba").attr("tachiba"))
 
@@ -1371,8 +1439,15 @@ if(position == 1){
     showNextStep();
 }
 
+if(msg.preStatus == 2){
+    addViolateMessageToLeftTop(2);
+}else if(msg.preStatus == 3){
+    addViolateMessageToRightTop(1);
+}else{
 
-addViolateMessageToLeftTop(2);
+}
+
+
 
 //重新规划制限時間
 initialTimeCount()
@@ -1396,6 +1471,15 @@ function addViolateMessageToLeftTop(tachiba){
             $("#left").find(".bottom").eq(0).append(sampleConState)
             $("#left").find(".bottom").eq(0).find(".conState").eq(-1).find(".alert-link").eq(0).text("否定側が時間を違反しました")
         }
+}
+
+
+function addViolateMessageToRightTop(tachiba){
+    if(tachiba == 1){
+        $($("#right").find("#rightContainer")[0]).append($($("#copy").find(".resultVPro")[0]).prop("outerHTML"))
+    }else{
+        $($("#right").find("#rightContainer")[0]).append($($("#copy").find(".resultVCon")[0]).prop("outerHTML"))
+    }
 }
 
 

@@ -22,7 +22,7 @@
 
     <script src="/javascripts/sweetalert.min.js"></script>
 
-
+    <script src="/javascripts/jquery.validate.js"></script>
     <script src="/javascripts/jquery.liquidcarousel.js"></script>
 </head>
 
@@ -36,52 +36,15 @@
 
 <body>
 
+
+
+
+
 <div class="container">
 
-        <div class="row" id="top">
-            <div class="row">
-            <nav class="navbar navbar-default">
-                <div class="container-fluid">
-                    <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="#">こんにちわ</a>
-                    </div>
-
-                    <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav">
-                            <li><a href="#">討論室<span class="sr-only">(current)</span></a></li>
-                            <li  class="active"><a href="#">グループページ</a></li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">設定<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">中断申請</a></li>
-                                    <li><a href="#"></a></li>
-                                    <li><a href="#">システム設定</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="#">投降</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="#">視聴者誘う</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-
-                          <ul class="nav navbar-nav navbar-right">
-                                <li><a href="#">ようこそ:<%= @userInformation.username%></a></li>
-                              </ul>
+        <% include 'debate/top.ect', { userInformation:@userInformation} %>
 
 
-                    </div><!-- /.navbar-collapse -->
-                </div><!-- /.container-fluid -->
-            </nav>
-            </div>
-        </div>
 
         <div class="row">
             <!-- Stack the columns on mobile by making one full-width and the other half-width -->
@@ -91,33 +54,25 @@
 
 
                 <div class="row">
-                <div class="alert alert-info" role="alert" style="margin-bottom: 8px;">現在空いているルーム</div>
+                <div class="alert alert-info" role="alert" style="margin-bottom: 8px;">テーマ一覧</div>
                         <div id="liquid" class="liquid">
                             <span class="previous"></span>
                             <div class="wrapper">
                                 <ul>
 
-                                    <% for theme in @themes : %>
-                                       <li>
+
+
+                                     <% for theme in @themes : %>
+
+                                       <li style="margin-left:10px;">
                                            <div class="row">
                                                <div class="thumbnail">
-                                                   <h4 style="height:85px;">テーマ:<%=theme.theme%></h4>
-                                                   <p class="themes" num="<%=theme.num%>">
+                                                   <h5 style="height:40px;">テーマ:<%=theme.theme%></h5>
+                                                   <div class="themes" num="<%=theme.num%>">
+                                                        <div style="width:100%;margin-top:3px;"  onclick="return join(1,this)" class="btn btn-info" num="<%=theme.num%>">新規作成</div>
+                                                        <div style="width:100%;margin-top:3px;" href="#" onclick="join(2,this)" num="<%=theme.num%>" class="btn btn-success" >新規作成</div>
 
-                                                    <% if theme?.pro : %>
-
-                                                        <a href="#" disabled onclick="return join(1,this)" class="btn btn-info" num="<%=theme.num%>" role="button">参加</a>
-                                                    <% else: %>
-                                                        <a href="#"  onclick="return join(1,this)" class="btn btn-info" num="<%=theme.num%>" role="button">参加</a>
-                                                    <% end %>
-
-                                                     <% if theme?.con : %>
-                                                        <a href="#" disabled  onclick="join(2,this)" num="<%=theme.num%>" class="btn btn-success" role="button">参加</a>
-                                                    <% else: %>
-                                                        <a href="#" onclick="join(2,this)" num="<%=theme.num%>" class="btn btn-success" role="button">参加</a>
-                                                    <% end %>
-
-                                                   </p>
+                                                   </div>
                                                </div>
                                            </div>
                                        </li>
@@ -133,26 +88,35 @@
 
 
                 <div class="row" style="margin-top:6px">
-                    <div class="alert alert-info" style="margin-bottom: 8px;" role="alert">討論中のルーム</div>
+                    <div class="alert alert-info" style="margin-bottom: 8px;" role="alert">ルーム一覧</div>
 
                     <div id="liquid2" class="liquid">
                             <span class="previous"></span>
                                 <div class="wrapper">
                                     <ul>
-
                                         <% for theme in @debatingList : %>
-                                           <li>
+
+                                          <li style="margin-left:10px;">
                                                <div class="row">
                                                    <div class="thumbnail">
-                                                       <h4>テーマ:<%=theme.theme%></h4>
-                                                       <p class="themes" num="<%=theme.num%>">
-
-                                                            <span class="btn btn-info" role="btn"><%= theme.pro %></span>
-
-                                                            <span class="btn btn-success" role="btn"><%= theme.con %></span>
+                                                       <h5 style="height:40px">テーマ:<%=theme.theme%></h5>
+                                                       <div class="themes" num="<%=theme.num%>">
 
 
-                                                       </p>
+                                                <% if theme.pro : %>
+                                                   <div style="width:100%;margin-top:3px;" disabled class="btn btn-info" num="<%=theme.num%>"><%=theme.pro%></div>
+                                                   <% else : %>
+                                                    <div style="width:100%;margin-top:3px;"  onclick="return participate(1,this)" class="btn btn-info" rNum="<%=theme.rNum%>" num="<%=theme.num%>">参加</div>
+                                                <% end %>
+
+
+                                                 <% if theme.con : %>
+                                                   <div style="width:100%;margin-top:3px;" disabled class="btn btn-success" num="<%=theme.num%>"><%=theme.con%></div>
+                                                   <% else : %>
+                                                    <div style="width:100%;margin-top:3px;"  onclick="return participate(2,this)" class="btn btn-success" num="<%=theme.num%>" rNum="<%=theme.rNum%>" >参加</div>
+                                                <% end %>
+
+                                                     </div>
                                                    </div>
                                                </div>
                                            </li>
@@ -167,7 +131,7 @@
 
 
                     <div class="row" style="margin-top:6px">
-                    <div class="alert alert-info" style="margin-bottom: 8px;" role="alert">討論終了のルーム</div>
+                    <div class="alert alert-info" style="margin-bottom: 8px;" role="alert">過去の討論一覧</div>
 
                     <div id="liquid3" class="liquid">
                             <span class="previous"></span>
@@ -270,15 +234,75 @@
 <script>
    var socket = io("127.0.0.1:8000/group");
 
+socket.on("loadThemes",function(result){
+    $("#table").html("")
+    var result = result.result
+        $("#table").append("<tr><td>テーマ</td><td>操作</td></tr>")
+    for(var i=0;i<result.length;i++){
+        $("#table").append("<tr><td>"+result[i].theme+"</td><td><button onclick='_remove(\""+result[i]._id+"\")' class='btn btn-default btn-sm glyphicon glyphicon-remove' aria-hidden='true'>削除</button></td></tr>")
+    }
 
+})
+
+socket.on("insertThemeErr",function(jsonData){
+        swal(jsonData.msg)
+})
+
+socket.on("insertThemeSuccess",function(jsonData){
+        swal(jsonData.msg)
+        $('#themeController').modal('hide')
+})
 
 $(document).ready(function() {
+
+    $('#liquidTest').liquidcarousel({height:160});
+
+
 	$('#liquid,#liquid2,#liquid3').liquidcarousel({
-		height: 150,		//the height of the list
-		duration: 100,		//the duration of the animation
-		hidearrows: false	//hide arrows if all of the list items are visible
+		height: 140,		//the height of the list
+		duration: 300,		//the duration of the animation
+		hidearrows: true	//hide arrows if all of the list items are visible
 	});
+
+
 });
+
+
+ var validator = $("#form").validate({
+        			rules: {
+        				themeTitle: {
+        					required: true,
+        					minlength: 10
+        				}
+        			},
+        			messages: {
+                        themeTitle: {
+                            required: "テーマのタイトルを入力してください"
+                        }
+                    }
+        		});
+
+function submits(){
+        if(validator.form()){
+                        _request();
+                        return false;
+        }
+
+}
+
+function _request(){
+    var themeTitle = $("#themeTitle").val()
+    var themeDesc = $("#themeDesc").val()
+
+    socket.emit("insertTheme",{themeTitle:themeTitle,themeDesc:themeDesc});
+
+    $("#themeTitle").val("")
+    $("#themeDesc").val("")
+}
+
+function _remove(_id){
+    socket.emit("removeTheme",{_id:_id})
+}
 
 //点击参加然后进入辩论页面
 function join(n,that){
@@ -287,9 +311,27 @@ function join(n,that){
     return false;
 }
 
+
+//点击参加然后进入辩论页面
+function participate(n,that){
+
+    socket.emit("participate",{num:parseInt($(that).attr("num")),position:n,rNum:parseInt($(that).attr("rNum"))})
+           // location = "/debate"
+    return false;
+}
+
 socket.on("joined",function(result){
     console.log("joined result is the following....")
-    forbidJointButton(result)
+    //forbidJointButton(result)
+})
+
+socket.on("reNewRoomList",function(result){
+    console.log("room list is the following...");
+})
+
+socket.on("EnterIntoRoom",function(){
+    location = "/debate"
+
 })
 
 function forbidJointButton(obj){
@@ -314,6 +356,13 @@ function forbidJointButton(obj){
 
     }
 }
+
+
+$('#themeController').on('show.bs.modal', function (e) {
+        socket.emit("loadThemes",{})
+})
+
+
 </script>
 
 </html>

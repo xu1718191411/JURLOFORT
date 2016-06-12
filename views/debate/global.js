@@ -428,6 +428,7 @@ function test2(_start,_end){
 
 function showNextStep(){
 
+
     $("#wait").hide()
     //var dissentObj = [{"claimDissent":1,"warrant":[{"warrantDissent":1,"evidenceDissent":[1]}]}]
 

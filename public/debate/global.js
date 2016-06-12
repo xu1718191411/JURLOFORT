@@ -332,7 +332,7 @@ function test1(_start,_end){
         var keyword = "Pro"
     }
 
-    $($("#right").children("div")[0]).append($($("#copy").find(".resultD"+keyword)[0]).prop("outerHTML"))
+    $($("#right").find("#rightContainer")[0]).append($($("#copy").find(".resultD"+keyword)[0]).prop("outerHTML"))
     for(var i=_start;i<_end;i++){
     //再从copy的盒子里面取出放入claim的框架
     var claimKJ = $("#copy").find(".resultD"+keyword).eq(0).find(".resultD"+keyword+"A2").eq(0).children(".row").eq(0)
@@ -386,7 +386,7 @@ function test2(_start,_end){
         var keyword = "Pro"
     }
 
-    $($("#right").children("div")[0]).append($($("#copy").find(".result"+keyword)[0]).prop("outerHTML"))
+    $($("#right").find("#rightContainer")[0]).append($($("#copy").find(".result"+keyword)[0]).prop("outerHTML"))
 
     for(var i=_start;i<_end;i++){
 
@@ -436,6 +436,7 @@ function test2(_start,_end){
     }
 
 function showNextStep(){
+
 
     $("#wait").hide()
     //var dissentObj = [{"claimDissent":1,"warrant":[{"warrantDissent":1,"evidenceDissent":[1]}]}]

@@ -15,4 +15,5 @@ router.post('/tmpLoginPost',debateController.tmpLoginPostController);
 
 router.post('/preparePost',debateController.preparePostController);
 
+router.get('/logout',debateController.logoutController)
 module.exports = router;
