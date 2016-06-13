@@ -422,7 +422,7 @@
                                 <div class="col-sm-10">
                                     <div class="input-group">
                                         <span class="input-group-addon">主張: </span>
-                                        <input type="text" class="form-control claimTxt" value="勉強用の時間が減少しても，学業が疎かにならない" placeholder="">
+                                        <input type="text" class="form-control claimTxt" value="" placeholder="">
                                         <span class="input-group-addon"><input value="1" type="checkbox"> 異議つけ</span>
                                     </div>
                                 </div>
@@ -441,7 +441,7 @@
                                     <div class="col-sm-9 col-sm-offset-0">
                                         <div class="input-group">
                                             <span class="input-group-addon">論拠: </span>
-                                            <input type="text" class="form-control warrantTxt" value="大切にするから，時間の効率がよくなって，勉強の効果も上がる" placeholder="">
+                                            <input type="text" class="form-control warrantTxt" value="" placeholder="">
                                             <span class="input-group-addon"><input value="1" type="checkbox"> 異議つけ</span>
                                         </div>
                                     </div>
@@ -461,7 +461,7 @@
                                         <div class="col-sm-8 col-sm-offset-0">
                                             <div class="input-group">
                                                 <span class="input-group-addon">根拠:</span>
-                                                <input type="text" class="form-control evidenceTxt" value="勉強用の時間が少なければ，その時間を大切することになる" placeholder="">
+                                                <input type="text" class="form-control evidenceTxt" value="" placeholder="">
                                                 <span class="input-group-addon"><input value="1" type="checkbox"> 異議つけ</span>
                                             </div>
                                         </div>
@@ -1105,6 +1105,7 @@ socket.on("DoAnalysis",function(msg){
     }
 
 
+    $(".claimTxt,.warrantTxt,.evidenceTxt").val("");
 
 })
 
@@ -1309,7 +1310,8 @@ socket.on("receiveAnalysis",function(msg){
                 addResultToRightMapBox(msg.fenduanArr)
 
                 if(msg.numberOrder ==5){
-                    alert("finish");
+                    swal("討論終了");
+                    stopTimeCount()
                     return;
                 }
 
@@ -1335,7 +1337,8 @@ socket.on("receiveAnalysis",function(msg){
                 addResultToRightMapBox(msg.fenduanArr)
 
                 if(msg.numberOrder ==5){
-                    alert("finish");
+                     swal("討論終了");
+                    stopTimeCount()
                     return;
                 }
 

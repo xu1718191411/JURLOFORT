@@ -180,7 +180,30 @@ function analysisResultComesFromOpposiote(){
 
 analysisResultComesFromOpposiote()
 
+function checkEmptyBox(){
+    var claims = $(".down").find(".claimTxt")
+    var warrants = $(".down").find(".warrantTxt")
+    var evidences = $(".down").find(".evidenceTxt")
+
+
+    for(var i=0;i<claims.length;i++){
+        if(!claims.eq(i).val()){swal("また入力していない主張があります");return false;}
+    }
+
+    for(var i=0;i<warrants.length;i++){
+        if(!warrants.eq(i).val()){swal("また入力していない論拠があります");return false;}
+    }
+
+    for(var i=0;i<evidences.length;i++){
+        if(!evidences.eq(i).val()){swal("また入力していない根拠があります");return false;}
+    }
+
+    return true
+}
+
 function _submit(){
+
+    if(!checkEmptyBox()) return false;
 
     //重新规划制限時間
     initialTimeCount()

@@ -295,6 +295,7 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
         var username = session.debateLogin.username
         var group = session.debateLogin.group
         var num = session.debateLogin.num
+        var rNum = session.debateLogin.rNum
         var position = session.debateLogin.position
 
 
@@ -310,20 +311,42 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
                         mongo.update("userStatus",{username:username,num:num,rNum:session.debateLogin.rNum},{$set:{status:0},$unset:{num:1}},this.hold(function(result){
 
                         }))
-
-                        if(position==1){
-                            var update = {$unset:{pro:1,proPrepare:1}}
-                        }else{
-                            var update = {$unset:{con:1,conPrepare:1}}
-                        }
-
-                        mongo.update("debateStatus",{num:num},update,{},this.hold(function(result){
-                                delete session.debateLogin.num
-                                delete session.debateLogin.position
-                                session.save()
-                        }))
+                    }else{
+                        this.terminate()
                     }
             }))
+        },function(){
+            mongo.find("debateStatus",{num:num,rNum:rNum},{},this.hold(function(result){
+                var pro = result[0].pro
+                var con = result[0].con
+                if((position == 1 && !con) || (position == 2 && !pro)){
+                    mongo.remove("debateStatus",{num:num,rNum:rNum},{},this.hold(function(result){
+                        delete session.debateLogin.num
+                        delete session.debateLogin.position
+                        delete session.debateLogin.rNum
+                        session.save()
+                        this.terminate()
+                    }))
+                }
+
+
+            }))
+        },function(){
+
+            if(position==1){
+                var update = {$unset:{pro:1,proPrepare:1}}
+            }else{
+                var update = {$unset:{con:1,conPrepare:1}}
+            }
+
+            mongo.update("debateStatus",{num:num,rNum:rNum},update,{},this.hold(function(result){
+                delete session.debateLogin.num
+                delete session.debateLogin.position
+                delete session.debateLogin.rNum
+                session.save()
+            }))
+
+
         })()
 
         //if(!session){
