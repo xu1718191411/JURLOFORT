@@ -425,6 +425,9 @@ sessionSockets.of("/group").on('connection', function (err, socket, session) {
     })
 
     socket.on("insertTheme",function(jsonData){
+
+
+
             if(session.debateLogin.type != 0){
                 socket.emit("insertThemeErr",{err:1,msg:"権限がなし"})
             }

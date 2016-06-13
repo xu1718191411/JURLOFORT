@@ -232,7 +232,7 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-   var socket = io("127.0.0.1:8000/group");
+   var socket = io(window.location.host+"/group");
 
 socket.on("loadThemes",function(result){
     $("#table").html("")
