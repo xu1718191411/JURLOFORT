@@ -1109,6 +1109,9 @@ socket.on("DoAnalysis",function(msg){
 
     $(".claimTxt,.warrantTxt,.evidenceTxt").val("");
 
+    //显示对方传来的消息
+    $("#proAnalysis").html("receive from opposite site")
+
 })
 
 
@@ -1260,6 +1263,11 @@ socket.on("receiveAnalysis",function(msg){
 
 
     $("#proAnalysis").html(_str);
+
+    //现在处于等待确认阶段，停止倒计时
+
+    initialTimeCount()
+
 
     if(window.status == 1){
 
@@ -1622,6 +1630,7 @@ function __submit(){
 
 function dealWithAnalysisResult(n,that){
     $(that).attr("disabled","disabled")
+    $(that).siblings("button").attr("disabled","disabled")
     if(n<=1){
         //認証
         socket.emit("dealWithAnalysisResult",{res:1})
