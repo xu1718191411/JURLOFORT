@@ -171,15 +171,30 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
                     return status-1;
                 }else{
                     msg.status = (status + 1)%4
-                    socket.emit("receiveStatement",msg)
-                    socket.broadcast.emit("receiveStatement",msg)
-                    socket.emit("DoAnalysis",msg)
-                    socket.broadcast.emit("DoAnalysis",msg)
-                    return status;
+                    this.step(
+                    function(){
+                        mongo.createIfNotExists("LatestAnalysisMsg",this.hold(function(){
+
+                        }))
+                    },function(){
+                        mongo.remove("LatestStatementMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{},this.hold(function(){
+
+                        }))
+                    },function(){
+                            mongo.insert("LatestStatementMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum,msg:msg},{},this.hold(function(){
+                                socket.emit("receiveStatement",msg)
+                                socket.broadcast.emit("receiveStatement",msg)
+                                socket.emit("DoAnalysis",msg)
+                                socket.broadcast.emit("DoAnalysis",msg)
+                                return status;
+                            }))
+                    })
+
                 }
 
             }))
         },function(status){
+            console.log(status)
             status = (status + 1)%4
             mongo.update("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{$set:{status:status}},{},this.hold(function(result){
                 console.log(result)
@@ -236,7 +251,8 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
             mongo.find("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{},this.hold(function(result){
                 var status = result[0].status
                 msg.numberOrder = result[0].numberOrder
-                msg.status = (status + 1)%4
+                //msg.status = (status + 1)%4
+                msg.status = status;
                 socket.emit("receiveAnalysis",msg)
                 // msg is the following...
                 // { _obj: [ { claimTxt: '勉強用の時間が減少しても，学業が疎かにならない', warrant: [Object] } ],
@@ -252,9 +268,21 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
             }))
 
         },function(status){
-            status = (status + 1)%4
-            mongo.update("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{$set:{status:status}},{},this.hold(function(result){
-                console.log(result)
+            //status = (status + 1)%4
+            //mongo.update("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{$set:{status:status}},{},this.hold(function(result){
+            //    console.log(result)
+            //}))
+        },function(){
+            mongo.createIfNotExists("LatestAnalysisMsg",this.hold(function(_res){
+
+            }))
+        },function(){
+            mongo.remove("LatestAnalysisMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{},this.hold(function(_res){
+
+            }))
+        },function(){
+            mongo.insert("LatestAnalysisMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum,msg:msg},{},this.hold(function(){
+
             }))
         })()
 
@@ -280,6 +308,51 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
             }))
         })()
 
+    })
+
+    socket.on("dealWithAnalysisResult",function(msg){
+        if(msg.res == 1){
+            steps(function(){
+                mongo.find("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{},this.hold(function(_result){
+                    return _result[0].status
+                }))
+            },function(status){
+                if(status !=1 && status !=3){
+                    this.terminate()
+                }
+                var status = (status+1)%4
+                mongo.update("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{$set:{status:status}},{},this.hold(function(result){
+                    console.log(result)
+                    return status
+                }))
+            },function(status){
+                mongo.find("LatestAnalysisMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{},function(_result){
+                        if(_result[0].msg){
+                            var _obj = _result[0].msg
+                            console.log(status)
+                            _obj.status = status;
+                            //_result[0].msg.status = status
+                            socket.emit("confirmCompleted",_obj)
+                            socket.broadcast.emit("confirmCompleted",_obj)
+                        }
+                })
+            })()
+        }
+
+
+        if(msg.res == 2){
+
+            steps(
+            function(){
+                mongo.find("LatestStatementMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{},function(_res){
+                    socket.emit("DoAnalysis",_res[0].msg)
+                    socket.broadcast.emit("DoAnalysis",_res[0].msg)
+                })
+            })()
+
+
+
+        }
     })
 
 
@@ -466,7 +539,6 @@ sessionSockets.of("/group").on('connection', function (err, socket, session) {
 
     socket.on("removeTheme",function(jsonData){
         var _id = jsonData._id
-
         mongo.remove("themes",{_id:new mongodb.ObjectID(_id)},{},function(result){
             mongo.find("themes",{group:session.debateLogin.group},{},function(result){
                 socket.emit("loadThemes",{result:result})

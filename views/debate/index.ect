@@ -518,7 +518,7 @@
     </div>
     <br/>
     <div class="row" id="wait" style="display:none">
-        <h2 class="alert alert-default text-center" role="alert">相手の確認をお待ちください</h2>
+        <h2 class="alert alert-default text-center" role="alert" id="waitTxt">相手の確認をお待ちください</h2>
         <div class="cssload-loading">
             <div class="cssload-finger cssload-finger-1">
                 <div class="cssload-finger-item">
@@ -1004,6 +1004,8 @@ socket.on("receiveStatement",function(msg){
     },2000)
 
 
+    $("#proAnalysis").html("receive from opposite site")
+
     window.status = msg.status
 
     console.log("-------------------")
@@ -1243,6 +1245,17 @@ socket.on("receiveAnalysis",function(msg){
     }
 
     _str += '</div><!-- claimSample -->'
+
+    if((window.status == 1 && $("#tachiba").attr("tachiba")==1) || (window.status == 3 && $("#tachiba").attr("tachiba") == 2)){
+        _str += '<div class="row">'+
+            '<div style="width:200px;margin:0 auto">'+
+            '<button type="button" class="btn btn-primary btn-lg" onclick="dealWithAnalysisResult(1,this)">認証</button>'+
+            '<button type="button" class="btn btn-default btn-lg" onclick="dealWithAnalysisResult(2,this)">拒否</button>'+
+            '</div>'+
+            '</div>'
+    }
+
+
     }
 
 
@@ -1256,39 +1269,42 @@ socket.on("receiveAnalysis",function(msg){
 
             //如果是con -->右上角显示 上方显示结果 等待pro确认 之后显示statement文本输入框
 
-            $("#wait").find("h2").eq(0).text("肯定側の確認をお待ちください")
+            //$("#wait").find("h2").eq(0).text("肯定側の確認をお待ちください")
+
+            $("#waitTxt").text("肯定側の確認をお待ちください")
             $("#wait").show()
 
-                //在此模拟自己的意见经由对方审核同意
-                setTimeout(function(){
-                addResultToRightMapBox(msg.fenduanArr)
-                showNextStep();
-                    initialTimeCount()
-                    //制限時間スタート
-                    setTimeout(function(){
-                        startTimeCount()
-                    },2000)
-
-                },3000)
+       //         在此模拟自己的意见经由对方审核同意
+       //         setTimeout(function(){
+       //         addResultToRightMapBox(msg.fenduanArr)
+       //         showNextStep();
+       //             initialTimeCount()
+       //             //制限時間スタート
+       //             setTimeout(function(){
+       //                 startTimeCount()
+       //             },2000)
+       //         },3000)
 
         }else{
             //如果是pro -->右上角显示 上方显示结果 等待自己确认后 显示等待con statement
 
-            $("#wait").find("h2").eq(0).text("結果を確認してください")
+            //$("#wait").find("h2").eq(0).text("結果を確認してください")
+            $("#waitTxt").text("結果を確認してください")
             $("#wait").show()
 
-                //在此模拟自己的意见经由对方审核同意
-                setTimeout(function(){
-                addResultToRightMapBox(msg.fenduanArr)
-                    initialTimeCount()
-                    //制限時間スタート
-                    setTimeout(function(){
-                        startTimeCount()
-                    },2000)
+            //      在此模拟自己的意见经由对方审核同意
+            //    setTimeout(function(){
+            //    addResultToRightMapBox(msg.fenduanArr)
+            //        initialTimeCount()
+            //        //制限時間スタート
+            //        setTimeout(function(){
+            //            startTimeCount()
+            //        },2000)
+            //      $("#wait").find("h2").eq(0).text("否定側の意見述べまた意義説明をおまちください")
+            //       $("#waitTxt").text("否定側の意見述べまた意義説明をおまちください")
+            //    },3000)
 
-                },3000)
 
-            $("#wait").find("h2").eq(0).text("否定側の意見述べまた意義説明をおまちください")
             $("#wait").show()
         }
     }
@@ -1302,55 +1318,51 @@ socket.on("receiveAnalysis",function(msg){
          if($("#tachiba").attr("tachiba") == 2){
 
             //如果是con -->右上角显示 上方显示结果 等待自己确认后 显示等待pro statement
-            $("#wait").find("h2").eq(0).text("結果を確認してください")
+            //$("#wait").find("h2").eq(0).text("結果を確認してください")
+            $("#waitTxt").text("結果を確認してください")
             $("#wait").show()
 
                 //在此模拟自己的意见经由对方审核同意
-                setTimeout(function(){
-                addResultToRightMapBox(msg.fenduanArr)
-
-                if(msg.numberOrder ==5){
-                    swal("討論終了");
-                    stopTimeCount()
-                    return;
-                }
-
-                    initialTimeCount()
+//                setTimeout(function(){
+//                addResultToRightMapBox(msg.fenduanArr)
+//                if(msg.numberOrder ==5){
+//                    swal("討論終了");
+//                    stopTimeCount()
+//                    return;
+//                }
+//                    initialTimeCount()
                     //制限時間スタート
-                    setTimeout(function(){
-                        startTimeCount()
-                    },2000)
+//                    setTimeout(function(){
+//                        startTimeCount()
+//                    },2000)
+                    //$("#wait").find("h2").eq(0).text("肯定側の意見述べまた意義説明をおまちください")
+//                    $("#waitTxt").text("肯定側の意見述べまた意義説明をおまちください")
+//                },3000)
 
 
-                },3000)
-
-            $("#wait").find("h2").eq(0).text("肯定側の意見述べまた意義説明をおまちください")
             $("#wait").show()
 
          }else{
             //如果是pro -->右上角显示 上方显示结果 等待对方确认后 之后显示statement文本输入框
-            $("#wait").find("h2").eq(0).text("否定側の確認をお待ちください")
+            //$("#wait").find("h2").eq(0).text("否定側の確認をお待ちください")
+            $("#waitTxt").text("否定側の確認をお待ちください")
             $("#wait").show()
 
                 //在此模拟自己的意见经由对方审核同意
-                setTimeout(function(){
-                addResultToRightMapBox(msg.fenduanArr)
-
-                if(msg.numberOrder ==5){
-                     swal("討論終了");
-                    stopTimeCount()
-                    return;
-                }
-
-                showNextStep();
-
-                initialTimeCount()
-                //制限時間スタート
-                setTimeout(function(){
-                startTimeCount()
-                },2000)
-
-                },3000)
+//                setTimeout(function(){
+//                addResultToRightMapBox(msg.fenduanArr)
+//                if(msg.numberOrder ==5){
+//                     swal("討論終了");
+//                    stopTimeCount()
+//                    return;
+//                }
+//                showNextStep();
+//                initialTimeCount()
+//                //制限時間スタート
+//                setTimeout(function(){
+//                startTimeCount()
+//                },2000)
+//                },3000)
          }
 
     }
@@ -1460,6 +1472,71 @@ startTimeCount()
 })
 
 
+socket.on("confirmCompleted",function(msg){
+    _obj = msg._obj
+    dissentObj = msg.dissentObj
+    window.status = msg.status
+
+    if(window.status == 2){
+        if(parseInt($("#tachiba").attr("tachiba")) == 2){
+                addResultToRightMapBox(msg.fenduanArr)
+                showNextStep();
+                    initialTimeCount()
+                    //制限時間スタート
+                    setTimeout(function(){
+                        startTimeCount()
+                    },2000)
+        }
+
+        if(parseInt($("#tachiba").attr("tachiba")) == 1){
+                addResultToRightMapBox(msg.fenduanArr)
+                    initialTimeCount()
+                    //制限時間スタート
+                    setTimeout(function(){
+                        startTimeCount()
+                    },2000)
+                  //$("#wait").find("h2").eq(0).text("否定側の意見述べまた意義説明をおまちください")
+                   $("#waitTxt").text("否定側の意見述べまた意義説明をおまちください")
+        }
+
+    }
+
+
+    if(window.status == 0){
+        if(parseInt($("#tachiba").attr("tachiba")) == 2){
+                addResultToRightMapBox(msg.fenduanArr)
+                if(msg.numberOrder ==5){
+                    swal("討論終了");
+                    stopTimeCount()
+                    return;
+                }
+                    initialTimeCount()
+                    //制限時間スタート
+                    setTimeout(function(){
+                        startTimeCount()
+                    },2000)
+                    //$("#wait").find("h2").eq(0).text("肯定側の意見述べまた意義説明をおまちください")
+                    $("#waitTxt").text("肯定側の意見述べまた意義説明をおまちください")
+        }
+
+        if(parseInt($("#tachiba").attr("tachiba")) == 1){
+                addResultToRightMapBox(msg.fenduanArr)
+                if(msg.numberOrder ==5){
+                     swal("討論終了");
+                    stopTimeCount()
+                    return;
+                }
+                showNextStep();
+                initialTimeCount()
+                //制限時間スタート
+                setTimeout(function(){
+                startTimeCount()
+                },2000)
+        }
+
+    }
+
+})
 
 function addViolateMessageToLeftTop(tachiba){
      if(tachiba == 1){
@@ -1524,7 +1601,7 @@ function __submit(){
 
 
     stopTimeCount()
-
+    $("#proAnalysis").html("")
 
     var obj = $("#form2").find("#area").find("textarea");
 
@@ -1542,6 +1619,17 @@ function __submit(){
     return false;
 }
 
+
+function dealWithAnalysisResult(n,that){
+    $(that).attr("disabled","disabled")
+    if(n<=1){
+        //認証
+        socket.emit("dealWithAnalysisResult",{res:1})
+    }else{
+        //拒否
+        socket.emit("dealWithAnalysisResult",{res:2})
+    }
+}
 
 
 </script>
