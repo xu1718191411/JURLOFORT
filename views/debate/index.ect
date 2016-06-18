@@ -380,116 +380,72 @@
 
 
  <div style="display:none">
-    <div class="row" id="igisetsumeiTag">異議説明分1分析結果</div>
-    <div id="claimSample">
+    <div class="row" id="igisetsumeiTag" class="igisetsumeiTagTxt">異議説明分1分析結果</div>
+    <div id="dClaimSample">
        <div class="row">
           <div class="col-sm-1">主張</div>
-          <div class="col-sm-8">ad</div>
+          <div class="col-sm-8" class="dClaimSampleTxt">ad</div>
           <div class="col-sm-2">&nbsp;</div>
        </div>
-       <div id="warrantSample">
-          <div class="row">
-             <div class="col-sm-1">論拠</div>
-             <div class="col-sm-7">asd</div>
-             <div class="col-sm-3">&nbsp;</div>
-          </div>
-          <div id="evidenceSample">
-             <div class="row">
-                <div class="col-sm-1">根拠</div>
-                <div class="col-sm-6">asd</div>
-                <div class="col-sm-4">&nbsp;</div>
-             </div>
-          </div>
-          <!-- evidenceSample -->
-       </div>
+
        <!-- warrantSample  -->
     </div>
 
+    <div id="dWarrantSample">
+      <div class="row">
+         <div class="col-sm-1">論拠</div>
+         <div class="col-sm-7" class="dWarrantSampleTxt">asd</div>
+         <div class="col-sm-3">&nbsp;</div>
+      </div>
+   </div>
 
+
+    <div id="dEvidenceSample">
+      <div class="row">
+            <div class="col-sm-1">根拠</div>
+            <div class="col-sm-6" class="dEvidenceSampleTxt">asd</div>
+            <div class="col-sm-4">&nbsp;</div>
+      </div>
+    </div>
+    <!-- evidenceSample -->
 
     <!-- claimSample -->
-    <div class="row" id="originalikenTag">オリジナル意見分析結果</div>
+    <div class="row" id="originalikenTag" class="originalikenTagTxt">オリジナル意見分析結果</div>
     <div id="claimSample">
        <div class="row">
           <div class="col-sm-1">主張</div>
-          <div class="col-sm-8">asd</div>
+          <div class="col-sm-8" class="claimSampleTxt">asd</div>
           <div class="col-sm-2">&nbsp;</div>
        </div>
-       <div id="warrantSample">
-          <div class="row">
-             <div class="col-sm-1">論拠</div>
-             <div class="col-sm-7">asd</div>
-             <div class="col-sm-3">&nbsp;</div>
-          </div>
-          <div id="evidenceSample">
-             <div class="row">
-                <div class="col-sm-1">根拠</div>
-                <div class="col-sm-6">asd</div>
-                <div class="col-sm-4">&nbsp;</div>
-             </div>
-          </div>
-          <!-- evidenceSample -->
-       </div>
-       <!-- warrantSample  -->
     </div>
     <!-- claimSample -->
+
+    <div id="warrantSample">
+              <div class="row">
+                 <div class="col-sm-1">論拠</div>
+                 <div class="col-sm-7" class="warrantSampleTxt">asd</div>
+                 <div class="col-sm-3">&nbsp;</div>
+              </div>
+    </div>
+    <!-- warrantSample  -->
+
+    <div id="evidenceSample">
+                     <div class="row">
+                        <div class="col-sm-1">根拠</div>
+                        <div class="col-sm-6" class="evidenceSampleTxt">asd</div>
+                        <div class="col-sm-4">&nbsp;</div>
+                     </div>
+    </div>
+    <!-- evidenceSample -->
+
+
+    <div class="row" id="bunsekikekaTag">
+    <div style="width:200px;margin:0 auto">
+    <button type="button" class="btn btn-primary btn-lg" onclick="dealWithAnalysisResult(1,this)">認証</button>
+    <button type="button" class="btn btn-default btn-lg" onclick="dealWithAnalysisResult(2,this)">拒否</button>
+    </div>
+    </div>
  </div>
-
-<div class="row" style="display:none">
-   <div class="row">異議説明分1分析結果</div>
-   <div id="claimSample">
-      <div class="row">
-         <div class="col-sm-1">主張</div>
-         <div class="col-sm-8">asd</div>
-         <div class="col-sm-2">&nbsp;</div>
-      </div>
-      <div id="warrantSample">
-         <div class="row">
-            <div class="col-sm-1">論拠</div>
-            <div class="col-sm-7">asd</div>
-            <div class="col-sm-3">&nbsp;</div>
-         </div>
-         <div id="evidenceSample">
-            <div class="row">
-               <div class="col-sm-1">根拠</div>
-               <div class="col-sm-6">asd</div>
-               <div class="col-sm-4">&nbsp;</div>
-            </div>
-         </div>
-         <!-- evidenceSample -->
-      </div>
-      <!-- warrantSample  -->
-   </div>
-
-   <!-- claimSample -->
-   <div class="row">オリジナル意見分析結果</div>
-   <div id="claimSample">
-      <div class="row">
-         <div class="col-sm-1">主張</div>
-         <div class="col-sm-8">asd</div>
-         <div class="col-sm-2">&nbsp;</div>
-      </div>
-      <div id="warrantSample">
-         <div class="row">
-            <div class="col-sm-1">論拠</div>
-            <div class="col-sm-7">asd</div>
-            <div class="col-sm-3">&nbsp;</div>
-         </div>
-         <div id="evidenceSample">
-            <div class="row">
-               <div class="col-sm-1">根拠</div>
-               <div class="col-sm-6">asd</div>
-               <div class="col-sm-4">&nbsp;</div>
-            </div>
-         </div>
-         <!-- evidenceSample -->
-      </div>
-      <!-- warrantSample  -->
-   </div>
-   <!-- claimSample -->
-</div>
-
-
 
     <div class="row" id="proAnalysis">
 
@@ -1001,8 +957,6 @@
 <script>
 var socket = io(window.location.host + "/debate");
 
-
-
 socket.on("enterRoom",function(msg){
         // 0 pro 做陈述
         // 1 con 做分析
@@ -1011,14 +965,11 @@ socket.on("enterRoom",function(msg){
 
     window.status = parseInt(msg.status)
 
-
     if(msg.loginInfo.position == 1){
         $("#proUsername").text(msg.loginInfo.username)
     }else{
         $("#conUsername").text(msg.loginInfo.username)
     }
-
-
 })
 
 socket.on("prepare",function(msg){
@@ -1317,6 +1268,27 @@ socket.on("receiveAnalysis",function(msg){
     _obj = msg._obj
     dissentObj = msg.dissentObj
 
+    //先清空
+    $("#proAnalysis").html("")
+
+    for(var i=0;i<_obj.length;i++){
+        if(i<boundaryN){
+           $($("#igisetsumeiTag").prop('outerHTML')).find(".igisetsumeiTagTxt").eq(0).text("異議説明"+(i+1));
+            var str = $($("#igisetsumeiTag").prop('outerHTML'))
+        }else{
+            $($("#originalikenTag").prop('outerHTML')).find(".originalikenTagTxt").eq(0).text("オリジナル意見");
+            var str = $($("#originalikenTag").prop('outerHTML'))
+        }
+        $("#proAnalysis").append(str)
+
+
+        var str = $("#dClaimSample").prop("outerHTML")
+        var str = $(str).attr("id","dClaimSample"+_obj[i].uuid)
+        $(str).find(".dClaimSampleTxt").eq(0).text(_obj[i].claimTxt)
+
+        $("#proAnalysis").append(str)
+
+    }
 ///    var _str = '';
 ///    for(var i=0;i<_obj.length;i++){
 ///
@@ -1385,6 +1357,13 @@ socket.on("receiveAnalysis",function(msg){
 ///
 ///
 ///    $("#proAnalysis").html(_str);
+
+
+
+    if((window.status == 1 && $("#tachiba").attr("tachiba")==1) || (window.status == 3 && $("#tachiba").attr("tachiba") == 2)){
+    var bunsekikekaTag = $($("#bunsekikekaTag").prop("outerHTML"))
+    $("#proAnalysis").append(bunsekikekaTag)
+    }
 
     //现在处于等待确认阶段，停止倒计时
 
