@@ -131,17 +131,21 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
         // 2 con 做陈述
         // 3 pro 做分析
 
+        for(var i=0;i<msg.submitContentArr.length;i++){
+                msg.submitContentArr[i].uuid = Math.round(Math.random()*1000000000)
+        }
+
         //把陈述内容计入数据库
         steps(function(){
             mongo.createIfNotExists("statementLog",this.hold(function(result){
 
             }))
         },function(){
-            mongo.update("statementLog",{num:session.debateLogin.num},{$unset:{lastest:1}},{multi:true},this.hold(function(result){
+            mongo.update("statementLog",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{$unset:{lastest:1}},{multi:true},this.hold(function(result){
 
             }))
         },function(){
-            mongo.insert("statementLog",{num:session.debateLogin.num,position:session.debateLogin.position,lastest:1,submitContentArr:msg.submitContentArr,time:Date.parse(new Date())},{},this.hold(function(result){
+            mongo.insert("statementLog",{num:session.debateLogin.num,rNum:session.debateLogin.rNum,position:session.debateLogin.position,lastest:1,submitContentArr:msg.submitContentArr,time:Date.parse(new Date())},{},this.hold(function(result){
 
             }))
         },function(){
@@ -206,6 +210,17 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
 
     socket.on("makeAnalysis",function(msg){
 
+
+        for(var i=0;i<msg._obj.length;i++){
+            msg._obj[i].uuid = Math.round(Math.random()*1000000000)
+            for(var j=0;j<msg._obj[i].warrant.length;j++){
+                msg._obj[i].warrant[j].uuid =  Math.round(Math.random()*1000000000)
+                for(var k=0;k<msg._obj[i].warrant[j].evidence.length;k++){
+                    msg._obj[i].warrant[j].evidence[k].uuid = Math.round(Math.random()*1000000000)
+                }
+            }
+        }
+
         if(msg.violate == 1){
             steps(function(){
                 mongo.find("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{},this.hold(function(result){
@@ -235,6 +250,7 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
             return false;
         }
 
+        console.log(msg)
         steps(function(){
                mongo.createIfNotExists("analysisLog",this.hold(function(result){
 
