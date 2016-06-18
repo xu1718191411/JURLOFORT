@@ -1195,74 +1195,74 @@ socket.on("receiveAnalysis",function(msg){
     _obj = msg._obj
     dissentObj = msg.dissentObj
 
-    var _str = '';
-    for(var i=0;i<_obj.length;i++){
-
-    if(i<boundaryN){
-    //如果是对前几位異議説明的分析的话
-    _str += "<div class='row'>異議説明分"+(i+1)+"分析結果</div>"
-    }else{
-    //如果是对后几位オリジナル意見的分析的话
-    _str += "<div class='row'>オリジナル意見分析結果</div>"
-    }
-
-    var claimDissentStr = parseInt(dissentObj[i]['claimDissent'])==1?"異議":"&nbsp;"
-
-
-    //这里拼接的字符串是再提交完分析表单后呈现在分析表单上面的分析结果
-    _str += '<div id="claimSample">'+
-    '<div class="row">'+
-    '<div class="col-sm-1">'+
-    '主張'+
-    '</div>'+
-    '<div class="col-sm-8">'+ _obj[i].claimTxt+
-    '</div><div class="col-sm-2">'+claimDissentStr+'</div>'+
-    '</div>'
-
-    for(var j=0;j<_obj[i]['warrant'].length;j++){
-    var warrantDissentStr = parseInt(dissentObj[i]['warrant'][j]['warrantDissent'])==1?"異議":"&nbsp;"
-    _str += '<div id="warrantSample">'+
-    '<div class="row">'+
-    '<div class="col-sm-1">'+
-    '論拠'+
-    '</div>'+
-    '<div class="col-sm-7">'+_obj[i]['warrant'][j]['warrantTxt']+
-    '</div><div class="col-sm-3">'+warrantDissentStr+'</div>'+
-    '</div>'
-
-
-    for(var k=0;k<_obj[i]['warrant'][j]['evidence'].length;k++){
-    var evidenceDissentStr = parseInt(dissentObj[i]['warrant'][j]['evidenceDissent'][k])==1?"異議":"&nbsp;"
-    _str +=   '<div id="evidenceSample">'+
-    '<div class="row">'+
-    '<div class="col-sm-1">'+
-    '根拠'+
-    '</div>'+
-    '<div class="col-sm-6">'+_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt']+
-    '</div><div class="col-sm-4">'+evidenceDissentStr+'</div>'+
-    '</div>'+
-    '</div><!-- evidenceSample -->'
-    }
-
-    _str += '</div><!-- warrantSample  -->'
-    }
-
-    _str += '</div><!-- claimSample -->'
-
-    if((window.status == 1 && $("#tachiba").attr("tachiba")==1) || (window.status == 3 && $("#tachiba").attr("tachiba") == 2)){
-        _str += '<div class="row">'+
-            '<div style="width:200px;margin:0 auto">'+
-            '<button type="button" class="btn btn-primary btn-lg" onclick="dealWithAnalysisResult(1,this)">認証</button>'+
-            '<button type="button" class="btn btn-default btn-lg" onclick="dealWithAnalysisResult(2,this)">拒否</button>'+
-            '</div>'+
-            '</div>'
-    }
-
-
-    }
-
-
-    $("#proAnalysis").html(_str);
+///    var _str = '';
+///    for(var i=0;i<_obj.length;i++){
+///
+///    if(i<boundaryN){
+///    //如果是对前几位異議説明的分析的话
+///    _str += "<div class='row'>異議説明分"+(i+1)+"分析結果</div>"
+///    }else{
+///    //如果是对后几位オリジナル意見的分析的话
+///    _str += "<div class='row'>オリジナル意見分析結果</div>"
+///    }
+///
+///    var claimDissentStr = parseInt(dissentObj[i]['claimDissent'])==1?"異議":"&nbsp;"
+///
+///
+///    //这里拼接的字符串是再提交完分析表单后呈现在分析表单上面的分析结果
+///    _str += '<div id="claimSample">'+
+///    '<div class="row">'+
+///    '<div class="col-sm-1">'+
+///    '主張'+
+///    '</div>'+
+///    '<div class="col-sm-8">'+ _obj[i].claimTxt+
+///    '</div><div class="col-sm-2">'+claimDissentStr+'</div>'+
+///    '</div>'
+///
+///    for(var j=0;j<_obj[i]['warrant'].length;j++){
+///    var warrantDissentStr = parseInt(dissentObj[i]['warrant'][j]['warrantDissent'])==1?"異議":"&nbsp;"
+///    _str += '<div id="warrantSample">'+
+///    '<div class="row">'+
+///    '<div class="col-sm-1">'+
+///    '論拠'+
+///    '</div>'+
+///    '<div class="col-sm-7">'+_obj[i]['warrant'][j]['warrantTxt']+
+///    '</div><div class="col-sm-3">'+warrantDissentStr+'</div>'+
+///    '</div>'
+///
+///
+///    for(var k=0;k<_obj[i]['warrant'][j]['evidence'].length;k++){
+///    var evidenceDissentStr = parseInt(dissentObj[i]['warrant'][j]['evidenceDissent'][k])==1?"異議":"&nbsp;"
+///    _str +=   '<div id="evidenceSample">'+
+///    '<div class="row">'+
+///    '<div class="col-sm-1">'+
+///    '根拠'+
+///    '</div>'+
+///    '<div class="col-sm-6">'+_obj[i]['warrant'][j]['evidence'][k]['evidenceTxt']+
+///    '</div><div class="col-sm-4">'+evidenceDissentStr+'</div>'+
+///    '</div>'+
+///    '</div><!-- evidenceSample -->'
+///    }
+///
+///    _str += '</div><!-- warrantSample  -->'
+///    }
+///
+///    _str += '</div><!-- claimSample -->'
+///
+///    if((window.status == 1 && $("#tachiba").attr("tachiba")==1) || (window.status == 3 && $("#tachiba").attr("tachiba") == 2)){
+///        _str += '<div class="row">'+
+///            '<div style="width:200px;margin:0 auto">'+
+///            '<button type="button" class="btn btn-primary btn-lg" onclick="dealWithAnalysisResult(1,this)">認証</button>'+
+///            '<button type="button" class="btn btn-default btn-lg" onclick="dealWithAnalysisResult(2,this)">拒否</button>'+
+///            '</div>'+
+///            '</div>'
+///    }
+///
+///
+///    }
+///
+///
+///    $("#proAnalysis").html(_str);
 
     //现在处于等待确认阶段，停止倒计时
 
