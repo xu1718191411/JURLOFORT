@@ -385,7 +385,7 @@
        <div class="row">
           <div class="col-sm-1">主張</div>
           <div class="col-sm-8" class="dClaimSampleTxt">ad</div>
-          <div class="col-sm-2">&nbsp;</div>
+          <div class="col-sm-2 igiMark">&nbsp;</div>
        </div>
 
        <!-- warrantSample  -->
@@ -394,8 +394,8 @@
     <div id="dWarrantSample">
       <div class="row">
          <div class="col-sm-1">論拠</div>
-         <div class="col-sm-7" class="dWarrantSampleTxt">asd</div>
-         <div class="col-sm-3">&nbsp;</div>
+         <div class="col-sm-7" class="dWarrantSampleTxt">11111</div>
+         <div class="col-sm-3 igiMark">&nbsp;</div>
       </div>
    </div>
 
@@ -404,7 +404,7 @@
       <div class="row">
             <div class="col-sm-1">根拠</div>
             <div class="col-sm-6" class="dEvidenceSampleTxt">asd</div>
-            <div class="col-sm-4">&nbsp;</div>
+            <div class="col-sm-4 igiMark">&nbsp;</div>
       </div>
     </div>
     <!-- evidenceSample -->
@@ -415,7 +415,7 @@
        <div class="row">
           <div class="col-sm-1">主張</div>
           <div class="col-sm-8" class="claimSampleTxt">asd</div>
-          <div class="col-sm-2">&nbsp;</div>
+          <div class="col-sm-2 igiMark">&nbsp;</div>
        </div>
     </div>
     <!-- claimSample -->
@@ -424,7 +424,7 @@
               <div class="row">
                  <div class="col-sm-1">論拠</div>
                  <div class="col-sm-7" class="warrantSampleTxt">asd</div>
-                 <div class="col-sm-3">&nbsp;</div>
+                 <div class="col-sm-3 igiMark">&nbsp;</div>
               </div>
     </div>
     <!-- warrantSample  -->
@@ -433,7 +433,7 @@
                      <div class="row">
                         <div class="col-sm-1">根拠</div>
                         <div class="col-sm-6" class="evidenceSampleTxt">asd</div>
-                        <div class="col-sm-4">&nbsp;</div>
+                        <div class="col-sm-4 igiMark">&nbsp;</div>
                      </div>
     </div>
     <!-- evidenceSample -->
@@ -1273,8 +1273,9 @@ socket.on("receiveAnalysis",function(msg){
 
     for(var i=0;i<_obj.length;i++){
         if(i<boundaryN){
-           $($("#igisetsumeiTag").prop('outerHTML')).find(".igisetsumeiTagTxt").eq(0).text("異議説明"+(i+1));
-            var str = $($("#igisetsumeiTag").prop('outerHTML'))
+            var str = $("#igisetsumeiTag").prop('outerHTML')
+            var str = $(str).attr("id","igisetsumeiTag"+(i+1))
+            $(str).text("異議説明"+(i+1));
         }else{
             $($("#originalikenTag").prop('outerHTML')).find(".originalikenTagTxt").eq(0).text("オリジナル意見");
             var str = $($("#originalikenTag").prop('outerHTML'))
@@ -1284,9 +1285,37 @@ socket.on("receiveAnalysis",function(msg){
 
         var str = $("#dClaimSample").prop("outerHTML")
         var str = $(str).attr("id","dClaimSample"+_obj[i].uuid)
+        if(parseInt(dissentObj[i]['claimDissent'])==1){
+             $(str).find(".igiMark").eq(0).text("異議")
+        }
         $(str).find(".dClaimSampleTxt").eq(0).text(_obj[i].claimTxt)
 
+
+
         $("#proAnalysis").append(str)
+
+        for(var j=0;j<_obj[i]['warrant'].length;j++){
+                var str = $("#dWarrantSample").prop("outerHTML")
+                var str = $(str).attr("id","dWarrantSample"+_obj[i]['warrant'][j].uuid)
+                $(str).find(".dWarrantSampleTxt").eq(0).text(_obj[i]['warrant'][j]['warrantTxt'])
+                if(parseInt(dissentObj[i]['warrant'][j]['warrantDissent'])==1){
+                    $(str).find(".igiMark").eq(0).text("異議")
+                }
+
+
+                $("#dClaimSample"+_obj[i].uuid).append(str)
+
+
+                for(var k=0;k<_obj[i]['warrant'][j]['evidence'].length;k++){
+                    var str = $("#dEvidenceSample").prop("outerHTML")
+                    var str = $(str).attr("id","dEvidenceSample"+_obj[i]['warrant'][j]['evidence'][k].uuid)
+                    $(str).find(".dEvidenceSampleTxt").eq(0).text(_obj[i]['warrant'][j]['evidence'][k].evidenceTxt)
+                    if(parseInt(dissentObj[i]['warrant'][j]['evidenceDissent'][k])==1){
+                        $(str).find(".igiMark").eq(0).text("異議")
+                    }
+                    $("#dWarrantSample"+_obj[i]['warrant'][j].uuid).append(str)
+                }
+        }
 
     }
 ///    var _str = '';
