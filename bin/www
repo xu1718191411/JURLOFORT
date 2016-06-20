@@ -54,11 +54,11 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
             function(){
             // 传给刚进入房间或者是再次进入房间的用户status
            mongo.find("debateStatus",{num:loginInfo.num,rNum:loginInfo.rNum,group:loginInfo.group},{},this.hold(function(result){
-                   return result[0].status
+                   return {status:result[0].status,timeLimit:result[0].timeLimit,setting:result[0].setting}
            }))
-        },function(status){
-            socket.emit("enterRoom",{loginInfo:loginInfo,status:status,lastest:lastest})
-            socket.broadcast.emit("enterRoom",{loginInfo:loginInfo})
+        },function(_obj){
+            socket.emit("enterRoom",{loginInfo:loginInfo,status:_obj.status,timeLimit:_obj.timeLimit,setting:_obj.setting,lastest:lastest})
+            socket.broadcast.emit("enterRoom",{loginInfo:loginInfo,status:_obj.status,timeLimit:_obj.timeLimit,setting:_obj.setting})
         })()
 
     })
@@ -369,6 +369,16 @@ sessionSockets.of("/debate").on('connection', function (err, socket, session) {
 
 
         }
+    })
+
+
+    socket.on("systemSetting",function(msg){
+        steps(function(){
+            mongo.update("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{$set:{timeLimit:msg.timeLimite,setting:1}},function(_res){
+                socket.emit("systemSettingFinish",{timeLimit:msg.timeLimite})
+                socket.broadcast.emit("systemSettingFinish",{timeLimit:msg.timeLimite})
+            })
+        })()
     })
 
 

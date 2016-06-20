@@ -28,90 +28,93 @@
 <body>
 
 <div class="container">
-    <div class="row">
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">こんにちわ</a>
-                </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">討論室<span class="sr-only">(current)</span></a></li>
-                        <li><a href="#">テーマ一覧</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">設定<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">テーマ管理</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#">中断申請</a></li>
-                                <li><a href="#"></a></li>
-                                <li><a href="#">システム設定</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#">投降</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#">視聴者誘う</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-
-
-                </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
-        </nav>
-
-    </div>
+    <% include 'debate/top.ect', { userInformation:@userInformation} %>
 
    <div class="row">
 
-       <div class="jumbotron">
            <h2>テーマ:<%=@theme.theme%></h2>
 
+            <div class="row">
 
-           <% if @userInformation.position==1 : %>
-           <p>あなたの立場:<span id="tachiba" tachiba="1" class="label label-info" style="font-size: 20px;">肯定</span></p>
-           <% else : %>
-           <p>あなたの立場:<span id="tachiba" tachiba="2" class="label label-success" style="font-size: 20px;">否定</span></p>
-           <% end %>
+            </div>
+
+            <div class="row">
 
 
-           <p>今の段階:<span id="nowStatus">相手に意見の分析</span></p>
 
-           <p>ルール:5回終了.第<span id="numberOrder">0</span>回.あと<span id="leftNum">3</span>回</p>
-           <p>制限時間<span id="leftTimeSeconds">30</span>秒</p>
-           <p>肯定:<span id="proUsername"></span>
+                  <div class="col-md-3">
 
-           <span id="proUserStatus">
-            <% if @proPrepare==1 : %>
-            <%=@pro %>準備中
-           <% else : %>
-           <%=@pro %>入室
-           <% end %>
+                  <p>今の段階:<span id="nowStatus">相手に意見の分析</span></p>
 
-           </span>
-           </p>
-           <p>否定:<span id="conUsername"></span>
+                  </div>
 
-           <span id="conUserStatus">
-           <% if @conPrepare==1 : %>
-           <%=@con %>準備中
-           <% else : %>
-           <%=@con %>入室
-           <% end %>
+                  <div class="col-md-3">
 
-           </span></p>
+                  <p>ルール:5回終了.第<span id="numberOrder">0</span>回.あと<span id="leftNum">3</span>回</p>
 
-           <p><button id="prepare" class="btn-default">準備</button></p>
+                  </div>
+
+
+                  <div class="col-md-2">
+                               <% if @timeLimit == 1: %>
+                               <p>制限時間<span id="leftTimeSeconds">30</span>秒</p>
+                               <% else: %>
+                               <p id="timeLimit" style="display:none">制限時間<span id="leftTimeSeconds">30</span>秒</p>
+                               <% end %>
+                   </div>
+
+            </div>
+
+            <div class="row">
+                  <div class="col-md-3">
+
+                   <p>肯定:<span id="proUsername"></span>
+
+                             <span id="proUserStatus">
+                              <% if @proPrepare==1 : %>
+                              <%=@pro %>準備中
+                             <% else : %>
+                             <%=@pro %>入室
+                             <% end %>
+                             </span>
+                   </p>
+
+                   </div>
+
+                   <div class="col-md-3">
+
+                             <p>否定:<span id="conUsername"></span>
+
+                             <span id="conUserStatus">
+                             <% if @conPrepare==1 : %>
+                             <%=@con %>準備中
+                             <% else : %>
+                             <%=@con %>入室
+                             <% end %>
+
+                             </span>
+                             </p>
+                   </div>
+
+
+                     <div class="col-md-2">
+
+                            <% if @userInformation.position==1 : %>
+                            <p>あなたの立場:<span id="tachiba" tachiba="1" class="label label-info" style="font-size: 20px;">肯定</span></p>
+                            <% else : %>
+                            <p>あなたの立場:<span id="tachiba" tachiba="2" class="label label-success" style="font-size: 20px;">否定</span></p>
+                            <% end %>
+
+                     </div>
+
+                     <div class="col-md-4">
+                            <p><button id="prepare" class="btn-default btn-md">準備</button></p>
+                     </div>
+
+
+            </div>
+
        </div>
-   </div>
 
     <div class="row">
 
@@ -384,7 +387,7 @@
     <div id="dClaimSample">
        <div class="row">
           <div class="col-sm-1">主張</div>
-          <div class="col-sm-8" class="dClaimSampleTxt">ad</div>
+          <div class="col-sm-8 dClaimSampleTxt">ad</div>
           <div class="col-sm-2 igiMark">&nbsp;</div>
        </div>
 
@@ -394,7 +397,7 @@
     <div id="dWarrantSample">
       <div class="row">
          <div class="col-sm-1">論拠</div>
-         <div class="col-sm-7" class="dWarrantSampleTxt">11111</div>
+         <div class="col-sm-7 dWarrantSampleTxt" >11111</div>
          <div class="col-sm-3 igiMark">&nbsp;</div>
       </div>
    </div>
@@ -403,7 +406,7 @@
     <div id="dEvidenceSample">
       <div class="row">
             <div class="col-sm-1">根拠</div>
-            <div class="col-sm-6" class="dEvidenceSampleTxt">asd</div>
+            <div class="col-sm-6 dEvidenceSampleTxt">asd</div>
             <div class="col-sm-4 igiMark">&nbsp;</div>
       </div>
     </div>
@@ -414,7 +417,7 @@
     <div id="claimSample">
        <div class="row">
           <div class="col-sm-1">主張</div>
-          <div class="col-sm-8" class="claimSampleTxt">asd</div>
+          <div class="col-sm-8 claimSampleTxt">asd</div>
           <div class="col-sm-2 igiMark">&nbsp;</div>
        </div>
     </div>
@@ -423,7 +426,7 @@
     <div id="warrantSample">
               <div class="row">
                  <div class="col-sm-1">論拠</div>
-                 <div class="col-sm-7" class="warrantSampleTxt">asd</div>
+                 <div class="col-sm-7 warrantSampleTxt">asd</div>
                  <div class="col-sm-3 igiMark">&nbsp;</div>
               </div>
     </div>
@@ -432,7 +435,7 @@
     <div id="evidenceSample">
                      <div class="row">
                         <div class="col-sm-1">根拠</div>
-                        <div class="col-sm-6" class="evidenceSampleTxt">asd</div>
+                        <div class="col-sm-6 evidenceSampleTxt">asd</div>
                         <div class="col-sm-4 igiMark">&nbsp;</div>
                      </div>
     </div>
@@ -965,6 +968,16 @@ socket.on("enterRoom",function(msg){
 
     window.status = parseInt(msg.status)
 
+    if(parseInt(msg.setting) != 1){
+            $('#systemSettingController').modal('show')
+    }
+
+    if(parseInt(msg.timeLimit) == 1){
+            $("#timeLimit").show()
+    }
+
+    window.timeLimit = msg.timeLimit
+
     if(msg.loginInfo.position == 1){
         $("#proUsername").text(msg.loginInfo.username)
     }else{
@@ -1002,13 +1015,19 @@ function startTimeCount(){
 }
 
 function stopTimeCount(){
-    clearInterval(myTimer)
+    if(myTimer){
+        clearInterval(myTimer)
+    }
+
 }
 
 //初始化倒计时函数
 function initialTimeCount(){
-        clearInterval(myTimer)
-        $("#leftTimeSeconds").text(30)
+        if(myTimer){
+                clearInterval(myTimer)
+                $("#leftTimeSeconds").text(30)
+        }
+
 }
 
 //时间违反函数
@@ -1037,19 +1056,25 @@ socket.on("allPrepare",function(msg){
         var status = msg.status
         window.status = parseInt(status);
 
-        setTimeout(function(){
-            startTimeCount()
-        },2000)
+
+        $("#proUserStatus").text("討論中")
+        $("#conUserStatus").text("討論中")
+        $("#prepare").remove()
+
+        if(parseInt(window.timeLimit) == 1){
+
+                setTimeout(function(){
+                    startTimeCount()
+                },2000)
+        }
 
 
         if(status == 0){
-
                 $("#nowStatus").text("肯定側意見を述べる")
                     //pro 做陈述
                     if($("#tachiba").attr("tachiba") == 1){
                             showNextStep()
                     }
-
         }
 
 
@@ -1066,13 +1091,15 @@ socket.on("receiveStatement",function(msg){
 
 //submitContentArr
 
-    //重新规划制限時間
-    initialTimeCount()
-    //制限時間スタート
-    setTimeout(function(){
-        startTimeCount()
-    },2000)
+    if(parseInt(window.timeLimit) == 1){
 
+            //重新规划制限時間
+            initialTimeCount()
+            //制限時間スタート
+            setTimeout(function(){
+                startTimeCount()
+            },2000)
+    }
 
     $("#proAnalysis").html("receive from opposite site")
 
@@ -1328,7 +1355,10 @@ socket.on("receiveAnalysis",function(msg){
 
     //现在处于等待确认阶段，停止倒计时
 
-    initialTimeCount()
+    if(parseInt(window.timeLimit) == 1){
+        initialTimeCount()
+    }
+
 
 
     if(window.status == 1){
@@ -1421,6 +1451,14 @@ socket.on("disposal",function(msg){
 
 })
 
+socket.on("systemSettingFinish",function(msg){
+
+    if(parseInt(msg.timeLimit) == 1){
+        $("#timeLimit").show()
+    }
+    $('#systemSettingController').modal('hide')
+})
+
 //Conからただ主張する
 socket.on("restartFromCon",function(msg){
 //清除之前分析时提交的质疑
@@ -1442,12 +1480,16 @@ if(msg.preStatus == 0){
 
 
 
-//重新规划制限時間
-initialTimeCount()
-//制限時間スタート
-setTimeout(function(){
-    startTimeCount()
-},2000)
+if(parseInt(window.timeLimit) == 1){
+
+        //重新规划制限時間
+        initialTimeCount()
+        //制限時間スタート
+        setTimeout(function(){
+            startTimeCount()
+        },2000)
+}
+
 
 
 })
@@ -1472,12 +1514,15 @@ if(msg.preStatus == 2){
 
 }
 
+if(parseInt(window.timeLimit) == 1){
+        //重新规划制限時間
+        initialTimeCount()
+        //制限時間スタート
+        setTimeout(function(){
+            startTimeCount()
+        },2000)
+}
 
-
-//重新规划制限時間
-initialTimeCount()
-//制限時間スタート
-startTimeCount()
 
 })
 
@@ -1491,20 +1536,26 @@ socket.on("confirmCompleted",function(msg){
         if(parseInt($("#tachiba").attr("tachiba")) == 2){
                 addResultToRightMapBox(msg.fenduanArr)
                 showNextStep();
-                    initialTimeCount()
-                    //制限時間スタート
-                    setTimeout(function(){
-                        startTimeCount()
-                    },2000)
+
+                    if(parseInt(window.timeLimit) == 1){
+                            initialTimeCount()
+                            //制限時間スタート
+                            setTimeout(function(){
+                                startTimeCount()
+                            },2000)
+                    }
         }
 
         if(parseInt($("#tachiba").attr("tachiba")) == 1){
                 addResultToRightMapBox(msg.fenduanArr)
-                    initialTimeCount()
+
                     //制限時間スタート
-                    setTimeout(function(){
-                        startTimeCount()
-                    },2000)
+                    if(parseInt(window.timeLimit) == 1){
+                            initialTimeCount()
+                            setTimeout(function(){
+                                startTimeCount()
+                            },2000)
+                    }
                   //$("#wait").find("h2").eq(0).text("否定側の意見述べまた意義説明をおまちください")
                    $("#waitTxt").text("否定側の意見述べまた意義説明をおまちください")
         }
@@ -1518,11 +1569,15 @@ socket.on("confirmCompleted",function(msg){
                 if(msg.numberOrder ==5){
                     return finishDebate()
                 }
-                    initialTimeCount()
-                    //制限時間スタート
-                    setTimeout(function(){
-                        startTimeCount()
-                    },2000)
+
+                    if(parseInt(window.timeLimit) == 1){
+                        initialTimeCount()
+                        //制限時間スタート
+                        setTimeout(function(){
+                            startTimeCount()
+                        },2000)
+                    }
+
                     //$("#wait").find("h2").eq(0).text("肯定側の意見述べまた意義説明をおまちください")
                     $("#waitTxt").text("肯定側の意見述べまた意義説明をおまちください")
         }
@@ -1533,11 +1588,15 @@ socket.on("confirmCompleted",function(msg){
                     return finishDebate()
                 }
                 showNextStep();
-                initialTimeCount()
-                //制限時間スタート
-                setTimeout(function(){
-                startTimeCount()
-                },2000)
+
+                if(parseInt(window.timeLimit) == 1){
+                 initialTimeCount()
+                 //制限時間スタート
+                 setTimeout(function(){
+                 startTimeCount()
+                 },2000)
+                }
+
         }
 
     }
@@ -1613,8 +1672,10 @@ $("#kakusu").click(function(){
 
 function __submit(){
 
+    if(parseInt(window.timeLimit)==1){
+        stopTimeCount()
+    }
 
-    stopTimeCount()
     $("#proAnalysis").html("")
 
     var obj = $("#form2").find("#area").find("textarea");
@@ -1645,6 +1706,14 @@ function dealWithAnalysisResult(n,that){
         socket.emit("dealWithAnalysisResult",{res:2})
     }
 }
+
+
+function confirmDebateSetting(){
+    var timeSeigen = $(".seigen:checked").val()
+    socket.emit("systemSetting",{timeLimite:timeSeigen})
+}
+
+
 
 
 </script>

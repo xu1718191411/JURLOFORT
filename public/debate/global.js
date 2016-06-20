@@ -206,7 +206,10 @@ function _submit(){
     if(!checkEmptyBox()) return false;
 
     //重新规划制限時間
-    initialTimeCount()
+    if(parseInt(window.timeLimit) == 1){
+        initialTimeCount()
+    }
+
 
     //boundaryN = 1
     //这是一个全局变量

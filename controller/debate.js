@@ -13,6 +13,7 @@ module.exports = {
         var conPrepare
         var pro
         var con
+        var timeLimit
 
         if(tool.isEmpty(req.session.debateLogin)){
             res.redirect("tmpLogin")
@@ -61,6 +62,7 @@ module.exports = {
                 conPrepare = result[0].conPrepare
                 pro = result[0].pro
                 con = result[0].con
+                timeLimit = result[0].timeLimit
             }))
 
         },function(){
@@ -69,7 +71,7 @@ module.exports = {
                 return theme
             }))
         },function(theme){
-            res.render('debate/index', { userInformation:  req.session.debateLogin, theme : theme ,proPrepare:proPrepare, conPrepare:conPrepare,pro:pro,con:con});
+            res.render('debate/index', { userInformation:  req.session.debateLogin, theme : theme ,proPrepare:proPrepare, conPrepare:conPrepare,pro:pro,con:con,timeLimit:timeLimit});
         })()
 
 
@@ -102,7 +104,7 @@ module.exports = {
 //                }
 //            }))
 
-            mongo.find("debateStatus",{group:req.session.debateLogin.group,finishi:0},{},this.hold(function(result){
+            mongo.find("debateStatus",{group:req.session.debateLogin.group,finishi:0,setting:1},{},this.hold(function(result){
 
                 for(var i=0;i<result.length;i++){
 
