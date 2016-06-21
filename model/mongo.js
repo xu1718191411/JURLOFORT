@@ -9,16 +9,22 @@ var MongoClient = require('mongodb').MongoClient
 var assert = require('assert');
 var conf = require("../config/config.js");
 
-console.log(conf)
+
 // Connection URL
 var url = 'mongodb://'+conf.dbHost+':'+conf.dbPort+'/'+conf.dbName;
 // Use connect method to connect to the Server
 
-MongoClient.connect(url, function(err, mongodb) {
-    assert.equal(null, err);
-    console.log("Connected correctly to server");
-    db = mongodb;
-});
+function connect(callback){
+    MongoClient.connect(url, function(err, mongodb) {
+        assert.equal(null, err);
+        console.log("Connected correctly to server");
+        db = mongodb;
+
+        if(err) callback(1)
+        callback(0)
+    })
+}
+
 
 /**
  * @param collection_name コレクション名
@@ -105,11 +111,11 @@ function createIfNotExists(collection,callback){
 
 }
 
-
 module.exports = {
     find: find,
     insert: insert,
     update: update,
     remove: remove,
-    createIfNotExists:createIfNotExists
+    createIfNotExists:createIfNotExists,
+    connect:connect
 }

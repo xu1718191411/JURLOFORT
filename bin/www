@@ -10,7 +10,7 @@ var mongo = require("../model/mongo.js");
 var mongodb = require("mongodb")
 var tool = require("../controller/tool.js");
 var steps = require('ocsteps');
-
+var install = require("./install.js")
 
 app.set('port', process.env.PORT || wwwConfig.wwwPort);
 console.log("server is listening on port "+wwwConfig.wwwConfig);
@@ -20,6 +20,17 @@ console.log("server is listening on port "+wwwConfig.wwwConfig);
 //});
 
 var server = require("./server.js").server;
+
+
+
+
+steps(function(){
+    mongo.connect(this.hold(function(_res){
+        if(_res>0) console.log("connect error please check your configure file")
+    }))
+},function(){
+    install.initialDatabase(this)
+})()
 
 
 var io = require('socket.io')(server);
@@ -580,6 +591,10 @@ sessionSockets.of("/group").on('connection', function (err, socket, session) {
     })
 
 })
+
+
+
+
 
 //
 //io.on('connection',function(socket){

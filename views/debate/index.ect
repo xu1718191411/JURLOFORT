@@ -448,6 +448,22 @@
     <button type="button" class="btn btn-default btn-lg" onclick="dealWithAnalysisResult(2,this)">拒否</button>
     </div>
     </div>
+
+    <div class="list-group"id="receiveStatementFromOpposite" >
+
+    </div>
+
+      <a href="#" class="list-group-item active receiveStatementFromOppositeIgi">
+        <h4 class="list-group-item-heading ">異議説明</h4>
+        <p class="list-group-item-text receiveStatementFromOppositeIgiTxt">...</p>
+      </a>
+
+      <a href="#" class="list-group-item receiveStatementFromOppositeIken">
+          <h4 class="list-group-item-heading ">オリジナル意見</h4>
+          <p class="list-group-item-text receiveStatementFromOppositeIkenTxt">...</p>
+      </a>
+
+
  </div>
 
     <div class="row" id="proAnalysis">
@@ -1101,7 +1117,10 @@ socket.on("receiveStatement",function(msg){
             },2000)
     }
 
-    $("#proAnalysis").html("receive from opposite site")
+
+    var str = $("#receiveStatementFromOpposite").prop("outerHTML")
+    $(str).attr("id","_receiveStatementFromOpposite")
+    $("#proAnalysis").append(str)
 
     window.status = msg.status
 
@@ -1119,6 +1138,11 @@ socket.on("receiveStatement",function(msg){
 
         $("#proState"+msg.submitContentArr[msg.submitContentArr.length-1].uuid).find(".alert-link").eq(0).text(msg.submitContentArr[msg.submitContentArr.length-1].content)
                 //然后在statement前面依次放入異議説明
+        $("#receiveStatementFromOppositeIken").find("#receiveStatementFromOppositeIkenTxt").text(msg.submitContentArr[msg.submitContentArr.length-1].content)
+        var str = $("#receiveStatementFromOppositeIken").prop("outerHTML")
+        $(str).attr("id","_receiveStatementFromOppositeIken")
+        $("_receiveStatementFromOpposite").append(str)
+
                 if(msg.submitContentArr.length>1){
                         for(var i=0;i<msg.submitContentArr.length-1;i++){
                                 var sampleProDState = $($("#left_proDState").html()).attr("id","proDState"+msg.submitContentArr[i].uuid);
@@ -1210,7 +1234,7 @@ socket.on("DoAnalysis",function(msg){
     $(".claimTxt,.warrantTxt,.evidenceTxt").val("");
 
     //显示对方传来的消息
-    $("#proAnalysis").html("receive from opposite site")
+
 
 })
 
