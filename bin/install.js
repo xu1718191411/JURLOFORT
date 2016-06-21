@@ -8,7 +8,7 @@ var Steps = require('ocsteps');
 
 function initialDatabase(that){
     var database = ["LatestAnalysisMsg","LatestStatementMsg","analysisLog","debateMembers","debateStatus","statementLog","themes","userStatus"]
-    //var database = ["test1","test2","test3"]
+
 
 
     var fn = function(_i,_this){
