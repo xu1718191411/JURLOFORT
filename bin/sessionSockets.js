@@ -334,6 +334,8 @@ var sessionSockets = function(sessionSockets,steps,mongo){
 
 
             if(msg.res == 2){
+                var quotesRefuseOptionsTxt = msg.opt. quotesRefuseOptionsTxt
+                var quotesRefuseOptions = msg.opt.quotesRefuseOptions
 
                 steps(
                     function(){
