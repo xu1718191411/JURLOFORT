@@ -475,7 +475,7 @@
     <div class="alert alert-warning" role="alert" id="bunsekiFeedBackRefuse"> Warning! Better check yourself, you're not looking too good.</div>
 </div>
 
-<div class="row" id="bunsekikekaTag" style="display:block">
+<div class="row" id="bunsekikekaTag" style="display:none">
 
      <div style="width:200px;margin:0 auto">
       <ul id="myTab" class="nav nav-tabs">
@@ -1425,6 +1425,7 @@ socket.on("receiveAnalysis",function(msg){
 
     if((window.status == 1 && $("#tachiba").attr("tachiba")==1) || (window.status == 3 && $("#tachiba").attr("tachiba") == 2)){
         $("#bunsekikekaTag").show()
+        $("#quotesConfirm").addClass("active")
     }
 
     //现在处于等待确认阶段，停止倒计时
@@ -1786,7 +1787,7 @@ function dealWithAnalysisResult(n,that){
         var quotesRefuseOptionsTxt = $("#quotesRefuseOptionsTxt").val()
         var quotesRefuseOptions = $("#quotesRefuseOptions").val()
 
-        socket.emit("dealWithAnalysisResult",{res:2,{opt:{quotesRefuseOptionsTxt:quotesRefuseOptionsTxt,quotesRefuseOptions:quotesRefuseOptions}}})
+        //socket.emit("dealWithAnalysisResult",{res:2,{opt:{quotesRefuseOptionsTxt:quotesRefuseOptionsTxt,quotesRefuseOptions:quotesRefuseOptions}}})
     }
 
     $("#bunsekikekaTag").hide()
