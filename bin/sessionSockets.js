@@ -305,6 +305,7 @@ var sessionSockets = function(sessionSockets,steps,mongo){
 
         socket.on("dealWithAnalysisResult",function(msg){
             if(msg.res == 1){
+                var quotesConfirmTxt = msg.opt.quotesConfirmTxt
                 steps(function(){
                     mongo.find("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{},this.hold(function(_result){
                         return _result[0].status
@@ -324,6 +325,7 @@ var sessionSockets = function(sessionSockets,steps,mongo){
                             var _obj = _result[0].msg
                             console.log(status)
                             _obj.status = status;
+                            _obj.quotesConfirmTxt = quotesConfirmTxt
                             //_result[0].msg.status = status
                             socket.emit("confirmCompleted",_obj)
                             socket.broadcast.emit("confirmCompleted",_obj)
@@ -334,19 +336,19 @@ var sessionSockets = function(sessionSockets,steps,mongo){
 
 
             if(msg.res == 2){
-                var quotesRefuseOptionsTxt = msg.opt. quotesRefuseOptionsTxt
+                var quotesRefuseOptionsTxt = msg.opt.quotesRefuseOptionsTxt
                 var quotesRefuseOptions = msg.opt.quotesRefuseOptions
+
+
 
                 steps(
                     function(){
                         mongo.find("LatestStatementMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{},function(_res){
                             socket.emit("DoAnalysis",_res[0].msg)
                             socket.broadcast.emit("DoAnalysis",_res[0].msg)
+                            socket.broadcast.emit("analysisRefused",{quotesRefuseOptionsTxt:quotesRefuseOptionsTxt,quotesRefuseOptions:quotesRefuseOptions})
                         })
                     })()
-
-
-
             }
         })
 

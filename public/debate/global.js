@@ -203,6 +203,9 @@ function checkEmptyBox(){
 
 function _submit(){
 
+
+    $("#bunsekiFeedBack").hide()
+
     if(!checkEmptyBox()) return false;
 
     //重新规划制限時間
