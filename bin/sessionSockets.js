@@ -227,7 +227,6 @@ var sessionSockets = function(sessionSockets,steps,mongo){
                 return false;
             }
 
-            console.log(msg)
             steps(function(){
                 mongo.createIfNotExists("analysisLog",this.hold(function(result){
 
@@ -270,11 +269,11 @@ var sessionSockets = function(sessionSockets,steps,mongo){
 
                 }))
             },function(){
-                mongo.remove("LatestAnalysisMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{},this.hold(function(_res){
-
-                }))
+//                mongo.remove("LatestAnalysisMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{},this.hold(function(_res){
+//
+//                }))
             },function(){
-                mongo.insert("LatestAnalysisMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum,msg:msg},{},this.hold(function(){
+                mongo.insert("LatestAnalysisMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum,msg:msg,confirmed:0},{},this.hold(function(){
 
                 }))
             })()
@@ -307,6 +306,14 @@ var sessionSockets = function(sessionSockets,steps,mongo){
             if(msg.res == 1){
                 var quotesConfirmTxt = msg.opt.quotesConfirmTxt
                 steps(function(){
+                    mongo.remove("LatestAnalysisMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum,confirmed:1},{},this.hold(function(_res){
+
+                    }))
+                },function(){
+                    mongo.update("LatestAnalysisMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum,confirmed:0},{$set:{confirmed:1}},{},this.hold(function(_res){
+
+                    }))
+                },function(){
                     mongo.find("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{},this.hold(function(_result){
                         return _result[0].status
                     }))
@@ -320,7 +327,8 @@ var sessionSockets = function(sessionSockets,steps,mongo){
                         return status
                     }))
                 },function(status){
-                    mongo.find("LatestAnalysisMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{},function(_result){
+                    mongo.find("LatestAnalysisMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum,confirmed:1},{},function(_result){
+                        console.log(_result)
                         if(_result[0].msg){
                             var _obj = _result[0].msg
                             console.log(status)
@@ -334,12 +342,9 @@ var sessionSockets = function(sessionSockets,steps,mongo){
                 })()
             }
 
-
             if(msg.res == 2){
                 var quotesRefuseOptionsTxt = msg.opt.quotesRefuseOptionsTxt
                 var quotesRefuseOptions = msg.opt.quotesRefuseOptions
-
-
 
                 steps(
                     function(){
@@ -352,6 +357,27 @@ var sessionSockets = function(sessionSockets,steps,mongo){
             }
         })
 
+        socket.on("dealWithStatementResult",function(msg){
+            var LatestAnalysisMsg
+
+            steps(function(){
+                mongo.find("LatestAnalysisMsg",{num:session.debateLogin.num,rNum:session.debateLogin.rNum,confirmed:1},{},this.hold(function(_res){
+                    LatestAnalysisMsg = _res.length>0? _res[0].msg:1
+                }))
+
+            },function(){
+                mongo.update("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{$inc:{status:-1}},{},this.hold(function(_res){
+
+                }))
+            },function(){
+                mongo.find("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{},this.hold(function(_res){
+                    var dealWithStatementResultTxt = msg.saitoukounegaiTxt
+                    socket.broadcast.emit("statementRefused",{dealWithStatementResultTxt:dealWithStatementResultTxt,status:_res[0].status,LatestAnalysisMsg:LatestAnalysisMsg})
+                    socket.emit("statementRefused",{dealWithStatementResultTxt:dealWithStatementResultTxt,status:_res[0].status,LatestAnalysisMsg:LatestAnalysisMsg})
+                }))
+            })()
+
+        })
 
         socket.on("systemSetting",function(msg){
             steps(function(){

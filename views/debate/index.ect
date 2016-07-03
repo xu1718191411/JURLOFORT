@@ -68,7 +68,11 @@
             <div class="row">
                   <div class="col-md-3">
 
-                   <p>肯定:<span id="proUsername"></span>
+                   <p>肯定:<span id="proUsername">
+                        <% if @pro: %>
+                            <%= @pro %>
+                        <% end %>
+                   </span>
 
                              <span id="proUserStatus">
                               <% if @proPrepare==1 : %>
@@ -83,7 +87,11 @@
 
                    <div class="col-md-3">
 
-                             <p>否定:<span id="conUsername"></span>
+                             <p>否定:<span id="conUsername">
+                                    <% if @con: %>
+                                       <%= @con %>
+                                    <% end %>
+                             </span>
 
                              <span id="conUserStatus">
                              <% if @conPrepare==1 : %>
@@ -661,6 +669,17 @@
             </div>
         </div>
 
+        <div id="proStatementCopyStatementRefused">
+            <div class="panel panel-warning ">
+               <div class="panel-heading">
+                 <h3 class="panel-title proStatementCopyStatementRefusedTitle">再投稿お願いする</h3>
+               </div>
+              <div class="panel-body proStatementCopyStatementRefusedTxt">
+                &nbsp;
+              </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="row" id="proStatement" style="display:none">
@@ -700,7 +719,7 @@
          </textarea>
 
          <div>
-                     <button type="button" class="btn btn-default btn-lg" onclick="dealWithAnalysisResult(1,this)">送信</button>
+             <button type="button" class="btn btn-default btn-lg" onclick="dealWithAnalysisResult(1,this)">送信</button>
          </div>
      </div>
 
@@ -731,13 +750,13 @@
 
     <div class="row" id="expandForm1" style="display:none">
 
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs" id="_myTab">
           <li role="presentation" class="active"><a href="#_form1" data-toggle="tab">分析する</a></li>
           <li role="presentation"><a href="#_form1_1" data-toggle="tab">再投稿お願い</a></li>
         </ul>
 
-        <div class="tab-content">
-            <div class="tab-pane" id="_form1">
+        <div class="tab-content" id="_myTabContent">
+            <div class="tab-pane active" id="_form1">
             <form class="form-group" id="form1" style="display:block">
                         <hr>
 
@@ -863,9 +882,17 @@
 
             <div class="tab-pane" id="_form1_1">
             <form class="form-group" id="form1_1" style="display:block">
-                         <textarea class="form-control" rows="3" id="saitoukounegai">
 
-                         </textarea>
+                        <div class="row">
+                        <samp>コメント(分析出来ない理由などお書きください)</samp>
+                        <textarea class="form-control" rows="3" id="saitoukounegai">
+                        </textarea>
+                        </div>
+
+                        <div class="row">
+                            <button type="button" class="btn btn-default" onclick="return _saitoukounegai()" style="width:250px;">登録</button>
+                        </div>
+
             </form>
             </div>
 
@@ -1645,11 +1672,9 @@ function generateStatementInput(msg){
         $("#expandForm1").show()
 }
 
-socket.on("receiveAnalysis",function(msg){
-    _obj = msg._obj
-    dissentObj = msg.dissentObj
 
-    //先清空
+function insertIntoProAnalysisWhenReceiveAnalysis(_obj,dissentObj){
+ //先清空
     $("#proAnalysis").html("")
 
     for(var i=0;i<_obj.length;i++){
@@ -1683,9 +1708,7 @@ socket.on("receiveAnalysis",function(msg){
                     $(str).find(".igiMark").eq(0).text("異議")
                 }
 
-
                 $("#dClaimSample"+_obj[i].uuid).append(str)
-
 
                 for(var k=0;k<_obj[i]['warrant'][j]['evidence'].length;k++){
                     var str = $("#dEvidenceSample").prop("outerHTML")
@@ -1700,7 +1723,16 @@ socket.on("receiveAnalysis",function(msg){
 
     }
 
+    $("#proAnalysis").show()
+}
 
+
+
+socket.on("receiveAnalysis",function(msg){
+    _obj = msg._obj
+    dissentObj = msg.dissentObj
+
+    insertIntoProAnalysisWhenReceiveAnalysis(_obj,dissentObj)
 
     if((window.status == 1 && $("#tachiba").attr("tachiba")==1) || (window.status == 3 && $("#tachiba").attr("tachiba") == 2)){
         $("#bunsekikekaTag").show()
@@ -1712,8 +1744,6 @@ socket.on("receiveAnalysis",function(msg){
     if(parseInt(window.timeLimit) == 1){
         initialTimeCount()
     }
-
-
 
     if(window.status == 1){
 
@@ -1740,8 +1770,6 @@ socket.on("receiveAnalysis",function(msg){
 
         //如果这是pro做分析后发送给各方的结果的话
 
-
-
          if($("#tachiba").attr("tachiba") == 2){
 
             //如果是con -->右上角显示 上方显示结果 等待自己确认后 显示等待pro statement
@@ -1763,7 +1791,7 @@ socket.on("receiveAnalysis",function(msg){
 
     //$("#form1").hide()
     $("#expandForm1").hide()
-    $("#proAnalysis").show()
+
     window.status = msg.status
     return false;
 
@@ -1778,7 +1806,6 @@ socket.on("disposal",function(msg){
     // 1 con 做分析
     // 2 con 做陈述
     // 3 pro 做分析
-
 
     switch(status){
         case 0:
@@ -1839,7 +1866,6 @@ if(msg.preStatus == 0){
 
 
 if(parseInt(window.timeLimit) == 1){
-
         //重新规划制限時間
         initialTimeCount()
         //制限時間スタート
@@ -1847,8 +1873,6 @@ if(parseInt(window.timeLimit) == 1){
             startTimeCount()
         },2000)
 }
-
-
 
 })
 
@@ -1986,6 +2010,55 @@ socket.on("analysisRefused",function(msg){
     $("#bunsekiFeedBackRefuse").show()
 })
 
+socket.on("statementRefused",function(msg){
+
+    $("#proStatement").html("")
+    window.status = msg.status
+
+    var proStatementCopyStatementRefused = $($("#proStatementCopyStatementRefused").html())
+    $(proStatementCopyStatementRefused).find(".proStatementCopyStatementRefusedTxt").eq(0).text(msg.dealWithStatementResultTxt)
+    $("#proStatement").append(proStatementCopyStatementRefused)
+
+    $("#expandForm1").hide()
+    $("#wait").hide()
+    if(parseInt(window.status) == 0){
+        if(parseInt($("#tachiba").attr("tachiba")) == 2){
+                $("#waitTxt").text("肯定側の主張をお待ちください")
+                $("#wait").show()
+        }else{
+            if(msg.LatestAnalysisMsg != 1){
+                insertIntoProAnalysisWhenReceiveAnalysis(msg.LatestAnalysisMsg._obj,msg.LatestAnalysisMsg.dissentObj)
+                _obj = msg.LatestAnalysisMsg._obj
+                dissentObj = msg.LatestAnalysisMsg.dissentObj
+            }else{
+                _obj = []
+                dissentObj = []
+            }
+
+            showNextStep()
+
+        }
+    }
+
+    if(parseInt(window.status) == 2){
+        if(parseInt($("#tachiba").attr("tachiba")) == 1){
+                $("#waitTxt").text("否定側の主張をお待ちください")
+                $("#wait").show()
+        }else{
+            if(msg.LatestAnalysisMsg != 1){
+                insertIntoProAnalysisWhenReceiveAnalysis(msg.LatestAnalysisMsg._obj,msg.LatestAnalysisMsg.dissentObj)
+                _obj = msg.LatestAnalysisMsg._obj
+                dissentObj = msg.LatestAnalysisMsg.dissentObj
+            }else{
+                _obj = []
+                dissentObj = []
+            }
+
+            showNextStep()
+
+        }
+    }
+})
 
 
 function finishDebate(){
@@ -2099,6 +2172,12 @@ function dealWithAnalysisResult(n,that){
     $("#quotesRefuseOptions").val(1)
     $("#quotesRefuseOptionsTxt").val("")
     $("#bunsekikekaTag").hide()
+}
+
+function _saitoukounegai(){
+    var saitoukounegai = $("#saitoukounegai").val()
+    socket.emit("dealWithStatementResult",{saitoukounegaiTxt:saitoukounegai})
+    return false;
 }
 
 
