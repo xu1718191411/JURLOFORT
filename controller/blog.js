@@ -11,6 +11,14 @@ var tools = require("./tool.js");
 var isEmpty = tools.isEmpty
 
 module.exports = {
+    testController:function(req,res){
+        res.render('blog/test',{})
+    },
+    getDataController:function(req,res){
+            mongo.find("Articles",{},{},function(_res){
+                res.end(JSON.stringify(_res))
+            })
+    },
     indexController: function(req,res){
 
         mongo.find("Articles",{},{},function(doc){

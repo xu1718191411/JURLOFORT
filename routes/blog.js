@@ -27,6 +27,8 @@ router.post('/historySaveTxtData',blogController.historySaveTxtDataController);
 router.post('/updateHistorySaveTxtData',blogController.updateHistorySaveTxtDataController);
 router.post('/deleteHistorySaveTxtData',blogController.deleteHistorySaveTxtDataController);
 
+router.get('/test',blogController.testController)
+router.get('/getData',blogController.getDataController)
 
 
 
