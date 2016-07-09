@@ -146,12 +146,8 @@
                                                    <div class="thumbnail">
                                                        <h5 style="height:40px">テーマ:<%=theme.theme%></h5>
                                                        <div class="themes" num="<%=theme.num%>">
-
-                                                    <div style="width:100%;margin-top:3px;"  onclick="return gotoReview(1,this)"   class="btn btn-info" num="<%=theme.num%>"><%=theme.pro%></div>
-
-                                                    <div style="width:100%;margin-top:3px;"  onclick="return gotoReview(2,this)"   class="btn btn-success" num="<%=theme.num%>" rNum="<%=theme.rNum%>"><%=theme.pro%></div>
-
-
+                                                            <div style="width:100%;margin-top:3px;"> <%=theme.pro%>  <%=theme.con%></div>
+                                                            <div style="width:100%;margin-top:3px;"  onclick="return gotoReview(this)"   class="btn btn-success" num="<%=theme.num%>" rNum="<%=theme.rNum%>">振り返る</div>
                                                      </div>
                                                    </div>
                                                </div>
@@ -289,7 +285,6 @@ function submits(){
                         _request();
                         return false;
         }
-
 }
 
 function _request(){
@@ -320,6 +315,10 @@ function participate(n,that){
     socket.emit("participate",{num:parseInt($(that).attr("num")),position:n,rNum:parseInt($(that).attr("rNum"))})
            // location = "/debate"
     return false;
+}
+
+function gotoReview(that){
+    location = "/debate/review?num="+$(that).attr("num")+"&rNum="+$(that).attr("rNum")
 }
 
 socket.on("joined",function(result){

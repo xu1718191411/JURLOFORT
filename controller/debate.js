@@ -136,14 +136,7 @@ module.exports = {
             res.render("debate/group",{userInformation:req.session.debateLogin,themes:themes,debatingList:debatingList,finishList:finishList})
         })()
     },
-    reviewController:function(req,res){
-        res.render("debate/review",{})
-    },
-    reviewDataController:function(req,res){
-        mongo.find("themes",{},{},function(list){
-            res.end(JSON.stringify(list))
-        })
-    },
+
     tmpLoginController:function(req,res){
         res.render('debate/tmpLogin', { title: 'Express' });
     },

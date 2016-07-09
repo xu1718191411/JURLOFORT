@@ -1,0 +1,13 @@
+<div ng-click="remove($index)" ng-repeat="x in statementData track by $index">
+    <div ng-repeat="s in x.submitContentArr">
+
+        <div ng-if="x.position==1" class="alert alert-info" role="alert">
+          <a href="#" class="alert-link" uuid="{{s.uuid}}">{{s.content}}</a>
+        </div>
+
+        <div ng-if="x.position==2" class="alert alert-success" role="alert">
+              <a href="#" class="alert-link" uuid="{{s.uuid}}">{{s.content}}</a>
+        </div>
+
+    </div>
+</div>
