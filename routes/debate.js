@@ -10,6 +10,8 @@ var debateController = require('../controller/debate.js');
 router.get('/',debateController.indexController);
 router.get('/tmpLogin',debateController.tmpLoginController);
 router.get('/group',debateController.groupController);
+router.get('/review',debateController.reviewController);
+router.get('/reviewData',debateController.reviewDataController)
 
 router.post('/tmpLoginPost',debateController.tmpLoginPostController);
 

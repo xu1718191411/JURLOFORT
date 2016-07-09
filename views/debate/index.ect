@@ -50,7 +50,7 @@
 
                   <div class="col-md-3">
 
-                  <p>ルール:5回終了.第<span id="numberOrder">0</span>回.あと<span id="leftNum">3</span>回</p>
+                  <p>ルール:<span id="systemTimes"><%= @systemTimes%></span>回終了.第<span id="numberOrder">0</span>回.あと<span id="leftNum">3</span>回</p>
 
                   </div>
 
@@ -1316,8 +1316,8 @@ socket.on("prepare",function(msg){
 
 //开始倒计时
 function startTimeCount(){
-    // myTimer 全局变量
-    myTimer = setInterval(function(){
+    // window.myTimer 全局变量
+    window.myTimer = setInterval(function(){
         var leftTimeSeconds =  parseInt($("#leftTimeSeconds").text()) - 1
 
         //如果时间到了的话
@@ -1334,16 +1334,16 @@ function startTimeCount(){
 }
 
 function stopTimeCount(){
-    if(myTimer){
-        clearInterval(myTimer)
+    if(window.myTimer){
+        clearInterval(window.myTimer)
     }
 
 }
 
 //初始化倒计时函数
 function initialTimeCount(){
-        if(myTimer){
-                clearInterval(myTimer)
+        if(window.myTimer){
+                clearInterval(window.myTimer)
                 $("#leftTimeSeconds").text(30)
         }
 
@@ -1398,7 +1398,7 @@ socket.on("allPrepare",function(msg){
 
 
         //还剩几轮结束
-        $("#leftNum").text(5)
+        $("#leftNum").text(window.themeTimes)
 })
 
 socket.on("receiveStatement",function(msg){
@@ -1841,6 +1841,10 @@ socket.on("systemSettingFinish",function(msg){
     if(parseInt(msg.timeLimit) == 1){
         $("#timeLimit").show()
     }
+
+    $("#systemTimes").text(msg.themeTimes)
+    window.themeTimes = msg.themeTimes
+
     $('#systemSettingController').modal('hide')
 })
 
@@ -1953,7 +1957,7 @@ socket.on("confirmCompleted",function(msg){
     if(window.status == 0){
         if(parseInt($("#tachiba").attr("tachiba")) == 2){
                 addResultToRightMapBox(msg.fenduanArr)
-                if(msg.numberOrder ==5){
+                if(msg.numberOrder ==window.themeTimes){
                     return finishDebate()
                 }
 
@@ -1971,7 +1975,7 @@ socket.on("confirmCompleted",function(msg){
 
         if(parseInt($("#tachiba").attr("tachiba")) == 1){
                 addResultToRightMapBox(msg.fenduanArr)
-                if(msg.numberOrder ==5){
+                if(msg.numberOrder ==window.themeTimes){
                     return finishDebate()
                 }
                 showNextStep();
@@ -2066,8 +2070,11 @@ function finishDebate(){
                     stopTimeCount()
                     $("#proAnalysis").html("討論終了")
                     $("#wait").hide();
+
+                    socket.emit("endDebate",{})
                     return false;
 }
+
 function addViolateMessageToLeftTop(tachiba){
      if(tachiba == 1){
              // 0 pro 做陈述
@@ -2101,7 +2108,7 @@ function addViolateMessageToRightTop(tachiba){
 socket.emit("enterRoom",{})
 
 $("#prepare").click(function(){
-
+    window.themeTimes = parseInt($("#systemTimes").text())
     $(this).attr("disabled","disabled");
 
         $.ajax({
@@ -2183,7 +2190,10 @@ function _saitoukounegai(){
 
 function confirmDebateSetting(){
     var timeSeigen = $(".seigen:checked").val()
-    socket.emit("systemSetting",{timeLimite:timeSeigen})
+    var themeTimes = $("#themeTimes").val()
+    window.themeTimes = themeTimes
+    
+    socket.emit("systemSetting",{timeLimite:timeSeigen,themeTimes:themeTimes})
 }
 
 

@@ -379,11 +379,25 @@ var sessionSockets = function(sessionSockets,steps,mongo){
 
         })
 
+
+        socket.on("endDebate",function(msg){
+             steps(function(){
+                   mongo.find("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{},this.hold(function(_res){
+                            if(parseInt(_res[0].themeTimes) == _res[0].numberOrder){
+                                mongo.update("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{$set:{finishi:1}},this.hold(function(_res){
+
+                                }))
+                            }
+                   }))
+             })()
+        })
+
+
         socket.on("systemSetting",function(msg){
             steps(function(){
-                mongo.update("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{$set:{timeLimit:msg.timeLimite,setting:1}},function(_res){
-                    socket.emit("systemSettingFinish",{timeLimit:msg.timeLimite})
-                    socket.broadcast.emit("systemSettingFinish",{timeLimit:msg.timeLimite})
+                mongo.update("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{$set:{timeLimit:msg.timeLimite,themeTimes:msg.themeTimes,setting:1}},function(_res){
+                    socket.emit("systemSettingFinish",{timeLimit:msg.timeLimite,themeTimes:msg.themeTimes})
+                    socket.broadcast.emit("systemSettingFinish",{timeLimit:msg.timeLimite,themeTimes:msg.themeTimes})
                 })
             })()
         })

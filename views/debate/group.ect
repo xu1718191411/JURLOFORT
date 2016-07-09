@@ -139,6 +139,24 @@
                                     <ul>
 
 
+                                        <% for theme in @finishList : %>
+
+                                          <li style="margin-left:10px;">
+                                               <div class="row">
+                                                   <div class="thumbnail">
+                                                       <h5 style="height:40px">テーマ:<%=theme.theme%></h5>
+                                                       <div class="themes" num="<%=theme.num%>">
+
+                                                    <div style="width:100%;margin-top:3px;"  onclick="return gotoReview(1,this)"   class="btn btn-info" num="<%=theme.num%>"><%=theme.pro%></div>
+
+                                                    <div style="width:100%;margin-top:3px;"  onclick="return gotoReview(2,this)"   class="btn btn-success" num="<%=theme.num%>" rNum="<%=theme.rNum%>"><%=theme.pro%></div>
+
+
+                                                     </div>
+                                                   </div>
+                                               </div>
+                                           </li>
+                                        <% end %>
 
                                     </ul>
                                 </div>

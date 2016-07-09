@@ -1,0 +1,47 @@
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.1/angular.js"></script>
+<body ng-app="myApps">
+
+
+ <div ng-controller="customersCtrl">
+        <ul>
+          <li ng-repeat="x in names">
+           1111
+          </li>
+        </ul>
+
+         <div my-inserted-unit></div>
+ </div>
+
+
+
+</body>
+
+<script>
+
+var app = angular.module('myApps',[])
+app.controller('customersCtrl',function($scope,$http) {
+    $scope.reviewUser = 'villa',
+    $scope.reviewDebate = 'aaaaa',
+
+    $http.get('/debate/reviewData').success(function(res){
+        $scope.names = res
+    })
+
+});
+
+app.directive("myInsertedUnit",function(){
+    return {
+        template:"name:{{reviewUser}},debateTheme:{{reviewDebate}}"
+    }
+})
+
+
+
+</script>
+
+</html>
