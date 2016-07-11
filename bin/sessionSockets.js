@@ -6,6 +6,14 @@
 
 var sessionSockets = function(sessionSockets,steps,mongo){
 
+    sessionSockets.of("/test").on('connection',function(err,socket,session){
+        socket.on("sendAnalysisResult",function(msg){
+            console.log(msg)
+            socket.broadcast.emit("receiveAnalysisResult",msg)
+            socket.emit("receiveAnalysisResult",msg)
+        })
+    })
+
     sessionSockets.of("/debate").on('connection', function (err, socket, session) {
         //your regular socket.io code goes here
         //and you can still use your io object

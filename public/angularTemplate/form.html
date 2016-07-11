@@ -1,0 +1,71 @@
+<form class="form-group" >
+    <div class="claim" ng-repeat="(_key,_obj) in obj track by $index">
+        <div class="row">
+            <div class="col-sm-11">
+                <div class="input-group">
+                    <span class="input-group-addon">主張: </span>
+                    <input type="text" class="form-control claimTxt" ng-model="_obj.claimTxt"  placeholder="">
+                    <span class="input-group-addon"><input value="1" ng-checked="_obj.dissent" type="checkbox"> 異議つけ</span>
+                </div>
+            </div>
+            <div class="col-sm-1 col-sm-offset-0 remove">
+                <button class="btn btn-default btn-xm glyphicon glyphicon-ban-circle" ng-click="removeClaim(_key)" ></button>
+            </div>
+        </div>
+
+        <div class="warrant" ng-repeat="(__key,__obj) in _obj.warrant track by $index">
+            <div class="row">
+                <div class="col-sm-offset-0 col-sm-1">
+                    <button ng-if="(_key == obj.length-1)&&(__key == 0)" class="btn btn-default btn-xs addClaim" ng-click="addClaim()"><i class="fa fa-plus-square"></i> 主張</button>
+                </div>
+
+                <div class="col-sm-10 col-sm-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">論拠: </span>
+                        <input type="text" class="form-control warrantTxt" ng-model="__obj.warrantTxt" placeholder="">
+                        <span class="input-group-addon"><input value="1" ng-checked="__obj.dissent" type="checkbox"> 異議つけ</span>
+                    </div>
+                </div>
+
+                <div class="col-sm-1 col-sm-offset-0 remove">
+                    <button class="btn btn-default btn-xm glyphicon glyphicon-ban-circle" ng-click="removeWarrant(_key,__key)" ></button>
+                </div>
+
+            </div>
+
+
+            <div class="evidence" ng-repeat="(___key,___obj) in __obj.evidence track by $index">
+                <div class="row">
+                    <div class="col-sm-offset-1 col-sm-1">
+                        <button ng-if="(__key== _obj['warrant'].length-1)&&(___key==0)" class="btn btn-default btn-xs addWarrant" ng-click="addWarrant(_key,__key)"><i class="fa fa-plus-square"></i> 論拠</button>
+                    </div>
+                    <div class="col-sm-9 col-sm-offset-0">
+                        <div class="input-group">
+                            <span class="input-group-addon">根拠:</span>
+                            <input type="text" class="form-control evidenceTxt" ng-model="___obj.evidenceTxt" placeholder="">
+                            <span class="input-group-addon"><input value="1" type="checkbox" ng-checked="___obj.dissent"> 異議つけ</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-1 col-sm-offset-0 remove">
+                        <button class="btn btn-default btn-xm glyphicon glyphicon-ban-circle" ng-click="removeEvidence(_key,__key,___key)" ></button>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-sm-offset-2 col-sm-1">
+                        <button ng-if="___key == __obj['evidence'].length-1" class="btn btn-default btn-xs addEvidence" ng-click="addEvidence(_key,__key)"><span class="fa fa-plus-square"></span>根拠</button>
+                    </div>
+                </div>
+
+
+            </div><!-- end of evidence-->
+
+
+        </div><!-- end of warrant-->
+
+    </div><!-- end of claim-->
+
+    <div><button class="btn btn-default btn-xs" ng-click="_submit()">登録</button></div>
+</form>
