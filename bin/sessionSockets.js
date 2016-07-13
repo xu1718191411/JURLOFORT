@@ -516,7 +516,7 @@ var sessionSockets = function(sessionSockets,steps,mongo){
 
             steps(function(){
                 mongo.insert("debateStatus",newRoom,{},this.hold(function(result){
-
+                    
                 }))
             },function(){
                 mongo.find("debateStatus",{finish:0},{},this.hold(function(result){
