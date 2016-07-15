@@ -6,6 +6,45 @@
 
 var sessionSockets = function(sessionSockets,steps,mongo){
 
+
+    sessionSockets.of("/_group").on('connection',function(err,socket,session){
+
+    })
+
+    sessionSockets.of("/_chat").on('connection',function(err,socket,session){
+        socket.on("enterRoom",function(msg){
+            console.log("enter room session is the following...")
+            console.log(session.debateLogin)
+
+            var loginInfo = session.debateLogin
+            delete loginInfo['password']
+            var lastest = {}
+            steps(
+                function(){
+                    // 传给刚进入房间或者是再次进入房间的用户status
+                    mongo.find("debateStatus",{num:loginInfo.num,rNum:loginInfo.rNum,group:loginInfo.group},{},this.hold(function(result){
+                        return {status:result[0].status,timeLimit:result[0].timeLimit,setting:result[0].setting}
+                    }))
+                },function(_obj){
+                    socket.emit("enterRoom",{loginInfo:loginInfo,status:_obj.status,timeLimit:_obj.timeLimit,setting:_obj.setting,lastest:lastest})
+                    socket.broadcast.emit("enterRoom",{loginInfo:loginInfo,status:_obj.status,timeLimit:_obj.timeLimit,setting:_obj.setting})
+                })()
+
+        })
+
+
+
+        socket.on("debateSetting",function(msg){
+            steps(function(){
+                mongo.update("debateStatus",{num:session.debateLogin.num,rNum:session.debateLogin.rNum},{$set:{config:{timeNumbers:msg.timeNumbers,timeLimit:msg.timeLimit,timeLimitValDefault:msg.timeLimitValDefault,timeLimitValCustomize:msg.timeLimitValCustomize},setting:1}},function(_res){
+                    socket.emit("systemSettingFinish",msg)
+                    socket.broadcast.emit("systemSettingFinish",msg)
+                })
+            })()
+        })
+    })
+
+
     sessionSockets.of("/test").on('connection',function(err,socket,session){
         socket.on("sendAnalysisResult",function(msg){
             console.log(msg)

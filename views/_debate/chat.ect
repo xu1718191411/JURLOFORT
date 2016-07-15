@@ -23,13 +23,13 @@
 </head>
 <body ng-app="myApp">
 <div ng-controller="myCtr" class="container">
+<setting-part ng-show="debateInfo.setting != 1" setting-info="settingInfo" set-up="setUp()"></setting-part>
 <div class="row">
 <my-navy></my-navy>
 </div>
 
 <div class="row">
 <ul class="nav nav-pills nav-justified">
-
     <li role="presentation" class="{{changeTabVal[0]}}"><a ng-click="changeTab(0)">討論情報</a></li>
     <li role="presentation" class="{{changeTabVal[1]}}"><a ng-click="changeTab(1)">主張履歴</a></li>
     <li role="presentation" class="{{changeTabVal[2]}}"><a ng-click="changeTab(2)">分析履歴</a></li>
@@ -37,13 +37,109 @@
 
 </div>
 
+<div>
+
+<div class="row" ng-show="changeTabVal[0] == 'active'">
+   <table class="table table-striped">
+     <!-- On rows -->
+     <tr class="info"><th>テーマ</th><td>information</td></tr>
+     <tr class="active"><th>肯定側</th><td>{{debateInfo.pro}}</td></tr>
+     <tr class="success"><th>否定側</th><td>{{debateInfo.con}}</td></tr>
+     <tr class="warning"><th>回数</th><td>{{debateInfo.config.timeNumbers}}</td></tr>
+     <tr class="danger"><th>時間制限</th><td>{{debateInfo.config.timeLimitValDefault}}</td></tr>
+   </table>
+</div>
+
+<div class="row" ng-show="changeTabVal[1] == 'active'">
+        <div class="panel panel-default">
+          <div class="panel-heading">主張</div>
+          <div class="panel-body">
+                主張内容
+          </div>
+        </div>
+</div>
+
+<div class="row" ng-show="changeTabVal[2] == 'active'">
+
+    <div class="row">
+                            <div class="col-sm-1">
+                             <div class="panel panel-default">
+                               <div class="panel-body">
+                                 主張
+                               </div>
+                             </div>
+                             </div>
+
+                             <div class="col-sm-10">
+                             <div class="panel panel-default">
+                                 <div class="panel-body">
+                                    主張内容
+                                 </div>
+                             </div>
+                             </div>
+
+                                <div class="col-sm-1" style="line-height:50px;">
+                                   <button class="btn btn-danger">意義</button>
+                             </div>
+
+    </div>
+
+    <div class="row">
+                            <div class="col-sm-1 col-sm-offset-1">
+                             <div class="panel panel-default">
+                               <div class="panel-body">
+                                 論拠
+                               </div>
+                             </div>
+                             </div>
+
+                             <div class="col-sm-9">
+                             <div class="panel panel-default">
+                                 <div class="panel-body">
+                                    論拠内容
+                                 </div>
+                             </div>
+                             </div>
+
+                                <div class="col-sm-1" style="line-height:50px;">
+                                   <button class="btn btn-danger">意義</button>
+                             </div>
+    </div>
+
+
+    <div class="row">
+                            <div class="col-sm-1 col-sm-offset-2">
+                             <div class="panel panel-default">
+                               <div class="panel-body">
+                                 根拠
+                               </div>
+                             </div>
+                             </div>
+
+                             <div class="col-sm-8">
+                             <div class="panel panel-default">
+                                 <div class="panel-body">
+                                    根拠内容
+                                 </div>
+                             </div>
+                             </div>
+
+                                <div class="col-sm-1" style="line-height:50px;">
+                                   <button class="btn btn-danger">意義</button>
+                             </div>
+
+    </div>
+</div>
 <div class="row">
-    <div class="alert alert-success" role="alert">...</div>
-    <div class="alert alert-info" role="alert">...</div>
-    <div class="alert alert-warning" role="alert">...</div>
-    <div class="alert alert-danger" role="alert">...</div>
-    <div class="alert alert-success" role="alert">...</div>
-    <div class="alert alert-info" role="alert">...</div>
+    <ul class="nav nav-pills nav-justified">
+        <li role="presentation" class="{{changeFormVal[0]}}"><a ng-click="changeForm(0)">主張入力</a></li>
+        <li role="presentation" class="{{changeFormVal[1]}}"><a ng-click="changeForm(1)">分析入力</a></li>
+    </ul>
+</div>
+
+<div class="row">
+<my-form ng-show="changeFormVal[0] == 'active'" obj="obj" addClaim="addClaim"></my-form>
+<my-input-form input-message="inputMessage" ng-show="changeFormVal[1] == 'active'"></my-input-form>
 </div>
 
 </div>
@@ -52,8 +148,74 @@
 
     var myApp = angular.module("myApp",[])
 
-    myApp.controller("myCtr",function($scope){
+    myApp.factory('coreSocket', function($rootScope) {
+                //var socket = io.connect();
+                var socket = io(window.location.host + "/_chat").connect()
+                return {
+                    on: function(eventName, callback) {
+                        socket.on(eventName, function() {
+                            var args = arguments;
+                            $rootScope.$apply(function() {
+                                callback.apply(socket, args);
+                            });
+                        });
+                    },
+                    emit: function(eventName, data, callback) {
+                        socket.emit(eventName, data, function() {
+                            var args = arguments;
+                            $rootScope.$apply(function() {
+                                if (callback) {
+                                    callback.apply(socket, args);
+                                }
+                            });
+                        });
+                    }
+                };
+    });
+
+    myApp.factory("myPost",function($http){
+        return{
+            postData:function(url,data){
+                return $http.post(url,data).success(function(res){
+                   return res;
+                })
+            }
+        }
+    })
+
+    myApp.controller("myCtr",function($scope,coreSocket,myPost){
+
+            function init(){
+                coreSocket.emit("enterRoom",{})
+                getDebateInformation()
+            }
+
+            init()
+
+            function getDebateInformation(){
+                myPost.postData("/_debate/getDebateInformation").then(function(_res){
+
+                    console.log(_res)
+                    $scope.debateInfo.pro = _res.data.pro
+                    $scope.debateInfo.con = _res.data.con
+                    $scope.debateInfo.finish = _res.data.finish
+                    $scope.debateInfo.setting = _res.data.setting
+                    $scope.debateInfo.group = _res.data.group
+                    $scope.debateInfo.config = _res.data.config
+
+                })
+            }
+
+            coreSocket.on("enterRoom",function(_res){
+                console.log(_res)
+            })
+
+            coreSocket.on("systemSettingFinish",function(_res){
+                console.log(_res)
+            })
+
             $scope.changeTabVal = ["active","",""]
+            $scope.changeFormVal = ["active",""]
             $scope.changeTab = function(n){
                 for(var i=0;i<$scope.changeTabVal.length;i++){
                     $scope.changeTabVal[i] = ""
@@ -61,12 +223,169 @@
                 $scope.changeTabVal[n] = "active"
             }
 
+            $scope.changeForm = function(n){
+                            for(var i=0;i<$scope.changeFormVal.length;i++){
+                                $scope.changeFormVal[i] = ""
+                            }
+                            $scope.changeFormVal[n] = "active"
+            }
+
+            $scope.testValue = "testValue"
+
+            $scope.obj=[{
+                                        "claimTxt": "",
+                                        "dissent":0,
+                                        "warrant": [
+                                          {
+                                            "warrantTxt": "",
+                                            "evidence": [
+                                              {
+                                                "evidenceTxt": "",
+                                                "dissent":0
+                                             }
+
+                                           ],
+                                           "dissent":0
+                                         }
+                                       ]
+                        }]
+
+
+            $scope.inputMessage = [
+                        {title:"this is the message for dissent",dissent:1,content:""},
+                        {title:"this is the message for dissent",dissent:1,content:""},
+                        {title:"this is the message for statement",dissent:0,content:""}
+                    ]
+
+            $scope.settingInfo = {
+                timeNumbers:5,
+                timeLimit:0,
+                timeLimitValDefault:"",
+                timeLimitValCustomize:""
+
+            }
+
+            $scope.debateInfo = {
+                pro:"",
+                con:"",
+                finishi:"",
+                setting:"",
+                group:"",
+                config:{}
+            }
+
+            $scope.setUp = function(){
+                coreSocket.emit("debateSetting",$scope.settingInfo)
+            }
+
+
     })
 
     myApp.directive("myNavy",function(){
         return {
             templateUrl:"/_debate/navy.html"
         }
+    })
+
+
+    myApp.directive('myForm',function(){
+
+        var claim = {
+                           "claimTxt": "",
+                           "dissent":0,
+                           "warrant": [
+                             {
+                               "warrantTxt": "",
+                               "dissent":0,
+                               "evidence": [
+                                 {
+                                   "evidenceTxt": "",
+                                   "dissent":0
+                                }
+
+                              ]
+                            }
+                          ]
+                      }
+
+        var warrant = {
+               "warrantTxt": "",
+               "dissent":0,
+               "evidence": [
+                 {
+                   "evidenceTxt": "",
+                   "dissent":0
+                }
+
+              ]
+        }
+
+        var evidence = {
+                 "evidenceTxt": "",
+                 "dissent":0
+        }
+
+          return{
+              controller:function($scope){
+                    $scope.addClaim = function(){
+                            $scope.obj.push(JSON.parse(JSON.stringify(claim)))
+                    }
+
+                    $scope.addWarrant = function(_key,__key){
+                            $scope.obj[_key]['warrant'].push(JSON.parse(JSON.stringify(warrant)))
+                    }
+
+                    $scope.addEvidence = function(_key,__key){
+                            $scope.obj[_key]['warrant'][__key]['evidence'].push(JSON.parse(JSON.stringify(evidence)))
+
+                    }
+
+                    $scope.removeClaim = function(_key){
+                            $scope.obj.splice(_key,1)
+                    }
+
+                    $scope.removeWarrant = function(_key,__key){
+                            console.log($scope.obj[_key].warrant.splice(__key,1))
+                            console.log($scope.obj)
+                    }
+
+                    $scope.removeEvidence = function(_key,__key,___key){
+                            $scope.obj[_key].warrant[__key].evidence.splice(___key,1)
+                    }
+
+                    $scope.submit = function(){
+                        alert("submit analysis result")
+                    }
+              },
+              scope:{
+                obj:"="
+              },
+              templateUrl:"/angularTemplate/form.html"
+          }
+    })
+
+    myApp.directive("myInputForm",function(){
+        return {
+           controller:function($scope){
+             $scope._submit = function(){
+                alert("submit statement result")
+             }
+           },
+           scope:{
+            inputMessage:"="
+           },
+           templateUrl:"/angularTemplate/inputForm.html"
+        }
+    })
+
+    myApp.directive("settingPart",function(){
+           return {
+                scope:{
+                    settingInfo:"=",
+                    setUp:"&"
+                },
+                templateUrl:"/_debate/settingPart.html"
+           }
     })
 
 

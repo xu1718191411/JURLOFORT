@@ -136,5 +136,10 @@ module.exports = {
     },
     chatController:function(req,res){
         res.render("_debate/chat",{})
+    },
+    getDebateInformationController:function(req,res){
+        mongo.find("debateStatus",{num:req.session.debateLogin.num,rNum:req.session.debateLogin.rNum},{},function(_res){
+                res.end(JSON.stringify(_res[0]))
+        })
     }
 }

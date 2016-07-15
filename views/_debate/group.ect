@@ -59,6 +59,32 @@
 
 var myApp = angular.module("myApp",["ngRoute"]);
 
+myApp.factory('coreSocket', function($rootScope) {
+            //var socket = io.connect();
+            var socket = io(window.location.host + "/_group").connect()
+            return {
+                on: function(eventName, callback) {
+                    socket.on(eventName, function() {
+                        var args = arguments;
+                        $rootScope.$apply(function() {
+                            callback.apply(socket, args);
+                        });
+                    });
+                },
+                emit: function(eventName, data, callback) {
+                    socket.emit(eventName, data, function() {
+                        var args = arguments;
+                        $rootScope.$apply(function() {
+                            if (callback) {
+                                callback.apply(socket, args);
+                            }
+                        });
+                    });
+                }
+            };
+        });
+
+
 myApp.config(function($routeProvider){
    $routeProvider.when('/theme',{
     controller:"themeCtr",
@@ -96,7 +122,7 @@ myApp.controller("themeCtr",function($scope,getDataFromServer){
 
     $scope.createRoom = function(num,position){
         getDataFromServer.getData("/_debate/createNewRoom",{num:num,position:position}).then(function(_res){
-                if(parseInt(_res.err) == 0){
+                if(parseInt(_res.data.err) == 0){
                     location = "/_debate/chat"
                 }
         })
@@ -110,6 +136,7 @@ myApp.controller("debatingCtr",function($scope){
 myApp.controller("finishedCtr",function($scope){
     $scope.title = "finishedCtr"
 })
+
 myApp.directive("myNavy",function(){
     return {
         templateUrl:"/_debate/navy.html"
