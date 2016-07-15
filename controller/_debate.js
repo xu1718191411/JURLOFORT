@@ -110,24 +110,51 @@ module.exports = {
     },
     getThemeListController:function(req,res){
         steps(function(){
-            mongo.find("themes",{},{},this.hold(function(_res){
+            mongo.find("themes",{group:req.session.debateLogin.group},{},this.hold(function(_res){
                     res.end(JSON.stringify(_res))
+            }))
+        })()
+    },
+    getDebatingListController:function(req,res){
+        steps(function(){
+            mongo.find("debateStatus",{group:req.session.debateLogin.group,setting:1},{},this.hold(function(_res){
+                res.end(JSON.stringify(_res))
             }))
         })()
     },
     createNewRoomController:function(req,res){
         var position = req.body.position
         var num = req.body.num
+        var title = req.body.title
 
         var rNum = Math.round(Math.random()*10000)
         if(position == 1){
-            var newRoom = {pro:req.session.debateLogin.username,num:num,rNum:rNum,finishi:0,setting:0,group:req.session.debateLogin.group}
+            var newRoom = {title:title,pro:req.session.debateLogin.username,num:num,rNum:rNum,finishi:0,setting:0,group:req.session.debateLogin.group}
         }else{
-            var newRoom = {con:req.session.debateLogin.username,num:num,rNum:rNum,finishi:0,setting:0,group:req.session.debateLogin.group}
+            var newRoom = {title:title,con:req.session.debateLogin.username,num:num,rNum:rNum,finishi:0,setting:0,group:req.session.debateLogin.group}
         }
 
         steps(function(){
             mongo.insert("debateStatus",newRoom,{},this.hold(function(_res){
+                req.session.debateLogin.num = num
+                req.session.debateLogin.rNum = rNum
+                res.end(JSON.stringify({err:0,msg:"successfully"}))
+            }))
+        })()
+    },
+    participateRoomController:function(req,res){
+        var position = req.body.position
+        var num = req.body.num
+        var rNum = req.body.rNum
+
+        if(position == 1){
+            var _update = {pro:req.session.debateLogin.username}
+        }else{
+            var _update = {con:req.session.debateLogin.username}
+        }
+
+        steps(function(){
+            mongo.update("debateStatus",{num:num},{$set:_update},this.hold(function(){
                 req.session.debateLogin.num = num
                 req.session.debateLogin.rNum = rNum
                 res.end(JSON.stringify({err:0,msg:"successfully"}))

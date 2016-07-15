@@ -23,16 +23,14 @@ var sessionSockets = function(sessionSockets,steps,mongo){
                 function(){
                     // 传给刚进入房间或者是再次进入房间的用户status
                     mongo.find("debateStatus",{num:loginInfo.num,rNum:loginInfo.rNum,group:loginInfo.group},{},this.hold(function(result){
-                        return {status:result[0].status,timeLimit:result[0].timeLimit,setting:result[0].setting}
+                        return {status:result[0].status,config:result[0].config,setting:result[0].setting}
                     }))
                 },function(_obj){
-                    socket.emit("enterRoom",{loginInfo:loginInfo,status:_obj.status,timeLimit:_obj.timeLimit,setting:_obj.setting,lastest:lastest})
-                    socket.broadcast.emit("enterRoom",{loginInfo:loginInfo,status:_obj.status,timeLimit:_obj.timeLimit,setting:_obj.setting})
+                    socket.emit("enterRoom",{loginInfo:loginInfo,status:_obj.status,config:_obj.config,setting:_obj.setting})
+                    socket.broadcast.emit("enterRoom",{loginInfo:loginInfo,status:_obj.status,config:_obj.config,setting:_obj.setting})
                 })()
 
         })
-
-
 
         socket.on("debateSetting",function(msg){
             steps(function(){

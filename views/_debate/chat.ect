@@ -23,7 +23,7 @@
 </head>
 <body ng-app="myApp">
 <div ng-controller="myCtr" class="container">
-<setting-part ng-show="debateInfo.setting != 1" setting-info="settingInfo" set-up="setUp()"></setting-part>
+<setting-part ng-show="debateInfo.setting != 1"  setting-info="settingInfo" set-up="setUp()"></setting-part>
 <div class="row">
 <my-navy></my-navy>
 </div>
@@ -40,13 +40,13 @@
 <div>
 
 <div class="row" ng-show="changeTabVal[0] == 'active'">
-   <table class="table table-striped">
+   <table class="table table-striped ">
      <!-- On rows -->
-     <tr class="info"><th>テーマ</th><td>information</td></tr>
-     <tr class="active"><th>肯定側</th><td>{{debateInfo.pro}}</td></tr>
-     <tr class="success"><th>否定側</th><td>{{debateInfo.con}}</td></tr>
-     <tr class="warning"><th>回数</th><td>{{debateInfo.config.timeNumbers}}</td></tr>
-     <tr class="danger"><th>時間制限</th><td>{{debateInfo.config.timeLimitValDefault}}</td></tr>
+     <tr class="info"><th>テーマ</th><td>information</td><td></td></tr>
+     <tr class="active"><th>肯定側</th><td>{{debateInfo.pro}}</td><td><button class="btn btn-info">準備</button></td></tr>
+     <tr class="success"><th>否定側</th><td>{{debateInfo.con}}</td><td><button class="btn btn-success">準備</button></td></tr>
+     <tr class="warning"><th>回数</th><td>{{debateInfo.config.timeNumbers}}</td><td></td></tr>
+     <tr class="danger"><th>時間制限</th><td>{{debateInfo.config.timeLimitValDefault}}</td><td></td></tr>
    </table>
 </div>
 
@@ -211,7 +211,8 @@
             })
 
             coreSocket.on("systemSettingFinish",function(_res){
-                console.log(_res)
+                $scope.debateInfo.setting = 1
+                $scope.debateInfo.config = {timeNumbers:_res.timeNumbers,timeLimit:_res.timeLimit,timeLimitValDefault:_res.timeLimitValDefault,timeLimitValCustomize:_res.timeLimitValCustomize}
             })
 
             $scope.changeTabVal = ["active","",""]

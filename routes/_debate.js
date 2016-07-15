@@ -17,7 +17,9 @@ router.post('/loginPost',_debateController.loginPostController);
 
 router.get('/group',_debateController.groupController)
 router.post('/getThemeList',_debateController.getThemeListController)
+router.post('/getDebatingList',_debateController.getDebatingListController)
 router.post('/createNewRoom',_debateController.createNewRoomController)
+router.post('/participateRoom',_debateController.participateRoomController)
 router.get("/chat",_debateController.chatController)
 router.post('/getDebateInformation',_debateController.getDebateInformationController)
 module.exports = router;

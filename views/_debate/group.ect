@@ -21,9 +21,9 @@
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-route.min.js"></script>
 </head>
-<body ng-app="myApp">
+<body>
 
-<div class="container">
+<div ng-app="myApp" class="container">
     <my-navy></my-navy>
 
     <div class="row" ng-controller="myController">
@@ -42,14 +42,9 @@
 
 
     <div ng-view></div>
-
-
     </div>
 
-
-
 </div>
-
 
 
 
@@ -91,7 +86,7 @@ myApp.config(function($routeProvider){
     templateUrl:'/_debate/themeList.html'
    }).when('/debating',{
     controller:"debatingCtr",
-    templateUrl:'/_debate/debatingLis.html'
+    templateUrl:'/_debate/debatingList.html'
    }).when('/finished',{
     controller:"finishedCtr",
     templateUrl:'/_debate/debateFinishList.html'
@@ -120,8 +115,8 @@ myApp.controller("themeCtr",function($scope,getDataFromServer){
         $scope.themeList = _res.data
     })
 
-    $scope.createRoom = function(num,position){
-        getDataFromServer.getData("/_debate/createNewRoom",{num:num,position:position}).then(function(_res){
+    $scope.createRoom = function(title,num,position){
+        getDataFromServer.getData("/_debate/createNewRoom",{title:title,num:num,position:position}).then(function(_res){
                 if(parseInt(_res.data.err) == 0){
                     location = "/_debate/chat"
                 }
@@ -129,8 +124,18 @@ myApp.controller("themeCtr",function($scope,getDataFromServer){
     }
 })
 
-myApp.controller("debatingCtr",function($scope){
+myApp.controller("debatingCtr",function($scope,getDataFromServer){
     $scope.title = "debatingCtr"
+    getDataFromServer.getData("/_debate/getDebatingList",{}).then(function(_res){
+        $scope.debatingList = _res.data
+    })
+    $scope.participateRoom = function(num,rNum,position){
+        getDataFromServer.getData("/_debate/participateRoom",{num:num,rNum:rNum,position:position}).then(function(_res){
+                if(parseInt(_res.data.err) == 0){
+                    location = "/_debate/chat"
+                }
+        })
+    }
 })
 
 myApp.controller("finishedCtr",function($scope){
