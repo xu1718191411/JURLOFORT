@@ -40,6 +40,19 @@ var sessionSockets = function(sessionSockets,steps,mongo){
                 })
             })()
         })
+
+        socket.on("prepare",function(msg){
+             if(parseInt(session.debateLogin.position) == 1){
+                    var _update = {proPrepare:1}
+             }else{
+                    var _update = {conPrepare:1}
+             }
+            steps(function(){
+                mongo.update("debateStatus",{num:session.debateLogin.num},{$set:_update},this.hold(function(){
+                    socket.emit("prepared",_update)
+                }))
+            })()
+        })
     })
 
 

@@ -153,6 +153,8 @@ module.exports = {
             var _update = {con:req.session.debateLogin.username}
         }
 
+        req.session.debateLogin.position = position
+
         steps(function(){
             mongo.update("debateStatus",{num:num},{$set:_update},this.hold(function(){
                 req.session.debateLogin.num = num

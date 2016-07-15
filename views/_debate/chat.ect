@@ -38,13 +38,13 @@
 </div>
 
 <div>
-
+{{debateInfo}}
 <div class="row" ng-show="changeTabVal[0] == 'active'">
    <table class="table table-striped ">
      <!-- On rows -->
      <tr class="info"><th>テーマ</th><td>information</td><td></td></tr>
-     <tr class="active"><th>肯定側</th><td>{{debateInfo.pro}}</td><td><button class="btn btn-info">準備</button></td></tr>
-     <tr class="success"><th>否定側</th><td>{{debateInfo.con}}</td><td><button class="btn btn-success">準備</button></td></tr>
+     <tr class="active"><th>肯定側</th><td>{{debateInfo.pro}}</td><td><button ng-click="prepare()" class="btn btn-info" ng-disabled="debateInfo.proPrepare == 1">準備</button></td></tr>
+     <tr class="success"><th>否定側</th><td>{{debateInfo.con}}</td><td><button ng-click="prepare()" class="btn btn-success" ng-disabled="debateInfo.conPrepare == 1"><span ng-if="debateInfo.conPrepare == 0">準備</span><span ng-if="debateInfo.conPrepare == 1">asd</span></button></td></tr>
      <tr class="warning"><th>回数</th><td>{{debateInfo.config.timeNumbers}}</td><td></td></tr>
      <tr class="danger"><th>時間制限</th><td>{{debateInfo.config.timeLimitValDefault}}</td><td></td></tr>
    </table>
@@ -201,6 +201,8 @@
                     $scope.debateInfo.finish = _res.data.finish
                     $scope.debateInfo.setting = _res.data.setting
                     $scope.debateInfo.group = _res.data.group
+                    $scope.debateInfo.proPrepare = _res.data.proPrepare
+                    $scope.debateInfo.conPrepare = _res.data.conPrepare
                     $scope.debateInfo.config = _res.data.config
 
                 })
@@ -213,6 +215,16 @@
             coreSocket.on("systemSettingFinish",function(_res){
                 $scope.debateInfo.setting = 1
                 $scope.debateInfo.config = {timeNumbers:_res.timeNumbers,timeLimit:_res.timeLimit,timeLimitValDefault:_res.timeLimitValDefault,timeLimitValCustomize:_res.timeLimitValCustomize}
+            })
+
+            coreSocket.on("prepared",function(_res){
+                if(_res.proPrepare == 1){
+                    $scope.debateInfo.proPrepare = 1
+                }
+
+                if(_res.conPrepare == 1){
+                    $scope.debateInfo.conPrepare = 1
+                }
             })
 
             $scope.changeTabVal = ["active","",""]
@@ -272,11 +284,17 @@
                 finishi:"",
                 setting:"",
                 group:"",
-                config:{}
+                config:{},
+                proPrepare:0,
+                conPrepare:0
             }
 
             $scope.setUp = function(){
                 coreSocket.emit("debateSetting",$scope.settingInfo)
+            }
+
+            $scope.prepare = function(){
+                coreSocket.emit("prepare",{})
             }
 
 
