@@ -1,49 +1,328 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Bootstrap 101 Template</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <![endif]-->
+     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+     <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body ng-app="myApp">
+    <h1>Hello, world!</h1>
 
-</head>
-<body ng-app="firstModule">
-<div ng-controller="firstController">
+    <div ng-controller="myController">
 
-<div class="alert alert-danger" role="alert" ng-click="_click()">
-  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-  <span class="sr-only">Error:</span>
-  {{user}}
-</div>
+      <div ng-show="submitFinish">
+          <div ng-repeat="(key,rec) in receiveObj">
 
-<ul>
-  <li ng-repeat="parent in res" ng-click="sc(parent)">
-        {{parent.title}}
-  </li>
-</ul>
+          <div class="row">
+                         <div class="col-sm-1">
 
-</div>
-</body>
-<script>
 
-var app = angular.module("firstModule",[])
-app.controller("firstController",function($scope,$http){
-    $scope.user = "aaa"
-    $scope._click = function(){
-        $scope.user = "bbb"
-    }
-    $http.get("/blog/getData").success(function(res){
-        $scope.res = res
-    })
+                         <div class="panel panel-default">
+                           <div class="panel-body">
+                             主張
+                           </div>
+                         </div>
+                         </div>
 
-    $scope.sc = function(ss){
-           ss.title = 1
-    }
-})
 
-</script>
+                         <div class="col-sm-8">
+
+                         <div class="panel panel-default">
+                             <div class="panel-body dClaimSampleTxt">
+                                {{rec.claimTxt}}
+                             </div>
+                         </div>
+
+                         </div>
+
+
+                         <div class="col-sm-1">
+
+                         <div class="panel panel-default">
+                             <div class="panel-body igiMark">
+                               &nbsp;
+                             </div>
+                         </div>
+
+
+                         </div>
+
+
+                      </div>
+
+
+          <div ng-repeat="(_key,_rec) in rec.warrant">
+          <div class="row">
+                    <div class="col-sm-1 col-sm-offset-1">
+
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        論拠
+                      </div>
+                    </div>
+                    </div>
+
+                    <div class="col-sm-7">
+
+                    <div class="panel panel-default">
+                        <div class="panel-body dClaimSampleTxt">
+                          {{_rec.warrantTxt}}
+                        </div>
+                    </div>
+
+                    </div>
+
+                    <div class="col-sm-1">
+
+                    <div class="panel panel-default">
+                        <div class="panel-body igiMark">
+                          &nbsp;
+                        </div>
+                    </div>
+
+                    </div>
+
+
+                     </div>
+
+          <div ng-repeat="(__key,__rec) in _rec.evidence">
+          <div class="row">
+            <div class="col-sm-1 col-sm-offset-2">
+
+
+            <div class="panel panel-default">
+              <div class="panel-body">
+                根拠
+              </div>
+            </div>
+            </div>
+
+
+            <div class="col-sm-6">
+
+            <div class="panel panel-default">
+                <div class="panel-body dClaimSampleTxt">
+                  {{__rec.evidenceTxt}}
+                </div>
+            </div>
+
+            </div>
+
+
+            <div class="col-sm-1">
+
+            <div class="panel panel-default">
+                <div class="panel-body igiMark">
+                  &nbsp;
+                </div>
+            </div>
+
+
+            </div>
+
+
+         </div>
+          </div>
+
+          </div>
+          </div>
+    </div>
+        <my-form obj="obj"></my-form>
+        </div>
+
+  </body>
+
+  <script>
+
+        var app = angular.module("myApp",[])
+
+        app.factory('coreSocket', function($rootScope) {
+            //var socket = io.connect();
+            var socket = io(window.location.host + "/test").connect()
+            return {
+                on: function(eventName, callback) {
+                    socket.on(eventName, function() {
+                        var args = arguments;
+                        $rootScope.$apply(function() {
+                            callback.apply(socket, args);
+                        });
+                    });
+                },
+                emit: function(eventName, data, callback) {
+                    socket.emit(eventName, data, function() {
+                        var args = arguments;
+                        $rootScope.$apply(function() {
+                            if (callback) {
+                                callback.apply(socket, args);
+                            }
+                        });
+                    });
+                }
+            };
+        });
+
+        app.factory('myFactory',function($http){
+                var res = function(){
+                    return $http.get('/').success(function(_res){
+
+                    })
+                }
+                return {res:res}
+        })
+
+
+        app.service("myService",function($http){
+
+            this.gg = "this is gg"
+
+            this.get = function(){
+                return $http.get('/').success(function(){
+
+                })
+            }
+
+            this.getGG = function(){
+                return this.gg
+            }
+
+            this.getgg = function(){
+                return this.gg
+            }
+
+        })
+
+
+        app.controller("myController",function($scope,$http,coreSocket,$timeout,myFactory,myService){
+
+                function init(){
+                    myFactory.res().then(function(res){
+                        console.log(res)
+                    })
+
+                   myService.get().then(function(res){
+                        console.log(res)
+                   })
+
+                   console.log(myService.getGG())
+                   console.log(myService.getgg())
+                }
+
+                init()
+
+                $submitFinish = false;
+                var claim = {
+                                   "claimTxt": "",
+                                   "dissent":0,
+                                   "warrant": [
+                                     {
+                                       "warrantTxt": "",
+                                       "dissent":0,
+                                       "evidence": [
+                                         {
+                                           "evidenceTxt": "",
+                                           "dissent":0
+                                        }
+
+                                      ]
+                                    }
+                                  ]
+                              }
+
+                var warrant = {
+                       "warrantTxt": "",
+                       "dissent":0,
+                       "evidence": [
+                         {
+                           "evidenceTxt": "",
+                           "dissent":0
+                        }
+
+                      ]
+                }
+
+                var evidence = {
+                         "evidenceTxt": "",
+                         "dissent":0
+                }
+
+                $scope.obj=[{
+                            "claimTxt": "",
+                            "dissent":0,
+                            "warrant": [
+                              {
+                                "warrantTxt": "",
+                                "evidence": [
+                                  {
+                                    "evidenceTxt": "",
+                                    "dissent":0
+                                 }
+
+                               ],
+                               "dissent":0
+                             }
+                           ]
+                           }
+                          ]
+
+
+                $scope.cc = 11111
+                $scope.addClaim = function(){
+                        $scope.obj.push(JSON.parse(JSON.stringify(claim)))
+                }
+
+                $scope.addWarrant = function(_key,__key){
+                        $scope.obj[_key]['warrant'].push(JSON.parse(JSON.stringify(warrant)))
+                }
+
+                $scope.addEvidence = function(_key,__key){
+                        $scope.obj[_key]['warrant'][__key]['evidence'].push(JSON.parse(JSON.stringify(evidence)))
+
+                }
+
+                $scope.removeClaim = function(_key){
+                        $scope.obj.splice(_key,1)
+                }
+
+                $scope.removeWarrant = function(_key,__key){
+                        console.log($scope.obj[_key].warrant.splice(__key,1))
+                        console.log($scope.obj)
+                }
+
+                $scope.removeEvidence = function(_key,__key,___key){
+                        $scope.obj[_key].warrant[__key].evidence.splice(___key,1)
+                }
+
+                $scope._submit = function(){
+                    console.log($scope.obj)
+                    console.log("===================")
+                    coreSocket.emit("sendAnalysisResult",$scope.obj)
+                }
+
+                coreSocket.on("receiveAnalysisResult",function(msg){
+                    $scope.submitFinish = true;
+                    $scope.receiveObj = msg;
+                    console.log($scope.receiveObj)
+                })
+        })
+
+        app.directive('myForm',function(){
+                      return{
+                          scope:{
+                            obj:"="
+                          },
+                          templateUrl:"/angularTemplate/form.html"
+                      }
+          })
+
+  </script>
 </html>
