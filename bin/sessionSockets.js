@@ -50,8 +50,25 @@ var sessionSockets = function(sessionSockets,steps,mongo){
             steps(function(){
                 mongo.update("debateStatus",{num:session.debateLogin.num},{$set:_update},this.hold(function(){
                     socket.emit("prepared",_update)
+                    socket.broadcast.emit("prepared",_update)
+                }))
+            },function(){
+                mongo.find("debateStatus",{num:session.debateLogin.num},{},this.hold(function(_res){
+                    if(parseInt(_res[0].conPrepare) == 1 && parseInt(_res[0].proPrepare) == 1){
+                        this.step(function(){
+                            mongo.update("debateStatus",{num:session.debateLogin.num},{$set:{status:0}},function(){
+                                socket.emit("prepareCompelete",{})
+                                socket.broadcast.emit("prepareCompelete",{})
+                            })
+                        })
+                    }
                 }))
             })()
+        })
+
+
+        socket.on("giveStatement",function(msg){
+                console.log(msg)
         })
     })
 

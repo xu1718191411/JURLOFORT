@@ -10,7 +10,10 @@ var steps = require('ocsteps');
 
 module.exports = {
     indexController:function(req,res){
-
+        if(tool.isEmpty(req.session.debateLogin)){
+            res.redirect("login")
+            return;
+        }
     },
     loginController:function(req,res){
         res.render("_debate/login",{})
@@ -54,6 +57,12 @@ module.exports = {
             })()
     },
     groupController:function(req,res){
+
+        if(tool.isEmpty(req.session.debateLogin)){
+            res.redirect("login")
+            return;
+        }
+
         var themes = []
         var debatingList = []
         var finishList = []
@@ -134,6 +143,8 @@ module.exports = {
             var newRoom = {title:title,con:req.session.debateLogin.username,num:num,rNum:rNum,finishi:0,setting:0,group:req.session.debateLogin.group}
         }
 
+        req.session.debateLogin.position = position
+        console.log(req.session.debateLogin)
         steps(function(){
             mongo.insert("debateStatus",newRoom,{},this.hold(function(_res){
                 req.session.debateLogin.num = num
@@ -155,6 +166,7 @@ module.exports = {
 
         req.session.debateLogin.position = position
 
+        console.log(req.session.debateLogin)
         steps(function(){
             mongo.update("debateStatus",{num:num},{$set:_update},this.hold(function(){
                 req.session.debateLogin.num = num
@@ -164,11 +176,18 @@ module.exports = {
         })()
     },
     chatController:function(req,res){
+        if(tool.isEmpty(req.session.debateLogin)){
+            res.redirect("login")
+            return;
+        }
+
         res.render("_debate/chat",{})
     },
     getDebateInformationController:function(req,res){
         mongo.find("debateStatus",{num:req.session.debateLogin.num,rNum:req.session.debateLogin.rNum},{},function(_res){
-                res.end(JSON.stringify(_res[0]))
+            _res[0].position = req.session.debateLogin.position
+            _res[0].status = (parseInt(_res[0].status +1 ) || -1) - 1
+            res.end(JSON.stringify(_res[0]))
         })
     }
 }

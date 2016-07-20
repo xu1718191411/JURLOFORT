@@ -43,8 +43,52 @@
    <table class="table table-striped ">
      <!-- On rows -->
      <tr class="info"><th>テーマ</th><td>information</td><td></td></tr>
-     <tr class="active"><th>肯定側</th><td>{{debateInfo.pro}}</td><td><button ng-click="prepare()" class="btn btn-info" ng-disabled="debateInfo.proPrepare == 1">準備</button></td></tr>
-     <tr class="success"><th>否定側</th><td>{{debateInfo.con}}</td><td><button ng-click="prepare()" class="btn btn-success" ng-disabled="debateInfo.conPrepare == 1"><span ng-if="debateInfo.conPrepare == 0">準備</span><span ng-if="debateInfo.conPrepare == 1">asd</span></button></td></tr>
+
+     <tr class="active">
+     <th>肯定側</th>
+     <td>{{debateInfo.pro}}</td>
+     <td>
+            <div ng-if="debateInfo.status<0">
+             <div ng-if="debateInfo.position == 1">
+                <button ng-click="prepare()" class="btn btn-info" ng-if="debateInfo.proPrepare != 1">準備</button>
+                <span ng-if="debateInfo.proPrepare == 1">準備済み</span>
+             </div>
+
+             <div ng-if="debateInfo.position == 2">
+                <span ng-if="debateInfo.proPrepare == 1">準備済み</span>
+                <span ng-if="debateInfo.proPrepare != 1">未準備</span>
+             </div>
+            </div>
+
+            <div ng-if="debateInfo.status>=0">
+                討論中
+            </div>
+     </td>
+     </tr>
+
+     <tr class="success">
+     <th>否定側</th>
+     <td>{{debateInfo.con}}</td>
+     <td>
+          <div ng-if="debateInfo.status<0">
+          <div ng-if="debateInfo.position == 2">
+             <button ng-click="prepare()" class="btn btn-info" ng-if="debateInfo.conPrepare != 1">準備</button>
+             <span ng-if="debateInfo.conPrepare == 1">準備済み</span>
+          </div>
+
+          <div ng-if="debateInfo.position == 1">
+             <span ng-if="debateInfo.conPrepare == 1">準備済み</span>
+             <span ng-if="debateInfo.conPrepare != 1">未準備</span>
+          </div>
+          </div>
+
+            <div ng-if="debateInfo.status>=0">
+                討論中
+            </div>
+
+     </td>
+     </tr>
+
      <tr class="warning"><th>回数</th><td>{{debateInfo.config.timeNumbers}}</td><td></td></tr>
      <tr class="danger"><th>時間制限</th><td>{{debateInfo.config.timeLimitValDefault}}</td><td></td></tr>
    </table>
@@ -194,7 +238,6 @@
 
             function getDebateInformation(){
                 myPost.postData("/_debate/getDebateInformation").then(function(_res){
-
                     console.log(_res)
                     $scope.debateInfo.pro = _res.data.pro
                     $scope.debateInfo.con = _res.data.con
@@ -203,6 +246,8 @@
                     $scope.debateInfo.group = _res.data.group
                     $scope.debateInfo.proPrepare = _res.data.proPrepare
                     $scope.debateInfo.conPrepare = _res.data.conPrepare
+                    $scope.debateInfo.position = _res.data.position
+                    $scope.debateInfo.status = _res.data.status
                     $scope.debateInfo.config = _res.data.config
 
                 })
@@ -218,17 +263,23 @@
             })
 
             coreSocket.on("prepared",function(_res){
-                if(_res.proPrepare == 1){
-                    $scope.debateInfo.proPrepare = 1
-                }
+                getDebateInformation()
+            })
 
-                if(_res.conPrepare == 1){
-                    $scope.debateInfo.conPrepare = 1
+
+
+            coreSocket.on("prepareCompelete",function(_res){
+                getDebateInformation()
+            })
+
+            $scope.$watch("debateInfo.status",function(val,preVal){
+                if(parseInt(preVal) == -2 && parseInt(val) == 0){
+                    $scope.changeFormVal = ["","active"]
                 }
             })
 
             $scope.changeTabVal = ["active","",""]
-            $scope.changeFormVal = ["active",""]
+            $scope.changeFormVal = ["",""]
             $scope.changeTab = function(n){
                 for(var i=0;i<$scope.changeTabVal.length;i++){
                     $scope.changeTabVal[i] = ""
@@ -265,8 +316,6 @@
 
 
             $scope.inputMessage = [
-                        {title:"this is the message for dissent",dissent:1,content:""},
-                        {title:"this is the message for dissent",dissent:1,content:""},
                         {title:"this is the message for statement",dissent:0,content:""}
                     ]
 
@@ -375,6 +424,7 @@
                     $scope.submit = function(){
                         alert("submit analysis result")
                     }
+
               },
               scope:{
                 obj:"="
@@ -383,15 +433,15 @@
           }
     })
 
-    myApp.directive("myInputForm",function(){
+    myApp.directive("myInputForm",function(coreSocket){
         return {
-           controller:function($scope){
-             $scope._submit = function(){
-                alert("submit statement result")
-             }
-           },
            scope:{
             inputMessage:"="
+           },
+           controller:function($scope){
+                $scope._submit = function(){
+                    alert("submit statement result")
+                }
            },
            templateUrl:"/angularTemplate/inputForm.html"
         }
