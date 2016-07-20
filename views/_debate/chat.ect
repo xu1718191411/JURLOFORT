@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Chat</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="/tmp/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
     <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <link rel="stylesheet" href="/tmp/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
     <![endif]-->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="/tmp/angular.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="/tmp/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="/tmp/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <!--
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-animate.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-touch.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap.min.js"></script>
     -->
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-route.min.js"></script>
+    <script type="text/javascript" src="/tmp/angular-route.min.js"></script>
+
 </head>
 <body ng-app="myApp">
 <div ng-controller="myCtr" class="container">
@@ -95,10 +96,10 @@
 </div>
 
 <div class="row" ng-show="changeTabVal[1] == 'active'">
-        <div class="panel panel-default">
-          <div class="panel-heading">主張</div>
+        <div class="panel panel-default"  ng-repeat="(key,val) in statement">
+          <div class="panel-heading">主張:{{val.title}}</div>
           <div class="panel-body">
-                主張内容
+                主張内容:{{val.content}}
           </div>
         </div>
 </div>
@@ -266,10 +267,15 @@
                 getDebateInformation()
             })
 
-
-
             coreSocket.on("prepareCompelete",function(_res){
                 getDebateInformation()
+            })
+
+            coreSocket.on("receiveStatement",function(_res){
+                getDebateInformation()
+                $scope.statement = $scope.statement.concat(_res)
+                console.log("sssssssssss")
+                console.log($scope.statement)
             })
 
             $scope.$watch("debateInfo.status",function(val,preVal){
@@ -318,6 +324,10 @@
             $scope.inputMessage = [
                         {title:"this is the message for statement",dissent:0,content:""}
                     ]
+
+            $scope.statement = [
+                 {title:"this is the message for statement",dissent:0,content:"this is the message for statement"}
+            ]
 
             $scope.settingInfo = {
                 timeNumbers:5,
@@ -440,7 +450,7 @@
            },
            controller:function($scope){
                 $scope._submit = function(){
-                    alert("submit statement result")
+                    coreSocket.emit("giveStatement",$scope.inputMessage)
                 }
            },
            templateUrl:"/angularTemplate/inputForm.html"

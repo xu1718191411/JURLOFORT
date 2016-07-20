@@ -68,7 +68,14 @@ var sessionSockets = function(sessionSockets,steps,mongo){
 
 
         socket.on("giveStatement",function(msg){
-                console.log(msg)
+                steps(function(){
+                    mongo.update("debateStatus",{num:session.debateLogin.num},{$inc:{status:1}},function(){
+
+                    })
+                },function(){
+                    socket.emit("receiveStatement",msg)
+                    socket.broadcast.emit("receiveStatement",msg)
+                })()
         })
     })
 
