@@ -39,7 +39,6 @@
 </div>
 
 <div>
-{{debateInfo}}
 <div class="row" ng-show="changeTabVal[0] == 'active'">
    <table class="table table-striped ">
      <!-- On rows -->
@@ -96,20 +95,27 @@
 </div>
 
 <div class="row" ng-show="changeTabVal[1] == 'active'">
-        <div class="panel panel-default"  ng-repeat="(key,val) in statement">
-          <div class="panel-heading">主張:{{val.title}}</div>
+
+        <div ng-repeat="(key,val) in statement track by $index">
+        <div ng-class="(val.position == 1)? 'panel-info':'panel-success'" class="panel">
+          <div class="panel-heading">主張</div>
           <div class="panel-body">
                 主張内容:{{val.content}}
           </div>
+        </div>
         </div>
 </div>
 
 <div class="row" ng-show="changeTabVal[2] == 'active'">
 
+
+
+    <div ng-repeat="(key,val) in analysis track by $index">
+    <div ng-repeat="(_key,_val) in val.obj track by $index">
     <div class="row">
                             <div class="col-sm-1">
-                             <div class="panel panel-default">
-                               <div class="panel-body">
+                                <div ng-class="(val.position == 1)? 'panel-info':'panel-success'" class="panel">
+                               <div class="panel-heading">
                                  主張
                                </div>
                              </div>
@@ -118,21 +124,21 @@
                              <div class="col-sm-10">
                              <div class="panel panel-default">
                                  <div class="panel-body">
-                                    主張内容
+                                    主張内容:{{_val.claimTxt}}
                                  </div>
                              </div>
                              </div>
 
-                                <div class="col-sm-1" style="line-height:50px;">
+                                <div ng-if="_val.dissent == 1" class="col-sm-1" style="line-height:50px;">
                                    <button class="btn btn-danger">意義</button>
-                             </div>
+                                </div>
 
     </div>
-
+    <div ng-repeat="(__key,__val) in _val.warrant track by $index">
     <div class="row">
                             <div class="col-sm-1 col-sm-offset-1">
-                             <div class="panel panel-default">
-                               <div class="panel-body">
+                            <div ng-class="(val.position == 1)? 'panel-info':'panel-success'" class="panel">
+                               <div class="panel-heading">
                                  論拠
                                </div>
                              </div>
@@ -141,21 +147,21 @@
                              <div class="col-sm-9">
                              <div class="panel panel-default">
                                  <div class="panel-body">
-                                    論拠内容
+                                    論拠内容:{{__val.warrantTxt}}
                                  </div>
                              </div>
                              </div>
 
-                                <div class="col-sm-1" style="line-height:50px;">
+                                <div ng-if="__val.dissent == 1" class="col-sm-1" style="line-height:50px;">
                                    <button class="btn btn-danger">意義</button>
                              </div>
     </div>
 
-
+    <div ng-repeat="(___key,___val) in __val.evidence track by $index">
     <div class="row">
                             <div class="col-sm-1 col-sm-offset-2">
-                             <div class="panel panel-default">
-                               <div class="panel-body">
+                            <div ng-class="(val.position == 1)? 'panel-info':'panel-success'" class="panel">
+                               <div class="panel-heading">
                                  根拠
                                </div>
                              </div>
@@ -164,27 +170,43 @@
                              <div class="col-sm-8">
                              <div class="panel panel-default">
                                  <div class="panel-body">
-                                    根拠内容
+                                    根拠内容:{{___val.evidenceTxt}}
                                  </div>
                              </div>
                              </div>
 
-                                <div class="col-sm-1" style="line-height:50px;">
+                                <div ng-if="___val.dissent == 1" class="col-sm-1" style="line-height:50px;">
                                    <button class="btn btn-danger">意義</button>
                              </div>
 
     </div>
+
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
 </div>
 <div class="row">
     <ul class="nav nav-pills nav-justified">
-        <li role="presentation" class="{{changeFormVal[0]}}"><a ng-click="changeForm(0)">主張入力</a></li>
-        <li role="presentation" class="{{changeFormVal[1]}}"><a ng-click="changeForm(1)">分析入力</a></li>
+        <li role="presentation" class="{{changeFormVal[0]}}"><a ng-click="changeForm(0)">分析入力</a></li>
+        <li role="presentation" class="{{changeFormVal[1]}}"><a ng-click="changeForm(1)">主張入力</a></li>
+    </ul>
+
+<br/>
+    <ul class="nav nav-pills nav-justified" ng-if="changeFormVal[0] == 'active'">
+        <li role="presentation" class="{{changeAnalysisFormVal[0]}}"><a ng-click="changeAnalysisForm(0)">分析します</a></li>
+        <li role="presentation" class="{{changeAnalysisFormVal[1]}}"><a ng-click="changeAnalysisForm(1)">再投稿のお願いします</a></li>
     </ul>
 </div>
 
 <div class="row">
-<my-form ng-show="changeFormVal[0] == 'active'" obj="obj" addClaim="addClaim"></my-form>
-<my-input-form input-message="inputMessage" ng-show="changeFormVal[1] == 'active'"></my-input-form>
+<my-form ng-if="changeFormVal[0] == 'active' && changeAnalysisFormVal[0] == 'active'" obj="obj" addClaim="addClaim"></my-form>
+<my-input-form input-message="inputMessage" ng-if="changeFormVal[1] == 'active' && changeAnalysisFormVal[0] == 'active'"></my-input-form>
+<my-input-request-form ng-if="changeFormVal[0] == 'active' && changeAnalysisFormVal[1] == 'active'"  request-statement-message="requestStatementMessage"></my-input-request-form>
+
+<wait-for-confirm ng-if="waitForConfirmVal[0] == 'active'"></wait-for-confirm>
+<give-with-confirm ng-if="waitForConfirmVal[1] == 'active'"></give-with-confirm>
 </div>
 
 </div>
@@ -274,18 +296,77 @@
             coreSocket.on("receiveStatement",function(_res){
                 getDebateInformation()
                 $scope.statement = $scope.statement.concat(_res)
-                console.log("sssssssssss")
-                console.log($scope.statement)
             })
 
+             coreSocket.on("requestStatement",function(_res){
+                 getDebateInformation()
+             })
+
+             coreSocket.on("receiveAnalysis",function(_res){
+                 getDebateInformation()
+                 $scope.analysis.push(_res)
+                 console.log($scope.obj)
+             })
+
+
+
+             coreSocket.on("receiveConfirm",function(_res){
+                 getDebateInformation()
+                 $scope.giveWithSubmitResult = _res.giveWithSubmitResult
+                 $scope.giveWithSubmitMsg = _res.giveWithSubmitMsg
+             })
             $scope.$watch("debateInfo.status",function(val,preVal){
-                if(parseInt(preVal) == -2 && parseInt(val) == 0){
+                if(parseInt(preVal) == -2 && parseInt(val) == 0 && parseInt($scope.debateInfo.position) == 1){
+                    alert(1)
                     $scope.changeFormVal = ["","active"]
                 }
+
+                if(parseInt(preVal) == 0 && parseInt(val) == 1){
+
+                    if(parseInt($scope.debateInfo.position) == 1){
+                        $scope.changeFormVal = ["",""]
+                    }else{
+                        $scope.changeFormVal = ["active",""]
+                    }
+                }
+
+                if(parseInt(preVal) == 1 && parseInt(val) == 0){
+
+                    if(parseInt($scope.debateInfo.position) == 1){
+                        $scope.changeFormVal = ["","active"]
+                    }else{
+                        $scope.changeFormVal = ["",""]
+                    }
+                }
+
+                if(parseInt(preVal) == 1 && parseInt(val) == 2){
+
+                    if(parseInt($scope.debateInfo.position) == 1){
+                        $scope.changeFormVal = ["",""]
+                        $scope.waitForConfirmVal = ["","active"]
+                    }else{
+                        $scope.changeFormVal = ["",""]
+                        $scope.waitForConfirmVal = ["active",""]
+                    }
+                }
+
+                if(parseInt(preVal) == 2 && parseInt(val) == 1){
+
+                    if(parseInt($scope.debateInfo.position) == 1){
+                        $scope.waitForConfirmVal = ["",""]
+                    }else{
+                        $scope.waitForConfirmVal = ["active",""]
+                    }
+                }
+
             })
 
             $scope.changeTabVal = ["active","",""]
             $scope.changeFormVal = ["",""]
+            $scope.changeAnalysisFormVal = ["active",""]
+            $scope.waitForConfirmVal = ["",""]
+
+
             $scope.changeTab = function(n){
                 for(var i=0;i<$scope.changeTabVal.length;i++){
                     $scope.changeTabVal[i] = ""
@@ -294,10 +375,17 @@
             }
 
             $scope.changeForm = function(n){
-                            for(var i=0;i<$scope.changeFormVal.length;i++){
-                                $scope.changeFormVal[i] = ""
-                            }
-                            $scope.changeFormVal[n] = "active"
+                for(var i=0;i<$scope.changeFormVal.length;i++){
+                    $scope.changeFormVal[i] = ""
+                }
+                $scope.changeFormVal[n] = "active"
+            }
+
+            $scope.changeAnalysisForm = function(n){
+                for(var i=0;i<$scope.changeAnalysisFormVal.length;i++){
+                    $scope.changeAnalysisFormVal[i] = ""
+                }
+                $scope.changeAnalysisFormVal[n] = "active"
             }
 
             $scope.testValue = "testValue"
@@ -325,16 +413,19 @@
                         {title:"this is the message for statement",dissent:0,content:""}
                     ]
 
+            $scope.requestStatementMessage = ""
+
             $scope.statement = [
                  {title:"this is the message for statement",dissent:0,content:"this is the message for statement"}
             ]
+
+            $scope.analysis = []
 
             $scope.settingInfo = {
                 timeNumbers:5,
                 timeLimit:0,
                 timeLimitValDefault:"",
                 timeLimitValCustomize:""
-
             }
 
             $scope.debateInfo = {
@@ -366,7 +457,7 @@
     })
 
 
-    myApp.directive('myForm',function(){
+    myApp.directive('myForm',function(coreSocket){
 
         var claim = {
                            "claimTxt": "",
@@ -432,7 +523,7 @@
                     }
 
                     $scope.submit = function(){
-                        alert("submit analysis result")
+                        coreSocket.emit("giveAnalysis",{obj:$scope.obj})
                     }
 
               },
@@ -457,6 +548,18 @@
         }
     })
 
+    myApp.directive("myInputRequestForm",function(coreSocket){
+        return{
+            scope:{requestStatementMessage:"="},
+            controller:function($scope){
+                $scope.requestStatement = function(){
+                   coreSocket.emit("requestStatement",{msg:$scope.requestStatementMessage})
+                }
+            },
+            templateUrl:"/angularTemplate/inputRequestForm.html"
+        }
+    })
+
     myApp.directive("settingPart",function(){
            return {
                 scope:{
@@ -467,7 +570,29 @@
            }
     })
 
+    myApp.directive("waitForConfirm",function(){
+           return {
+                scope:{
 
+                },
+                templateUrl:"/angularTemplate/waitForConfirm.html"
+           }
+    })
+
+    myApp.directive("giveWithConfirm",function(coreSocket){
+           return {
+                scope:{
+
+                },
+                controller:function($scope){
+                    $scope.giveWithSubmitResult = 1
+                    $scope.giveWithSubmit = function(){
+                        coreSocket.emit("giveWithSubmit",{giveWithSubmitResult:$scope.giveWithSubmitResult,giveWithSubmitMsg:$scope.giveWithSubmitMsg})
+                    }
+                },
+                templateUrl:"/angularTemplate/giveWithConfirm.html"
+           }
+    })
 
 </script>
 </html>

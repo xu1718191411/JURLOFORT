@@ -73,10 +73,65 @@ var sessionSockets = function(sessionSockets,steps,mongo){
 
                     })
                 },function(){
+                    for(var i=0;i<msg.length;i++){
+                        msg[i].position = session.debateLogin.position
+                    }
                     socket.emit("receiveStatement",msg)
                     socket.broadcast.emit("receiveStatement",msg)
                 })()
         })
+
+        socket.on("requestStatement",function(msg){
+            steps(function(){
+                mongo.update("debateStatus",{num:session.debateLogin.num},{$inc:{status:-1}},function(){
+
+                })
+            },function(){
+                socket.emit("requestStatement",msg)
+                socket.broadcast.emit("requestStatement",msg)
+            })()
+
+        })
+
+        socket.on("giveAnalysis",function(msg){
+            console.log(msg)
+            steps(function(){
+                mongo.update("debateStatus",{num:session.debateLogin.num},{$inc:{status:1}},function(){
+
+                })
+            },function(){
+                msg.position =  session.debateLogin.position
+            },function(){
+                socket.emit("receiveAnalysis",msg)
+                socket.broadcast.emit("receiveAnalysis",msg)
+            })()
+
+        })
+
+        socket.on("giveWithSubmit",function(msg){
+            console.log(msg)
+            steps(function(){
+
+                if(msg.giveWithSubmitResult == 1){
+                    mongo.update("debateStatus",{num:session.debateLogin.num},{$inc:{status:1}},function(){
+                        msg.position = session.debateLogin.position
+                        socket.emit("receiveConfirm",msg)
+                        socket.broadcast.emit("receiveConfirm",msg)
+                    })
+                }else{
+                    mongo.update("debateStatus",{num:session.debateLogin.num},{$inc:{status:-1}},function(){
+                        msg.position = session.debateLogin.position
+                        socket.emit("receiveConfirm",msg)
+                        socket.broadcast.emit("receiveConfirm",msg)
+                    })
+                }
+
+            })()
+
+        })
+
+
+
     })
 
 
