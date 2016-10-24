@@ -8,9 +8,6 @@ var session = require('express-session');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var debate = require('./routes/debate');
-var _debate = require('./routes/_debate');
-var d3 = require('./routes/d3');
 var admin = require('./routes/admin');
 var blog = require('./routes/blog');
 var timeLine = require('./routes/timeLine');
@@ -58,16 +55,12 @@ app.sessionStore = sessionStore;
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/debate',debate);
-app.use('/_debate',_debate);
-app.use('/d3',d3);
 app.use('/admin',admin);
 app.use('/blog',blog);
 app.use('/timeLine',timeLine);
 app.use('/profile',profile);
 app.use('/life',life);
 app.use('/funcky',funcky);
-app.use('/debate',debate);
 
 
 

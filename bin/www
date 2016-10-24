@@ -6,10 +6,7 @@ var SessionSockets = require('session.socket.io');
 var wwwConfig = require("../config/www.js")
 
 var mongo = require("../model/mongo.js");
-var mongodb = require("mongodb")
-var tool = require("../controller/tool.js");
 var steps = require('ocsteps');
-var install = require("./install.js")
 
 app.set('port', process.env.PORT || wwwConfig.wwwPort);
 console.log("server is listening on port "+wwwConfig.wwwConfig);
@@ -27,8 +24,6 @@ steps(function(){
     mongo.connect(this.hold(function(_res){
         if(_res>0) console.log("connect error please check your configure file")
     }))
-},function(){
-    install.initialDatabase(this)
 })()
 
 
@@ -36,5 +31,4 @@ var io = require('socket.io')(server);
 var sessionSockets = new SessionSockets(io, app.sessionStore, app.cookieParser);
 
 
-var sessionSockets = require("./sessionSockets.js").sessionSockets(sessionSockets,steps,mongo)
 
