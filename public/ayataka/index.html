@@ -1197,7 +1197,7 @@
 		})
 
 
-		var myModalContent = myApp.controller("myModalContent",function($scope,items){
+		var myModalContent = myApp.controller("myModalContent",function($scope,items,$uibModalInstance){
 
 			$scope.items = items
 			$scope.infos = [
@@ -1222,11 +1222,11 @@
 
 
 			$scope.ok = function () {
-				ctrl.dismiss({$value: 'cancel'});
+				$uibModalInstance.dismiss('cancel');
 			};
 
 			$scope.cancel = function () {
-				$ctrl.dismiss({$value: 'cancel'});
+				$uibModalInstance.dismiss('cancel');
 			};
 		})
 

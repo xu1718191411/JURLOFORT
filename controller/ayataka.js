@@ -20,13 +20,16 @@ module.exports = {
         var msg = req.body.msg
         var time = changeDate(Date.parse(new Date()))
 
+        var ip = req.connection.remoteAddress
+
+        console.log(req)
 
         if(!name || !mail || !msg){
             req.end(JSON.stringify({error:1,msg:"illegal data"}))
             return
         }
 
-        mongo.insert("ayataka",{name:name,mail:mail,msg:msg,time:time},{},function(result){
+        mongo.insert("ayataka",{name:name,mail:mail,msg:msg,time:time,ip:ip},{},function(result){
             console.log(result)
             res.end(JSON.stringify({err:0,data:{name:name,mail:mail}}))
         })
