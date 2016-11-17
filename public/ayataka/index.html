@@ -344,12 +344,7 @@
 							<div class="color-cccddd">
 								<h3>13:00〜13:20  </h3>
 								<h4><span class="price">就活の基本事項</span> </h4>
-								<ul>
-									<li>記入欄</li>
-									<li>記入欄</li>
-									<li>記入欄</li>
 
-								</ul>
 								<a href="#" class="buy"><span></span></a>
 							</div>
 						</div>
@@ -360,12 +355,7 @@
 							<div class="color-666777">
 								<h3>13:20〜14:00 </h3>
 								<h4><span class="price">座談会</span> </h4>
-								<ul>
-									<li>記入欄</li>
-									<li>記入欄</li>
-									<li>記入欄</li>
 
-								</ul>
 								<a href="#" class="buy"><span></span></a>
 							</div>
 						</div>
@@ -376,11 +366,7 @@
 							<div class="color-custom">
 								<h3>14:00〜14:15  </h3>
 								<h4><span class="price">パソナテック社員のお話</span> </h4>
-								<ul>
-									<li>記入欄</li>
-									<li>記入欄</li>
-									<li>記入欄</li>
-								</ul>
+
 								<a href="#" class="buy"><span></span></a>
 							</div>
 						</div>
@@ -391,12 +377,7 @@
 							<div class="color-666777">
 								<h3>14:15〜14:30  </h3>
 								<h4><span class="price">アンケート記入</span> </h4>
-								<ul>
-									<li>記入欄</li>
-									<li>記入欄</li>
-									<li>記入欄</li>
 
-								</ul>
 								<a href="#" class="buy"><span></span></a>
 							</div>
 						</div>
@@ -408,12 +389,7 @@
 							<div class="color-666777">
 								<h3>14:30 〜 </h3>
 								<h4><span class="price">SNSの交換など</span> </h4>
-								<ul>
-									<li>記入欄</li>
-									<li>記入欄</li>
-									<li>記入欄</li>
 
-								</ul>
 								<a href="#" class="buy"><span></span></a>
 							</div>
 						</div>
@@ -461,11 +437,11 @@
 				<div id="flex1" class="flexslider">
 					<ul class="slides">
 
-						<li><div class="picture"><img src="img/slider/slider1.jpg" alt="" /></div></li>
+						<li><div class="picture"><img src="img/slider/pasona.jpg" alt="" /></div></li>
 
-						<li><div class="picture"><img src="img/slider/slider2.jpg" alt="" /></div></li>
+						<li><div class="picture"><img src="img/slider/pasona.jpg" alt="" /></div></li>
 
-						<li><div class="picture"><img src="img/slider/slider3.jpg" alt="" /></div></li>
+						<li><div class="picture"><img src="img/slider/pasona.jpg" alt="" /></div></li>
 
 					</ul>
 				</div>
@@ -967,10 +943,12 @@
 					</script>-->
 					<script src="js/jquery.gmap.min.js"></script>
 					<script type="text/javascript">
+
+						var myLatLng = {lat: 35.693968, lng: 139.693073};
 						$('#map').gMap({
 							controls: {
 								panControl: false,
-								zoomControl: false,
+								zoomControl: true,
 								mapTypeControl: false,
 								scaleControl: false,
 								streetViewControl: false,
@@ -978,15 +956,15 @@
 							},
 							maptype: 'ROADMAP',
 							scrollwheel: true,
-							zoom: 13,
-							markers: [
-								{
-									address: 'Tokyo, Japan,pasonaTech', // Your Adress Here
-									html: '',
-									popup: false,
-								}
-
+							zoom: 17,
+							markers: [{
+								address: '160-0023 東京都新宿区西新宿６丁目５−１', // Your Adress Here
+								html: '',
+								popup: true,
+							}
 							],
+
+
 
 						});
 
@@ -1005,14 +983,19 @@
 							zoom: 13,
 							markers: [
 								{
-									address: 'Tokyo, Japan,pasonaTech', // Your Adress Here
+									address: '160-0023 東京都新宿区西新宿６丁目５−１', // Your Adress Here
 									html: '',
-									popup: false,
+									popup: true,
 								}
 
 							],
 
 						});
+
+
+
+
+
 
 					</script>
 					<!-- end: Google Maps -->
