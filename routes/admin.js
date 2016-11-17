@@ -49,6 +49,11 @@ router.get('/personTimeLine',adminController.personTimeLineController);
 router.post('/saveTxtData',adminController.saveTxtDataController);
 router.get('/logout',adminController.logoutController)
 
+
+
+
+
+
 function checkAdminLogin(req,res,next){
 
     console.log(1111111111111);

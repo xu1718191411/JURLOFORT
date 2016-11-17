@@ -14,6 +14,7 @@ var timeLine = require('./routes/timeLine');
 var profile = require('./routes/profile');
 var life = require('./routes/life');
 var funcky = require('./routes/funcky');
+var ayataka = require('./routes/ayataka');
 
 var ECT = require('ect'); // ECT 読み込み
 
@@ -61,6 +62,7 @@ app.use('/timeLine',timeLine);
 app.use('/profile',profile);
 app.use('/life',life);
 app.use('/funcky',funcky);
+app.use('/ayataka',ayataka);
 
 
 

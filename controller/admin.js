@@ -417,7 +417,8 @@ module.exports = {
                     res.end("{err:0,doc:"+doc+"}")
                 })
             })()
-    }
+    },
+
 
 }
 

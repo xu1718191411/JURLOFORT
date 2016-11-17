@@ -4,7 +4,7 @@
 
 	<!-- start: Meta -->
 	<meta charset="utf-8">
-	<title>Essentia Responsive Bootstrap Theme by Bootstrap Master</title> 
+	<title>パソナテックの綾鷹組</title>
 	<meta name="description" content="Essentia Responsive Bootstrap Theme by Bootstrap Master"/>
 	<meta name="keywords" content="Template, Theme, web, html5, css3, Bootstrap" />
 	<meta name="author" content="Łukasz Holeczek from creativeLabs"/>
@@ -37,9 +37,21 @@
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <!--<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>-->
     <![endif]-->
 
+	<script src="./js/angular.min.js"></script>
+	<script src="./js/ui-bootstrap-tpls-2.2.0.min.js"></script>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+					(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-87618418-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
 
 	<style>
 
@@ -52,7 +64,7 @@
 
 	</style>
 </head>
-<body>
+<body id="ayataka">
 	
 	<!--start: Header -->
 	<header>
@@ -79,7 +91,7 @@
 									<li><a href="#" class="portfolio">会場の情報</a></li>
 									<li><a href="#" class="about">パソナテックについて</a></li>
 									<li><a href="#" class="team">パソナテックの綾鷹</a></li>
-									<li><a href="#" class="contact">問い合わせ</a></li>
+									<li><a href="#" class="contact">イベントの予約</a></li>
 			            		</ul>
 			          		</div>
 			        	</div>
@@ -853,11 +865,16 @@
 				
 	
 			<!-- start: Page Title -->
+
+
+				<p><h1 style="text-align: center">12月3日(土)(株)パソナテック内定者
+				が行う就活セミナー</h1></p>
 			<div id="page-title">
+
 
 				<div id="page-title-inner">
 
-						<h2><span>問い合わせ</span></h2>
+						<h2><span>予約フォーム</span></h2>
 
 				</div>	
 
@@ -873,7 +890,7 @@
 					<b>パソナテックの綾鷹</b> •
 					新宿 •
 					東京, 日本 •
-					Phone:  •
+					連絡先:  03-6872-6022(パソナテック人事課)•
 					Email: ayatakatech2017@yahoo.co.jp
 					<!-- end: Contact Info -->
 				
@@ -891,21 +908,42 @@
 				<div class="span6">
 					
 					<!-- start: Contact Form -->
-					<div id="contact-form">
+					<div id="contact-form" ng-app="myApp" ng-controller="myController">
 
-						<form method="post" action="">
+
+						<script type="text/ng-template" id="myModalContent.html">
+							<div class="modal-header">
+								<h3 class="modal-title" id="modal-title">12月3日(土)(株)パソナテック内定者
+									が行う就活セミナーご予約いただき,ありがとうございました</h3>
+							</div>
+							<div class="modal-body" id="modal-body">
+								<p>{{items.name}}さん:後日のイベントで楽しみにしてきます</p>
+								<ul>
+									<li ng-repeat="info in infos">
+										<p>{{info.content}}</p>
+									</li>
+								</ul>
+							</div>
+							<div class="modal-footer">
+								<button class="btn btn-primary" type="button" ng-click="ok()">了解</button>
+							</div>
+						</script>
+
+
+
+						<form method="post" name="userForm" ng-submit="_submit(1)">
 							
 							<fieldset>
 								
-								<input tabindex="4" id="name" name="name" type="text" value="" class="span12" placeholder="Name: ..." >
-								<input tabindex="2" id="email" name="email" type="text" value="" class="span12" placeholder="Email: ...">
-								<input tabindex="3" id="www" name="www" type="text" value="" class="span12" placeholder="WWW: ...">
-								<textarea tabindex="3" class="input-xlarge span12" id="message" name="body" rows="7" placeholder="Message: ..."></textarea>
-
+								<input tabindex="4" id="name" name="name" type="text"  class="span12" ng-model="name" placeholder="" required><span ng-if="userForm.name.$error.required">名前を入力してください</span>
+								<input tabindex="2" id="email" name="email" type="text" class="span12" ng-model="mail" placeholder="" required><span ng-if="userForm.email.$error.required">メールを入力してください</span>
+								<textarea tabindex="3" class="input-xlarge span12" id="message" name="msg" rows="7" ng-model="msg" placeholder="" required></textarea><span ng-if="userForm.msg.$error.required">メッセージを入力してください</span>
 								<div class="actions">
-									<button tabindex="3" type="submit" class="btn btn-succes btn-large">Send message</button>
+									<button tabindex="3" type="submit" class="btn btn-succes btn-large">送信</button>
+
 								</div>
-								
+
+
 							</fieldset>
 
 						</form>
@@ -949,7 +987,8 @@
 							],
 
 						});
-						
+
+						/*
 						$('#mapBg').gMap({
 							controls: {
 								panControl: false,
@@ -972,7 +1011,7 @@
 							],
 
 						});
-						
+						*/
 					</script>
 					<!-- end: Google Maps -->
 				
@@ -1101,5 +1140,97 @@
 </script>
 <!-- end: Java Script -->
 
+
+	<script>
+
+		function updateScroll(){
+			var element = document.getElementById("ayataka");
+			element.scrollTop = element.scrollHeight;
+		}
+
+		updateScroll("")
+
+		var myApp = angular.module("myApp",['ui.bootstrap'])
+
+		myApp.factory("myPost",function($http){
+			return{
+				postData:function(url,data){
+					return $http.post(url,data).success(function(res){
+						return res;
+					})
+				}
+			}
+		})
+
+		var app = myApp.controller("myController",function($scope,myPost,$uibModal){
+			$scope.flag = true
+				$scope._submit = function(){
+
+					if(!$scope.flag) return;
+
+					var name = $scope.name
+					var mail = $scope.mail
+					var msg = $scope.msg
+
+					myPost.postData('/ayataka/pasonaTechAyatakaEventPost',{name:name,mail:mail,msg:msg}).then(function(result){
+						if(result.data.err == 0){
+
+							$uibModal.open({
+								templateUrl: 'myModalContent.html',
+								controller: 'myModalContent',
+								resolve: {
+									items: function () {
+										return result.data.data
+									}
+								}
+							})
+
+
+							$scope.flag = false
+						}
+					})
+
+
+
+
+				}
+		})
+
+
+		var myModalContent = myApp.controller("myModalContent",function($scope,items){
+
+			$scope.items = items
+			$scope.infos = [
+							{content:"【開催概要】"},
+							{content:"日時：2016年12月03日(土)13:00〜14:30"},
+							{content:"場所：パソナテック本社（東京都新宿区西新宿6-5- 1　新宿アイランドタワー22F）"},
+							{content:"持ち物：筆記用具"},
+							{content:"※私服でお越し下さい。"},
+							{content:"【内容】"},
+							{content:"■ 就活の基本事項"},
+							{content:"└就職活動の流れ"},
+							{content:"■座談会"},
+							{content:"└聞きたいことがあれば何でもお気軽に 聞いてください"},
+							{content:"■先輩社員との相談"},
+							{content:"■アンケート記入"},
+							{content:"■連絡先の交換"},
+							{content:"＊ 受付期日　いつでも"},{content:"＊定員は20名の予定です。定員を超えた場合、期日前でも申し込みを閉め切る可能性があります。"},{content:"その他ご不明な点、相談等がありましたら以下の連絡先へお気軽にご連絡下さい。"},
+							{content:"パソナテック2017年卒内定者　就活支援綾鷹チーム"},
+							{content:"ayatakatech2017@yahoo.co.jp"}
+							]
+
+
+
+			$scope.ok = function () {
+				ctrl.dismiss({$value: 'cancel'});
+			};
+
+			$scope.cancel = function () {
+				$ctrl.dismiss({$value: 'cancel'});
+			};
+		})
+
+
+	</script>
 </body>
 </html>
