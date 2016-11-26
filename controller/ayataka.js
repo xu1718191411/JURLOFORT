@@ -33,7 +33,36 @@ module.exports = {
             console.log(result)
             res.end(JSON.stringify({err:0,data:{name:name,mail:mail}}))
         })
-    }
+    },
+    adminController:function(req,res){
+        if(!req.session.login){
+            res.redirect("login")
+        }
+
+        if(req.session.login != 1){
+            res.redirect("login")
+        }
+
+        mongo.find("ayataka",{},{},function(result){
+            res.render('ayataka/index',{results:result})
+        })
+
+    },
+    loginController:function(req,res){
+        res.render('ayataka/login',{})
+    },
+
+    loginPostController:function(req,res){
+
+        var username = req.body.username
+        var password = req.body.password
+
+        if(username == "ayataka" && password == "112233"){
+            req.session.login = 1
+            res.redirect("admin")
+        }
+
+    },
 }
 
 function isEmpty(obj) {

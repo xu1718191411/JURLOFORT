@@ -52,8 +52,6 @@ router.get('/logout',adminController.logoutController)
 
 
 
-
-
 function checkAdminLogin(req,res,next){
 
     console.log(1111111111111);
