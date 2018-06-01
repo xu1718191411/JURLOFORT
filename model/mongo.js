@@ -7,12 +7,7 @@
 var db;
 var MongoClient = require('mongodb').MongoClient
 var assert = require('assert');
-var conf = {
-    dbHost:'localhost',
-    dbPort:'27017',
-    dbName:'URLOIP'
-};
-
+var conf = require('../config/dbConfig.js');
 
 // Connection URL
 var url = 'mongodb://'+conf.dbHost+':'+conf.dbPort+'/'+conf.dbName;

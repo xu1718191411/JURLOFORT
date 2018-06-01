@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 var debug = require('debug')('home');
-var wwwConfig = {
-    wwwPort:8000
-}
+var wwwConfig = require("../config/www.js")
 
 var app = require('../app');
 var fs = require("fs");

@@ -2,6 +2,8 @@ log
 config
 tmp
 .idea
+*.DS_Store
+public/.DS_Store
 projectFilesBackup*
 public/data/
 public/upload/*
