@@ -1,8 +1,10 @@
 log
 config
 tmp
+*.mp4
 .idea
 *.DS_Store
+public/video/.DS_Store
 public/.DS_Store
 projectFilesBackup*
 public/data/
