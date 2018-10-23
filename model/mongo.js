@@ -23,12 +23,6 @@ function connect(callback) {
             callback(1)
         } else {
             callback(0)
-            db.collection("ClassMates", function(outer_error, collection) {
-                collection.find({}).toArray(function(inner_error, list) {
-                    console.log(inner_error)
-                    console.log(list)
-                });
-            });
         }
 
 
@@ -45,8 +39,15 @@ function connect(callback) {
  * http://docs.mongodb.org/manual/reference/method/db.collection.find/
  */
 function find(collection_name, criteria, projection, callback) {
+    console.log(collection_name)
+    console.log("===========1")
+    console.log(criteria)
+    console.log("============2")
+    console.log(projection)
     db.collection(collection_name, function(outer_error, collection) {
-        collection.find({}).toArray(function(inner_error, list) {
+        collection.find(criteria).toArray(function(inner_error, list) {
+            console.log("============3")
+            console.log(list)
             callback(list);
         });
     });

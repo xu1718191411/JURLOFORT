@@ -38,4 +38,12 @@
       password:miyoshi
       username:syoui
       password:syoui
+
+    7.mkdir public/timeLineupload/
+        mkdir public/uploads/
+        mkdir public/upload/
+        mkdir uploads/
+    
+    8.timeLine database
+        class is String
   

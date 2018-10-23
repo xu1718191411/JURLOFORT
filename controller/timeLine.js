@@ -10,39 +10,39 @@ var fs = require("fs")
 var path = require("path")
 
 module.exports = {
-    indexController: function(req,res){
+    indexController: function(req, res) {
 
-        steps(function(){
+        steps(function() {
             var _id = req.query._id;
-            if(!_id){
+            if (!_id) {
                 res.redirect('/blog')
                 this.terminate();
             }
 
-            if(isEmpty(req.session.loginSession)){
+            if (isEmpty(req.session.loginSession)) {
                 res.redirect("/blog/login")
                 this.terminate();
             }
 
-            mongo.find("ClassMates",{_id:new mongodb.ObjectID(_id)},{},function(doc){
+            mongo.find("ClassMates", { _id: new mongodb.ObjectID(_id) }, {}, function(doc) {
 
-                if(doc.length<1){
+                if (doc.length < 1) {
                     res.redirect('/blog')
                     this.terminate();
                 }
                 var content = doc[0];
                 var timeLine = content.timeLine || []
                 timeLine = eval(timeLine)
-                for(var i in timeLine){
-                   timeLine[i].targetname = timeLine[i].targetname || ""
+                for (var i in timeLine) {
+                    timeLine[i].targetname = timeLine[i].targetname || ""
 
-                   timeLine[i].targetName =  timeLine[i].targetname.replace("-thumb","")
+                    timeLine[i].targetName = timeLine[i].targetname.replace("-thumb", "")
 
 
                     var patt = /([0-9][0-9][0-9][0-9])-([0-9][0-9])-([0-9][0-9])T([0-9][0-9]):([0-9][0-9]):([0-9][0-9])\.([0-9][0-9][0-9])Z/;
                     var regRes = patt.exec(timeLine[i].start);
 
-                    if(!isEmpty(regRes)) {
+                    if (!isEmpty(regRes)) {
                         var d = new Date(regRes[1], regRes[2], regRes[3], regRes[4], regRes[5], regRes[6]);
                         timeLine[i].start = utc2Jtc(d)
                         console.log(timeLine[i].start)
@@ -51,69 +51,70 @@ module.exports = {
 
 
 
-                res.render('timeLine/index', {_id:_id,content:content,contentTimeLines:timeLine,loginSession:req.session.loginSession});
+                res.render('timeLine/index', { _id: _id, content: content, contentTimeLines: timeLine, loginSession: req.session.loginSession });
             })
 
         })();
 
     },
-    addController:function(req,res){
+    addController: function(req, res) {
         var _ids = req.query._ids
         var allMembers = []
         steps(
-            function(){
-                if(isEmpty(req.session.loginSession)){
+            function() {
+                if (isEmpty(req.session.loginSession)) {
                     res.redirect("/blog/login")
                 }
             },
-            function(){
+            function() {
                 var _id = req.query._id;
                 req.session._id = _id;
-                mongo.find("ClassMates",{_id:new mongodb.ObjectID(_id)},{},this.hold(function(doc){
+                mongo.find("ClassMates", { _id: new mongodb.ObjectID(_id) }, {}, this.hold(function(doc) {
                     var content = doc[0];
                     console.log(content);
                     content.timeLine = content.timeLine || "[]"
                     return content
                 }))
 
-            } ,function(doc){
+            },
+            function(doc) {
 
-                mongo.find("ClassMates",{class:req.session.loginSession.class.toString()},{},this.hold(function(_allMembers){
+                mongo.find("ClassMates", { class: req.session.loginSession.class.toString() }, {}, this.hold(function(_allMembers) {
 
-                    for(var i in _allMembers){
+                    for (var i in _allMembers) {
 
-                        if(_allMembers[i].name!=doc.name){
+                        if (_allMembers[i].name != doc.name) {
                             allMembers.push(_allMembers[i])
                         }
                     }
 
-                    res.render("timeLine/add",{_ids:_ids,content:doc,fromName:req.session.loginSession.name,fromClass:req.session.loginSession.class,allMembers:allMembers});
+                    res.render("timeLine/add", { _ids: _ids, content: doc, fromName: req.session.loginSession.name, fromClass: req.session.loginSession.class, allMembers: allMembers });
 
                 }))
 
             })()
     },
-    saveTxtDataController:function(req,res){
+    saveTxtDataController: function(req, res) {
 
-        steps(function(){
+        steps(function() {
             req.session = req.session || {}
 
-            if(!req.session._id){//目标_id
+            if (!req.session._id) { //目标_id
                 res.end("no _id;");
             }
-        },function(){
-            if(isEmpty(req.session.loginSession)){
+        }, function() {
+            if (isEmpty(req.session.loginSession)) {
                 res.end("你未登陆")
             }
-        },function(){
-            mongo.update("ClassMates",{_id:new mongodb.ObjectID(req.session._id)},{$set:{timeLine:req.body.dataSet}},function(doc){
+        }, function() {
+            mongo.update("ClassMates", { _id: new mongodb.ObjectID(req.session._id) }, { $set: { timeLine: req.body.dataSet } }, function(doc) {
                 console.log("updating")
                 console.log(doc);
-                res.end("{err:0,doc:"+doc+"}")
+                res.end("{err:0,doc:" + doc + "}")
             })
         })()
     },
-    uploadController:function(req,res){
+    uploadController: function(req, res) {
 
         var file = req.files[0];
 
@@ -128,25 +129,27 @@ module.exports = {
         console.log(originalPath);
         var targetName = Math.random().toString(36).substring(2);
 
-        fs.rename(originalPath+"/"+filename,target_path+'/' +targetName+".jpg",function(err){
-            if(err) throw err;
+        fs.rename(originalPath + "/" + filename, target_path + '/' + targetName + ".jpg", function(err) {
+            if (err) throw err;
 
 
-            im.resize({
-                srcPath: target_path+'/' +targetName+".jpg",
-                dstPath: target_path+'/' +targetName+"-thumb.jpg",
-                height:  450
+            //if imagemagick is not installed comment out below
+            // im.resize({
+            //     srcPath: target_path+'/' +targetName+".jpg",
+            //     dstPath: target_path+'/' +targetName+"-thumb.jpg",
+            //     height:  450
 
-            }, function(err, stdout, stderr){
-                if (err) throw err;
-                console.log('resized kittens.jpg to fit within 256x256px');
-                res.end(JSON.stringify({targetName:targetName+"-thumb.jpg"}));
-            });
+            // }, function(err, stdout, stderr){
+            //     if (err) throw err;
+            //     console.log('resized kittens.jpg to fit within 256x256px');
+            //     res.end(JSON.stringify({targetName:targetName+"-thumb.jpg"}));
+            // });
 
-//            fs.unlink(originalPath+"/"+file.filename,function(err){
-//                if(err) throw err;
-//
-//            })
+            res.end(JSON.stringify({ targetName: targetName + ".jpg" }));
+            //            fs.unlink(originalPath+"/"+file.filename,function(err){
+            //                if(err) throw err;
+            //
+            //            })
 
         })
     }
@@ -157,22 +160,22 @@ module.exports = {
 
 
 function isEmpty(obj) {
-    for(var prop in obj) {
-        if(obj.hasOwnProperty(prop))
+    for (var prop in obj) {
+        if (obj.hasOwnProperty(prop))
             return false;
     }
 
     return true;
 }
 
-function utc2Jtc(date){
-    var d = Date.parse(date)+9*60*60*1000;
+function utc2Jtc(date) {
+    var d = Date.parse(date) + 9 * 60 * 60 * 1000;
     return changeDate(d);
 }
 
 
 
-function changeDate(str){
+function changeDate(str) {
     var now_date, now_date_format;
     now_date = new Date(parseInt(str));
     now_date_format = now_date.getFullYear();
