@@ -12,7 +12,7 @@
 
     1.create folder
     /config
-    2.create new file /config/config.js
+    2.create new file /config/dbConfig.js
 
     module.exports = {
         dbName:"blog",  //Name of the database
